@@ -1,14 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
   Sparkles, Heart, Briefcase, Wallet, Activity, Calendar, Search, 
-  Star, Compass, Gift, Award, MessageSquare, Send, CheckCircle2, 
-  ChevronRight, RefreshCw, Sun, Moon, Info, X, Users, Share2, ThumbsUp,
-  Clock, Terminal, Database, Code, ShieldCheck, ArrowRight, Copy, Check,
-  Sliders, Zap, ExternalLink, Download
+  Star, Compass, Gift, Award, CheckCircle2, Info
 } from 'lucide-react';
 
 // ============================================================================
-// PHASE 1: COMPLETE ASTROLOGICAL DATABASE (12 ZODIAC SIGNS)
+// BASE DE DONNÉES ASTROLOGIQUE (12 SIGNES DU ZODIAQUE)
 // ============================================================================
 
 const ZODIAC_SIGNS = [
@@ -26,14 +23,13 @@ const ZODIAC_SIGNS = [
   { id: 'poissons', name: 'Poissons', symbol: '♓', dates: '19 février - 20 mars', element: 'Eau', planet: 'Neptune', color: 'from-blue-400 to-indigo-600' }
 ];
 
-// Phase 1: Zodiac Calculator from Date
 const getZodiacSignFromDate = (dateString) => {
   if (!dateString) return null;
   const date = new Date(dateString);
   if (isNaN(date.getTime())) return null;
   
   const day = date.getUTCDate();
-  const month = date.getUTCMonth() + 1; // 1-12
+  const month = date.getUTCMonth() + 1;
 
   if ((month === 3 && day >= 21) || (month === 4 && day <= 19)) return ZODIAC_SIGNS[0];
   if ((month === 4 && day >= 20) || (month === 5 && day <= 20)) return ZODIAC_SIGNS[1];
@@ -50,7 +46,6 @@ const getZodiacSignFromDate = (dateString) => {
   return ZODIAC_SIGNS[0];
 };
 
-// Complete Database for Profiles (10 Qualities, 10 Flaws, 5 Anecdotes, 5 Talents, 10 Domains)
 const COMPLETE_PROFILES_DATABASE = {
   belier: {
     qualities: ["Audacieux", "Passionné", "Franc", "Pionnier", "Énergique", "Leader naturel", "Généreux", "Spontané", "Déterminé", "Optimiste"],
@@ -80,7 +75,7 @@ const COMPLETE_PROFILES_DATABASE = {
   },
   gemeaux: {
     qualities: ["Adaptable", "Éloquent", "Curieux", "Vif d'esprit", "Sociable", "Polyvalent", "Enthousiaste", "Perspicace", "Inventif", "Pétillant"],
-    flaws: ["Dispersé", "Superficieux", "Indécis", "Nerveux", "Inconstant", "Bavard", "Chanjeant", "Facilement distrait", "Ironique", "Tendance à procrastiner"],
+    flaws: ["Dispersé", "Superficiel", "Indécis", "Nerveux", "Inconstant", "Bavard", "Changeant", "Facilement distrait", "Ironique", "Tendance à procrastiner"],
     anecdotes: [
       "Il peut lire trois livres en même temps tout en écoutant un podcast intéressant.",
       "A la capacité d'engager une conversation captivante avec absolument n'importe qui.",
@@ -92,8 +87,8 @@ const COMPLETE_PROFILES_DATABASE = {
     excellenceDomains: ["Journalisme & Médias", "Relations Publiques", "Marketing digital", "Enseignement", "Traduction & Interprétariat", "Développement logiciel", "Commerce international", "Animation & Événementiel", "Rédaction créative", "Médiation"]
   },
   cancer: {
-    qualities: ["Intuitif", "Protecteur", "Empathetic", "Dévoué", "Créatif", "Sensible", "Attentif", "Loyal", "Plein d'imagination", "Patience affective"],
-    flaws: ["Sustensible", "Nostalgique", "Possessif", "Changement d'humeur", "Introverti", "Anxieux", "Réticent au risque", "Capricieux", "Protecteur à l'excès", "Dépendant"],
+    qualities: ["Intuitif", "Protecteur", "Empathique", "Dévoué", "Créatif", "Sensible", "Attentif", "Loyal", "Plein d'imagination", "Patient affectivement"],
+    flaws: ["Susceptible", "Nostalgique", "Possessif", "Changement d'humeur", "Introverti", "Anxieux", "Réticent au risque", "Capricieux", "Protecteur à l'excès", "Dépendant"],
     anecdotes: [
       "Ressent l'ambiance émotionnelle d'une pièce en une fraction de seconde.",
       "Gardera précieusement un simple ticket de cinéma qui lui rappelle un bon souvenir.",
@@ -131,8 +126,8 @@ const COMPLETE_PROFILES_DATABASE = {
     excellenceDomains: ["Audit & Contrôle", "Médecine & Recherche", "Comptabilité & Analyse", "Ingénierie informatique", "Gestion de la qualité", "Sciences de données", "Édition & Correction", "Organisation logistique", "Diététique & Santé", "Archivage"]
   },
   balance: {
-    qualities: ["Diplomate", "Équitable", "Sociable", "Élégant", "Charmant", "Pacifique", "Empathetic", "Coopératif", "Raffiné", "Conciliant"],
-    flaws: ["Indécis", "Évite les conflits", "Dépendant", "Influencable", "Superficieux", "Hésitant", "Soucieux du regard d'autrui", "Procrastinateur", "Trop indulgent", "Passif"],
+    qualities: ["Diplomate", "Équitable", "Sociable", "Élégant", "Charmant", "Pacifique", "Empathique", "Coopératif", "Raffiné", "Conciliant"],
+    flaws: ["Indécis", "Évite les conflits", "Dépendant", "Influençable", "Superficiel", "Hésitant", "Soucieux du regard d'autrui", "Procrastinateur", "Trop indulgent", "Passif"],
     anecdotes: [
       "Peut passer une heure à peser le pour et le contre pour choisir un menu.",
       "A un don inné pour apaiser une dispute houleuse en trouvant le juste milieu.",
@@ -151,7 +146,7 @@ const COMPLETE_PROFILES_DATABASE = {
       "Conserve ses secrets les plus chers sous une carapace impénétrable.",
       "Quand il s'investit dans une cause, il y met son âme entière sans retenue.",
       "Capacité légendaire à se régénérer après les pires épreuves de l'existence.",
-      "Préfère une vérité blesse mais franche à un mensonge réconfortant."
+      "Préfère une vérité qui blesse mais franche à un mensonge réconfortant."
     ],
     talents: ["Investigation et recherche approfondie", "Psychologie et détection des motivations", "Gestion de situations extrêmes et critiques", "Capacité de transformation personnelle", "Stratégie secrète et analyse complexe"],
     excellenceDomains: ["Psychiatrie & Psychanalyse", "Criminologie & Enquête", "Chirurgie spécialisée", "Cybersécurité", "Investissement en Capital-Risque", "Recherche scientifique", "Astrophysique", "Gestion de crises majeures", "Stratégie militaire", "Négociation complexe"]
@@ -170,7 +165,7 @@ const COMPLETE_PROFILES_DATABASE = {
     excellenceDomains: ["Enseignement supérieur", "Tourisme & Exploration", "Édition & Philosophie", "Commerce international", "Diplomatie culturelle", "Sports d'aventure", "Coaching de vie", "Traduction universelle", "Droit international", "Conférences"]
   },
   capricorne: {
-    qualities: ["Ambitieux", "Discipliné", "Pragmatique", "Patient", "Pévoyant", "Labeur", "Responsable", "Intègre", "Méthodique", "Persévérant"],
+    qualities: ["Ambitieux", "Discipliné", "Pragmatique", "Patient", "Prévoyant", "Labeur", "Responsable", "Intègre", "Méthodique", "Persévérant"],
     flaws: ["Austère", "Pessimiste", "Rigide", "Distanciation affective", "Perfectionniste", "Méfiance", "Travailleur compulsif", "Rancunier", "Sévère", "Réticent aux plaisirs"],
     anecdotes: [
       "Planifie souvent sa trajectoire professionnelle avec 10 ans d'avance.",
@@ -196,8 +191,8 @@ const COMPLETE_PROFILES_DATABASE = {
     excellenceDomains: ["Technologies avancées", "Aéronautique & Espace", "Sciences de l'environnement", "Sociologie & Recherche", "Intelligence Artificielle", "Action humanitaire", "Ingénierie réseau", "Invention & Brevets", "Mouvements citoyens", "E-Sport"]
   },
   poissons: {
-    qualities: ["Empathetic", "Intuitif", "Créatif", "Inspiré", "Généreux", "Compassionnel", "Devoué", "Artiste", "Doux", "Rêveur"],
-    flaws: ["Hypersensible", "Idéaliste", "Fuite de la réalité", "Influenceable", "Indécis", "Anxieux", "Tendance au sacrifice", "Désordonné", "Confus", "Nostalgique"],
+    qualities: ["Empathique", "Intuitif", "Créatif", "Inspiré", "Généreux", "Compassionnel", "Dévoué", "Artiste", "Doux", "Rêveur"],
+    flaws: ["Hypersensible", "Idéaliste", "Fuite de la réalité", "Influençable", "Indécis", "Anxieux", "Tendance au sacrifice", "Désordonné", "Confus", "Nostalgique"],
     anecdotes: [
       "Son monde intérieur est une source inépuisable d'histoires et de création.",
       "Ressent tellement la peine d'autrui qu'il fait tout pour essayer de la soulager.",
@@ -215,10 +210,9 @@ const getProfileForSign = (sign) => {
 };
 
 // ============================================================================
-// PHASE 2 & 3: AUTOMATED DAILY HOROSCOPE GENERATOR (08:00 UTC SYNCHRONIZED)
+// GÉNÉRATEUR D'HOROSCOPE QUOTIDIEN DÉTERMINISTE
 // ============================================================================
 
-// Hash generator for daily deterministic uniqueness
 const getDailyHash = (signId, dateStr) => {
   let hash = 0;
   const str = signId + "_" + dateStr;
@@ -231,188 +225,91 @@ const getDailyHash = (signId, dateStr) => {
 
 const HOROSCOPE_TEXT_DATABASE = {
   amour: [
-    "Vénus accentue la douceur de vos échanges affectifs aujourd'hui. En couple, l'écoute mutuelle permettra de dénouer un léger malentendu récent et de consolider vos projets d'avenir. Pour les célibataires, une rencontre imprévue au détour d'une activité habituelle pourrait éveiller une vive curiosité. Restez authentique et laissez parler votre cœur sans retenue.",
-    "Un vent de passion souffle sur votre ciel sentimental. Les moments partagés avec votre partenaire seront emprunts de complicité et de sensualité renouvelée. Si vous cherchez l'amour, vos charmes naturels seront particulièrement efficaces lors de sorties informelles. Prenez l'initiative d'exprimer vos sentiments les plus sincères sans crainte.",
-    "Les alignements planétaires favorisent la clarté et l'harmonie amoureuse. C'est la journée idéale pour aborder sereinement les sujets profonds et clarifier vos attentes mutuelles. Les personnes seules gagneront à sortir de leur zone de confort pour rencontrer de nouvelles personnes. L'ouverture d'esprit sera le catalyseur de vos plus belles émotions.",
-    "Votre sensibilité amoureuse est décuplée sous l'influence lunaire favorable. Vous saurez apporter le réconfort et l'attention nécessaires à l'épanouissement de votre relation de couple. Célibataire, un dialogue captivant avec une personne de votre entourage pourrait prendre une tournure romantique inattendue. Ne précipitez rien et appréciez chaque instant."
+    "Vénus accentue la douceur de vos échanges affectifs aujourd'hui. En couple, l'écoute mutuelle permettra de dénouer un léger malentendu récent. Pour les célibataires, une rencontre imprévue au détour d'une activité habituelle pourrait éveiller une vive curiosité.",
+    "Un vent de passion souffle sur votre ciel sentimental. Les moments partagés avec votre partenaire seront emprunts de complicité et de sensualité. Si vous cherchez l'amour, vos charmes naturels seront particulièrement efficaces.",
+    "Les alignements planétaires favorisent la clarté et l'harmonie amoureuse. C'est la journée idéale pour aborder sereinement les sujets profonds et clarifier vos attentes mutuelles.",
+    "Votre sensibilité amoureuse est décuplée sous l'influence lunaire favorable. Vous saurez apporter le réconfort et l'attention nécessaires à l'épanouissement de votre relation."
   ],
   travail: [
-    "Mercure stimule votre acuité intellectuelle et votre efficacité au travail. Vos propositions lors des réunions retenues retiendront l'attention de vos supérieurs ou de vos partenaires. C'est le moment idéal pour finaliser des dossiers complexes et poser des jalons stratégiques. Maintenez une communication claire avec vos collègues pour optimiser la cohésion d'équipe.",
-    "Votre persévérance porte enfin ses fruits et débloque un projet en attente. Vous saurez faire preuve d'un leadership rassembleur face à des défis méthodologiques inattendus. N'hésitez pas à déléguer certaines tâches secondaires pour vous concentrer sur vos priorités majeures. La reconnaissance professionnelle est à portée de main.",
-    "Une journée dynamique s'annonce sur le plan professionnel avec de belles opportunités d'innovation. Votre créativité et votre réactivité seront vos plus précieux atouts pour résoudre un problème technique. Prenez le temps de relire attentivement vos contrats avant toute signature définitive. Votre rigueur habituelle sera votre meilleure alliée.",
-    "L'ambiance de travail est particulièrement collaborative et propice aux synergies. Vous trouverez des solutions originales pour rationaliser votre emploi du temps et gagner en productivité. Un échange constructif avec un mentor pourrait vous ouvrir de nouvelles perspectives de carrière. Restez à l'écoute des conseils avisés."
+    "Mercure stimule votre acuité intellectuelle et votre efficacité au travail. Vos propositions lors des réunions retiendront l'attention de vos supérieurs ou partenaires.",
+    "Votre persévérance porte enfin ses fruits et débloque un projet en attente. Vous saurez faire preuve d'un leadership rassembleur face à des défis méthodologiques.",
+    "Une journée dynamique s'annonce sur le plan professionnel avec de belles opportunités d'innovation. Votre créativité et votre réactivité seront vos plus précieux atouts.",
+    "L'ambiance de travail est particulièrement collaborative et propice aux synergies. Vous trouverez des solutions originales pour rationaliser votre emploi du temps."
   ],
   argent: [
-    "Sur le plan financier, la prudence et la méthode vous permettent de consolider vos acquis. C'est une excellente journée pour réviser votre budget global et planifier des épargnes à moyen terme. Évitez les dépenses impulsives déclenchées par des coups de cœur éphémères. Un investissement réfléchi commencera à donner des signes encourageants.",
-    "Vos finances affichent une belle stabilité grâce à votre gestion méthodique récente. Une rentrée d'argent inattendue ou le remboursement d'une créance pourrait agréablement vous surprendre. Profitez-en pour assainir vos engagements bancaires et sécuriser vos réserves de précaution. La modération reste la clé d'une tranquillité durable.",
-    "Les aspects astrologiques incitent à la réflexion stratégique concernant votre patrimoine. C'est le moment opportun pour comparer des contrats ou renégocier des conditions financières avantageuses. Prenez conseil auprès d'experts si vous envisagez des placements importants dans un avenir proche. Votre flair financier est particulièrement aiguisé aujourd'hui.",
-    "Gestion équilibrée et opportunités mesurées caractérisent ce secteur aujourd'hui. Vous saurez résister aux sollicitations commerciales superflues et privilégier l'essentiel. Une bonne nouvelle liée à une démarche administrative ou fiscale est tout à fait envisageable. Continuez de tenir vos comptes avec la même rigueur."
+    "Sur le plan financier, la prudence et la méthode vous permettent de consolider vos acquis. C'est une excellente journée pour réviser votre budget global.",
+    "Vos finances affichent une belle stabilité grâce à votre gestion méthodique récente. Une rentrée d'argent inattendue pourrait agréablement vous surprendre.",
+    "Les aspects astrologiques incitent à la réflexion stratégique concernant votre patrimoine. C'est le moment opportun pour comparer des contrats.",
+    "Gestion équilibrée et opportunités mesurées caractérisent ce secteur aujourd'hui. Vous saurez résister aux sollicitations commerciales superflues."
   ],
   sante: [
-    "Votre niveau d'énergie vitale est en nette hausse sous cette configuration astrale stimulante. Pour maintenir cet équilibre, veillez à alterner vos périodes d'effort intense avec des pauses de relaxation. Une activité physique modérée en plein air vous permettra de vous vider l'esprit. Pensez également à bien vous hydrater tout au long de la journée.",
-    "Une très bonne résistance physique générale vous accompagne durant toute cette journée. Néanmoins, votre système nerveux nécessite un peu d'apaisement en fin de journée pour garantir un sommeil réparateur. Privilégiez des repas légers et équilibrés ce soir tout en évitant les écrans avant de dormir. Prenez soin de votre posture au bureau.",
-    "Forme et vitalité sont au rendez-vous, vous vous sentez capable de déplacer des montagnes. Canalisez cet enthousiasme à travers une séance de sport ou une longue marche stimulante. Veillez toutefois à ne pas trop tirer sur la corde et à accorder à votre corps les étirements nécessaires. L'écoute de votre rythme intérieur reste primordiale.",
-    "Votre capital santé bénéficie d'influences protectrices qui renforcent votre tonus. C'est une excellente période pour adopter de nouvelles habitudes de vie plus saines et durables. La pratique de la respiration consciente ou du yoga vous apportera une grande clarté mentale. Accordez-vous un moment de détente bien mérité ce soir."
+    "Votre niveau d'énergie vitale est en nette hausse sous cette configuration astrale stimulante. Pensez à bien vous hydrater tout au long de la journée.",
+    "Une très bonne résistance physique générale vous accompagne durant toute cette journée. Privilégiez des repas légers et équilibrés ce soir.",
+    "Forme et vitalité sont au rendez-vous, vous vous sentez capable de déplacer des montagnes. Canalisez cet enthousiasme à travers une séance de sport.",
+    "Votre capital santé bénéficie d'influences protectrices qui renforcent votre tonus. La pratique de la respiration consciente vous apportera une grande clarté."
   ],
   conseils: [
     "Accordez-vous dix minutes de méditation en début de matinée pour fixer vos intentions calmes.",
     "Exprimez votre gratitude envers une personne qui vous a soutenu discrètement ces derniers temps.",
     "Osez dire non aux demandes abusives pour préserver votre précieux temps personnel.",
-    "Faites confiance à votre intuition première avant de vous perdre dans une sur-analyse.",
-    "Prenez une grande respiration et abordez la journée une étape après l'autre avec sérénité.",
-    "Privilégiez la qualité de vos relations plutôt que la quantité d'échanges éphémères.",
-    "Offrez-vous une pause régénérante loin des notifications numériques pendant une heure.",
-    "Cultivez l'enthousiasme en vous concentrant sur ce qui fonctionne déjà parfaitement bien."
+    "Faites confiance à votre intuition première avant de vous perdre dans une sur-analyse."
   ]
 };
 
 const generateAutomatedHoroscope = (signId, dateStr) => {
   const hash = getDailyHash(signId, dateStr);
-  
-  const amourIdx = hash % HOROSCOPE_TEXT_DATABASE.amour.length;
-  const travailIdx = (hash >> 2) % HOROSCOPE_TEXT_DATABASE.travail.length;
-  const argentIdx = (hash >> 4) % HOROSCOPE_TEXT_DATABASE.argent.length;
-  const santeIdx = (hash >> 6) % HOROSCOPE_TEXT_DATABASE.sante.length;
-  const conseilIdx = (hash >> 8) % HOROSCOPE_TEXT_DATABASE.conseils.length;
-
-  const scoreAmour = 70 + (hash % 28);
-  const scoreTravail = 68 + ((hash >> 3) % 30);
-  const scoreArgent = 72 + ((hash >> 5) % 26);
-  const scoreSante = 75 + ((hash >> 7) % 23);
-
   return {
-    amour: { text: HOROSCOPE_TEXT_DATABASE.amour[amourIdx], score: scoreAmour },
-    travail: { text: HOROSCOPE_TEXT_DATABASE.travail[travailIdx], score: scoreTravail },
-    argent: { text: HOROSCOPE_TEXT_DATABASE.argent[argentIdx], score: scoreArgent },
-    sante: { text: HOROSCOPE_TEXT_DATABASE.sante[santeIdx], score: scoreSante },
-    conseil: HOROSCOPE_TEXT_DATABASE.conseils[conseilIdx]
+    amour: { text: HOROSCOPE_TEXT_DATABASE.amour[hash % HOROSCOPE_TEXT_DATABASE.amour.length], score: 70 + (hash % 28) },
+    travail: { text: HOROSCOPE_TEXT_DATABASE.travail[(hash >> 2) % HOROSCOPE_TEXT_DATABASE.travail.length], score: 68 + ((hash >> 3) % 30) },
+    argent: { text: HOROSCOPE_TEXT_DATABASE.argent[(hash >> 4) % HOROSCOPE_TEXT_DATABASE.argent.length], score: 72 + ((hash >> 5) % 26) },
+    sante: { text: HOROSCOPE_TEXT_DATABASE.sante[(hash >> 6) % HOROSCOPE_TEXT_DATABASE.sante.length], score: 75 + ((hash >> 7) % 23) },
+    conseil: HOROSCOPE_TEXT_DATABASE.conseils[(hash >> 8) % HOROSCOPE_TEXT_DATABASE.conseils.length]
   };
 };
 
 // ============================================================================
-// MAIN SAAS APPLICATION COMPONENT
+// COMPOSANT PRINCIPAL DE L'APPLICATION
 // ============================================================================
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('horoscope'); // 'horoscope' | 'profiler' | 'api'
+  const [activeTab, setActiveTab] = useState('horoscope'); // 'horoscope' | 'profiler'
   const [selectedSign, setSelectedSign] = useState(ZODIAC_SIGNS[0]);
   
-  // Profiler state
   const [birthdateInput, setBirthdateInput] = useState('1995-07-23');
   const [searchedProfile, setSearchedProfile] = useState(null);
 
-  // Time & Countdown State
-  const [timeToNextUpdate, setTimeToNextUpdate] = useState({ hours: 0, minutes: 0, seconds: 0 });
-  const [copiedCode, setCopiedCode] = useState(false);
-
-  // Today Date string ISO
-  const todayISO = useMemo(() => {
-    const d = new Date();
-    return d.toISOString().split('T')[0];
-  }, []);
-
+  const todayISO = useMemo(() => new Date().toISOString().split('T')[0], []);
   const todayFormatted = useMemo(() => {
     return new Date().toLocaleDateString('fr-FR', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
     });
   }, []);
 
-  // Compute Daily Horoscope for currently selected sign
   const currentHoroscope = useMemo(() => {
     return generateAutomatedHoroscope(selectedSign.id, todayISO);
   }, [selectedSign, todayISO]);
 
-  // Initial calculation for Profiler on mount
   useEffect(() => {
     if (birthdateInput) {
       const sign = getZodiacSignFromDate(birthdateInput);
-      if (sign) {
-        const details = getProfileForSign(sign);
-        setSearchedProfile({ sign, ...details });
-      }
+      if (sign) setSearchedProfile({ sign, ...getProfileForSign(sign) });
     }
   }, []);
 
-  // Countdown timer to next 08:00 UTC update
-  useEffect(() => {
-    const calculateCountdown = () => {
-      const now = new Date();
-      const nextUpdate = new Date();
-      
-      // Set to 08:00 UTC today or tomorrow
-      nextUpdate.setUTCHours(8, 0, 0, 0);
-      if (now >= nextUpdate) {
-        nextUpdate.setUTCDate(nextUpdate.getUTCDate() + 1);
-      }
-
-      const diffMs = nextUpdate.getTime() - now.getTime();
-      const hours = Math.floor(diffMs / (1000 * 60 * 60));
-      const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diffMs % (1000 * 60)) / 1000);
-
-      setTimeToNextUpdate({ hours, minutes, seconds });
-    };
-
-    calculateCountdown();
-    const interval = setInterval(calculateCountdown, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Handle Birthdate Search in Profiler
   const handleProfileSearch = (e) => {
     e.preventDefault();
     if (!birthdateInput) return;
     const sign = getZodiacSignFromDate(birthdateInput);
-    if (sign) {
-      const details = getProfileForSign(sign);
-      setSearchedProfile({ sign, ...details });
-    }
-  };
-
-  const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text);
-    setCopiedCode(true);
-    setTimeout(() => setCopiedCode(false), 2000);
+    if (sign) setSearchedProfile({ sign, ...getProfileForSign(sign) });
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans antialiased pb-24 sm:pb-12 selection:bg-purple-200 selection:text-purple-900 flex flex-col">
+    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans antialiased pb-24 sm:pb-12 flex flex-col selection:bg-purple-200 selection:text-purple-900">
       
-      {/* ---------------------------------------------------------------------- */}
-      {/* AUTOMATION STATUS BAR (PHASE 3 HEADER)                                 */}
-      {/* ---------------------------------------------------------------------- */}
-      <div className="bg-gradient-to-r from-purple-950 via-slate-900 to-indigo-950 text-white text-xs py-2 px-4 border-b border-purple-900/40">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2 text-center md:text-left">
-          
-          <div className="flex items-center gap-2 flex-wrap justify-center">
-            <span className="flex h-2 w-2 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-            </span>
-            <span className="font-semibold text-purple-200">Cron 08h00 UTC :</span>
-            <span className="text-slate-300">Horoscope actualisé automatiquement pour le <strong className="text-white">{todayFormatted}</strong></span>
-          </div>
-
-          <div className="flex items-center gap-4 text-[11px] text-purple-200/90 font-mono">
-            <div className="flex items-center gap-1 bg-white/10 px-2.5 py-0.5 rounded-full border border-white/10">
-              <Clock size={12} className="text-amber-300" />
-              <span>Prochaine génération dans : {String(timeToNextUpdate.hours).padStart(2, '0')}h {String(timeToNextUpdate.minutes).padStart(2, '0')}m {String(timeToNextUpdate.seconds).padStart(2, '0')}s</span>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      {/* ---------------------------------------------------------------------- */}
-      {/* MAIN NAVBAR (DESKTOP & TABLET)                                         */}
-      {/* ---------------------------------------------------------------------- */}
+      {/* BARRE DE NAVIGATION PRINCIPALE (ÉPURÉE SANS CRON NI API) */}
       <header className="bg-white/90 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-40 shadow-2xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between">
           
-          {/* Logo & Brand */}
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-purple-600 via-indigo-600 to-purple-800 flex items-center justify-center text-white shadow-md shadow-purple-200">
               <Sparkles size={20} className="animate-pulse" />
@@ -423,266 +320,173 @@ export default function App() {
                   ASTRAEA
                 </h1>
                 <span className="text-[10px] bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full font-bold uppercase tracking-wide border border-purple-200">
-                  SaaS v2.4
+                  SaaS
                 </span>
               </div>
               <p className="text-[11px] text-slate-500 font-medium hidden sm:block">
-                Moteur d'Astrologie Quotidien & Profilage Automatisé
+                Moteur d'Astrologie Quotidien & Profilage
               </p>
             </div>
           </div>
 
-          {/* Desktop Nav Items */}
-          <nav className="hidden md:flex items-center gap-1 bg-slate-100 p-1 rounded-2xl border border-slate-200/80">
+          {/* Navigation basculant entre Horoscope et Profil */}
+          <nav className="flex items-center gap-1 bg-slate-100 p-1 rounded-2xl border border-slate-200/80">
             <button
               onClick={() => setActiveTab('horoscope')}
               className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-xl transition-all duration-200 ${
-                activeTab === 'horoscope'
-                  ? 'bg-white text-purple-800 shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
+                activeTab === 'horoscope' ? 'bg-white text-purple-800 shadow-xs' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              <Sun size={15} className={activeTab === 'horoscope' ? 'text-purple-600' : ''} />
-              <span>Horoscope du Jour</span>
+              <Sparkles size={15} className={activeTab === 'horoscope' ? 'text-purple-600' : ''} />
+              <span>Horoscope</span>
             </button>
 
             <button
               onClick={() => setActiveTab('profiler')}
               className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-xl transition-all duration-200 ${
-                activeTab === 'profiler'
-                  ? 'bg-white text-purple-800 shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
+                activeTab === 'profiler' ? 'bg-white text-purple-800 shadow-xs' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               <Search size={15} className={activeTab === 'profiler' ? 'text-purple-600' : ''} />
-              <span>Mon Profil Astrologique</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('api')}
-              className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-xl transition-all duration-200 ${
-                activeTab === 'api'
-                  ? 'bg-white text-purple-800 shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <Terminal size={15} className={activeTab === 'api' ? 'text-purple-600' : ''} />
-              <span>API & Automatisation</span>
+              <span>Mon Profil</span>
             </button>
           </nav>
 
-          {/* Quick Date Display */}
           <div className="text-right hidden lg:block">
             <p className="text-xs font-bold text-slate-700">{todayFormatted}</p>
             <p className="text-[10px] text-emerald-600 font-semibold flex items-center justify-end gap-1">
-              <CheckCircle2 size={12} /> Sync Astres 100% OK
+              <CheckCircle2 size={12} /> En ligne
             </p>
           </div>
 
         </div>
       </header>
 
-      {/* ---------------------------------------------------------------------- */}
-      {/* MAIN CONTAINER CONTENT                                                 */}
-      {/* ---------------------------------------------------------------------- */}
+      {/* CONTENEUR PRINCIPAL */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 sm:pt-8 flex-1 w-full">
 
-        {/* ==================================================================== */}
-        {/* TAB 1: HOROSCOPE DU JOUR (PHASE 2 & 3)                               */}
-        {/* ==================================================================== */}
+        {/* ONGLET 1 : HOROSCOPE DU JOUR AVEC GRILLE 4x3 */}
         {activeTab === 'horoscope' && (
           <div className="space-y-6 sm:space-y-8 animate-fadeIn">
             
-            {/* Title Section */}
             <div className="text-center max-w-3xl mx-auto space-y-2">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-100/80 text-purple-800 text-xs font-semibold border border-purple-200">
-                <Sparkles size={13} className="text-purple-600" />
-                <span>Mise à jour automatique quotidienne • 08h00 UTC</span>
-              </div>
               <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
                 Horoscope Astral Quotidien
               </h2>
               <p className="text-slate-600 text-xs sm:text-sm max-w-xl mx-auto">
-                Analyse détaillée pour chaque signe du zodiaque basée sur la rotation et les transits des astres du système solaire.
+                Analyse détaillée pour chaque signe du zodiaque pour le {todayFormatted}.
               </p>
             </div>
 
-            {/* Zodiac Sign Carousel / Grid Selector */}
-            <div className="bg-white p-4 sm:p-5 rounded-3xl shadow-sm border border-slate-200/90 space-y-3">
+            {/* SÉLECTEUR DE SIGNES EN FORMAT STRICT 4 COLONNES SUR 3 LIGNES (GRID 4x3) */}
+            <div className="bg-white p-5 rounded-3xl shadow-sm border border-slate-200/90 space-y-3">
               <div className="flex items-center justify-between px-1">
                 <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
                   Sélectionnez un signe du zodiaque :
                 </p>
-                <span className="text-[11px] text-purple-700 font-semibold">
-                  Signe actif : {selectedSign.name}
+                <span className="text-xs text-purple-700 font-semibold">
+                  Signe actif : <strong className="text-slate-900">{selectedSign.name}</strong>
                 </span>
               </div>
 
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-12 gap-2">
+              {/* grid-cols-2 sur mobile, grid-cols-4 sur écrans larges pour faire un format 4x3 parfait (12 éléments) */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {ZODIAC_SIGNS.map((sign) => {
                   const isSelected = selectedSign.id === sign.id;
                   return (
                     <button
                       key={sign.id}
                       onClick={() => setSelectedSign(sign)}
-                      className={`flex flex-col items-center p-2.5 rounded-2xl transition duration-200 text-center border relative overflow-hidden group ${
+                      className={`flex items-center gap-3 p-3.5 rounded-2xl transition duration-200 border text-left group ${
                         isSelected
-                          ? 'bg-gradient-to-b from-purple-50 to-indigo-50/60 border-purple-500 text-purple-900 shadow-sm ring-2 ring-purple-500/20'
+                          ? 'bg-gradient-to-r from-purple-50 to-indigo-50 border-purple-500 text-purple-900 shadow-sm ring-2 ring-purple-500/20'
                           : 'border-slate-100 bg-slate-50/60 hover:bg-slate-100 text-slate-700 hover:border-slate-300'
                       }`}
                     >
-                      <span className="text-2xl sm:text-3xl mb-0.5 transition group-hover:scale-110">{sign.symbol}</span>
-                      <span className="text-xs font-bold truncate w-full">{sign.name}</span>
-                      <span className="text-[9px] text-slate-400 font-medium">{sign.element}</span>
+                      <span className="text-3xl shrink-0 group-hover:scale-110 transition">{sign.symbol}</span>
+                      <div className="overflow-hidden">
+                        <p className="text-xs font-bold truncate">{sign.name}</p>
+                        <p className="text-[10px] text-slate-400">{sign.element} • {sign.planet}</p>
+                      </div>
                     </button>
                   );
                 })}
               </div>
             </div>
 
-            {/* Selected Sign Detailed Cards View */}
+            {/* VUE DÉTAILLÉE DU SIGNE SÉLECTIONNÉ */}
             <div className="bg-white rounded-3xl shadow-md border border-slate-200 overflow-hidden space-y-6">
               
-              {/* Sign Header Banner */}
-              <div className={`bg-gradient-to-r ${selectedSign.color} text-white p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden`}>
-                <div className="flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left z-10">
-                  <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-white/15 backdrop-blur-md flex items-center justify-center text-5xl sm:text-6xl border border-white/20 shadow-inner">
+              <div className={`bg-gradient-to-r ${selectedSign.color} text-white p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6`}>
+                <div className="flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left">
+                  <div className="w-20 h-20 rounded-3xl bg-white/15 backdrop-blur-md flex items-center justify-center text-5xl border border-white/20 shadow-inner">
                     {selectedSign.symbol}
                   </div>
                   <div>
-                    <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-                      <h3 className="text-3xl sm:text-4xl font-black tracking-tight">{selectedSign.name}</h3>
-                      <span className="text-xs bg-white/20 text-white border border-white/30 px-3 py-1 rounded-full font-semibold backdrop-blur-md">
-                        Élément {selectedSign.element}
-                      </span>
-                    </div>
-                    <p className="text-white/90 text-xs sm:text-sm mt-1 font-medium">{selectedSign.dates}</p>
-                    <p className="text-xs text-white/80 mt-1">Gouverné par la planète <strong className="text-white">{selectedSign.planet}</strong></p>
+                    <h3 className="text-3xl font-black tracking-tight">{selectedSign.name}</h3>
+                    <p className="text-white/90 text-xs sm:text-sm mt-1 font-medium">{selectedSign.dates} • Élément {selectedSign.element}</p>
+                    <p className="text-xs text-white/80 mt-1">Gouverné par <strong className="text-white">{selectedSign.planet}</strong></p>
                   </div>
-                </div>
-
-                {/* Status badge */}
-                <div className="bg-slate-900/40 backdrop-blur-md border border-white/20 rounded-2xl p-4 text-center md:text-right min-w-[220px] z-10">
-                  <span className="text-[10px] text-purple-200 uppercase font-bold tracking-wider block">Génération Déterministe</span>
-                  <p className="text-sm font-bold text-emerald-300 flex items-center justify-center md:justify-end gap-1.5 mt-0.5">
-                    <CheckCircle2 size={16} /> Prêt depuis 08h00 UTC
-                  </p>
-                  <p className="text-[11px] text-slate-200 mt-1">Conforme aux mouvements célestes</p>
                 </div>
               </div>
 
-              {/* 4 Pillars Grid (Amour, Travail, Argent, Santé) */}
+              {/* 4 Piliers (Amour, Travail, Argent, Santé) */}
               <div className="p-6 sm:p-8 space-y-8">
-                
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   
-                  {/* Pillar 1: Amour */}
-                  <div className="bg-rose-50/40 border border-rose-100 p-6 rounded-3xl space-y-4 hover:shadow-md transition duration-200">
+                  <div className="bg-rose-50/40 border border-rose-100 p-6 rounded-3xl space-y-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="p-2.5 bg-rose-100 text-rose-700 rounded-2xl shadow-2xs">
-                          <Heart size={22} />
-                        </div>
-                        <div>
-                          <h4 className="text-base font-bold text-rose-950">Amour & Relations</h4>
-                          <p className="text-[11px] text-rose-700">Climat sentimental & compatibilité</p>
-                        </div>
+                        <div className="p-2.5 bg-rose-100 text-rose-700 rounded-2xl"><Heart size={22} /></div>
+                        <h4 className="text-base font-bold text-rose-950">Amour & Relations</h4>
                       </div>
-                      <div className="text-right">
-                        <span className="text-xs font-extrabold bg-rose-100 text-rose-900 px-3 py-1 rounded-full border border-rose-200">
-                          {currentHoroscope.amour.score}%
-                        </span>
-                      </div>
+                      <span className="text-xs font-extrabold bg-rose-100 text-rose-900 px-3 py-1 rounded-full">{currentHoroscope.amour.score}%</span>
                     </div>
-                    <p className="text-slate-700 text-sm leading-relaxed text-justify">
-                      {currentHoroscope.amour.text}
-                    </p>
+                    <p className="text-slate-700 text-sm leading-relaxed">{currentHoroscope.amour.text}</p>
                   </div>
 
-                  {/* Pillar 2: Travail */}
-                  <div className="bg-sky-50/40 border border-sky-100 p-6 rounded-3xl space-y-4 hover:shadow-md transition duration-200">
+                  <div className="bg-sky-50/40 border border-sky-100 p-6 rounded-3xl space-y-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="p-2.5 bg-sky-100 text-sky-700 rounded-2xl shadow-2xs">
-                          <Briefcase size={22} />
-                        </div>
-                        <div>
-                          <h4 className="text-base font-bold text-sky-950">Travail & Carrière</h4>
-                          <p className="text-[11px] text-sky-700">Projets, collègues & opportunités</p>
-                        </div>
+                        <div className="p-2.5 bg-sky-100 text-sky-700 rounded-2xl"><Briefcase size={22} /></div>
+                        <h4 className="text-base font-bold text-sky-950">Travail & Carrière</h4>
                       </div>
-                      <div className="text-right">
-                        <span className="text-xs font-extrabold bg-sky-100 text-sky-900 px-3 py-1 rounded-full border border-sky-200">
-                          {currentHoroscope.travail.score}%
-                        </span>
-                      </div>
+                      <span className="text-xs font-extrabold bg-sky-100 text-sky-900 px-3 py-1 rounded-full">{currentHoroscope.travail.score}%</span>
                     </div>
-                    <p className="text-slate-700 text-sm leading-relaxed text-justify">
-                      {currentHoroscope.travail.text}
-                    </p>
+                    <p className="text-slate-700 text-sm leading-relaxed">{currentHoroscope.travail.text}</p>
                   </div>
 
-                  {/* Pillar 3: Argent */}
-                  <div className="bg-emerald-50/40 border border-emerald-100 p-6 rounded-3xl space-y-4 hover:shadow-md transition duration-200">
+                  <div className="bg-emerald-50/40 border border-emerald-100 p-6 rounded-3xl space-y-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="p-2.5 bg-emerald-100 text-emerald-700 rounded-2xl shadow-2xs">
-                          <Wallet size={22} />
-                        </div>
-                        <div>
-                          <h4 className="text-base font-bold text-emerald-950">Argent & Finances</h4>
-                          <p className="text-[11px] text-emerald-700">Gestion budgétaire & investissements</p>
-                        </div>
+                        <div className="p-2.5 bg-emerald-100 text-emerald-700 rounded-2xl"><Wallet size={22} /></div>
+                        <h4 className="text-base font-bold text-emerald-950">Argent & Finances</h4>
                       </div>
-                      <div className="text-right">
-                        <span className="text-xs font-extrabold bg-emerald-100 text-emerald-900 px-3 py-1 rounded-full border border-emerald-200">
-                          {currentHoroscope.argent.score}%
-                        </span>
-                      </div>
+                      <span className="text-xs font-extrabold bg-emerald-100 text-emerald-900 px-3 py-1 rounded-full">{currentHoroscope.argent.score}%</span>
                     </div>
-                    <p className="text-slate-700 text-sm leading-relaxed text-justify">
-                      {currentHoroscope.argent.text}
-                    </p>
+                    <p className="text-slate-700 text-sm leading-relaxed">{currentHoroscope.argent.text}</p>
                   </div>
 
-                  {/* Pillar 4: Santé */}
-                  <div className="bg-amber-50/40 border border-amber-100 p-6 rounded-3xl space-y-4 hover:shadow-md transition duration-200">
+                  <div className="bg-amber-50/40 border border-amber-100 p-6 rounded-3xl space-y-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="p-2.5 bg-amber-100 text-amber-800 rounded-2xl shadow-2xs">
-                          <Activity size={22} />
-                        </div>
-                        <div>
-                          <h4 className="text-base font-bold text-amber-950">Santé & Vitalité</h4>
-                          <p className="text-[11px] text-amber-800">Énergie physique & bien-être mental</p>
-                        </div>
+                        <div className="p-2.5 bg-amber-100 text-amber-800 rounded-2xl"><Activity size={22} /></div>
+                        <h4 className="text-base font-bold text-amber-950">Santé & Vitalité</h4>
                       </div>
-                      <div className="text-right">
-                        <span className="text-xs font-extrabold bg-amber-100 text-amber-900 px-3 py-1 rounded-full border border-amber-200">
-                          {currentHoroscope.sante.score}%
-                        </span>
-                      </div>
+                      <span className="text-xs font-extrabold bg-amber-100 text-amber-900 px-3 py-1 rounded-full">{currentHoroscope.sante.score}%</span>
                     </div>
-                    <p className="text-slate-700 text-sm leading-relaxed text-justify">
-                      {currentHoroscope.sante.text}
-                    </p>
+                    <p className="text-slate-700 text-sm leading-relaxed">{currentHoroscope.sante.text}</p>
                   </div>
 
                 </div>
 
-                {/* Personal Daily Advice Callout */}
-                <div className="bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-950 text-white p-6 sm:p-8 rounded-3xl relative overflow-hidden shadow-lg border border-purple-800">
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 relative z-10">
-                    <div className="w-14 h-14 rounded-2xl bg-amber-400 text-slate-900 flex items-center justify-center shrink-0 shadow-md font-bold text-2xl">
-                      💡
-                    </div>
-                    <div className="space-y-1">
-                      <span className="text-xs font-bold text-amber-300 uppercase tracking-widest block">
-                        Conseil Astral Personnalisé du Jour
-                      </span>
-                      <p className="text-lg sm:text-xl font-medium italic text-purple-100 leading-snug">
-                        "{currentHoroscope.conseil}"
-                      </p>
+                {/* Conseil du jour */}
+                <div className="bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-950 text-white p-6 rounded-3xl shadow-lg">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-2xl bg-amber-400 text-slate-900 flex items-center justify-center font-bold text-xl shrink-0">💡</div>
+                    <div>
+                      <span className="text-xs font-bold text-amber-300 uppercase tracking-widest block">Conseil du Jour</span>
+                      <p className="text-base sm:text-lg italic text-purple-100 mt-1">"{currentHoroscope.conseil}"</p>
                     </div>
                   </div>
                 </div>
@@ -694,30 +498,23 @@ export default function App() {
           </div>
         )}
 
-        {/* ==================================================================== */}
-        {/* TAB 2: PROFILER ASTROLOGIQUE (PHASE 1)                               */}
-        {/* ==================================================================== */}
+        {/* ONGLET 2 : PROFILER ASTROLOGIQUE */}
         {activeTab === 'profiler' && (
           <div className="space-y-6 sm:space-y-8 animate-fadeIn">
             
             <div className="text-center max-w-3xl mx-auto space-y-2">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-100 text-indigo-800 text-xs font-semibold border border-indigo-200">
-                <Search size={13} className="text-indigo-600" />
-                <span>Moteur de Calcul de Signe & Analyse Complète</span>
-              </div>
               <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
                 Moteur de Profilage Astrologique
               </h2>
               <p className="text-slate-600 text-xs sm:text-sm max-w-xl mx-auto">
-                Saisissez n'importe quelle date de naissance pour débloquer immédiatement votre bilan astrologique détaillé.
+                Saisissez votre date de naissance pour découvrir votre profil complet.
               </p>
             </div>
 
-            {/* Input Search Form */}
-            <div className="max-w-xl mx-auto bg-white p-6 rounded-3xl shadow-sm border border-slate-200 space-y-4">
+            <div className="max-w-xl mx-auto bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
               <form onSubmit={handleProfileSearch} className="space-y-4">
                 <label className="block text-xs font-bold uppercase text-slate-500 tracking-wider">
-                  Renseignez la date de naissance :
+                  Date de naissance :
                 </label>
                 <div className="flex flex-col sm:flex-row gap-3">
                   <div className="relative flex-1">
@@ -726,122 +523,65 @@ export default function App() {
                       required
                       value={birthdateInput}
                       onChange={(e) => setBirthdateInput(e.target.value)}
-                      className="w-full pl-10 pr-4 py-3 rounded-2xl border border-slate-300 focus:ring-2 focus:ring-purple-600 focus:border-purple-600 text-slate-800 font-semibold text-sm outline-none transition"
+                      className="w-full pl-10 pr-4 py-3 rounded-2xl border border-slate-300 focus:ring-2 focus:ring-purple-600 text-sm outline-none"
                     />
                     <Calendar className="absolute left-3.5 top-3.5 text-slate-400" size={18} />
                   </div>
-                  <button
-                    type="submit"
-                    className="bg-purple-800 hover:bg-purple-900 active:scale-95 text-white font-bold px-6 py-3 rounded-2xl transition duration-200 flex items-center justify-center gap-2 shadow-md shadow-purple-200"
-                  >
-                    <Search size={18} />
-                    <span>Calculer mon signe</span>
+                  <button type="submit" className="bg-purple-800 hover:bg-purple-900 text-white font-bold px-6 py-3 rounded-2xl transition flex items-center justify-center gap-2">
+                    <Search size={18} /> Calculer
                   </button>
                 </div>
               </form>
             </div>
 
-            {/* Profile Results View */}
             {searchedProfile && (
-              <div className="bg-white rounded-3xl shadow-md border border-slate-200 overflow-hidden p-6 sm:p-8 space-y-8">
-                
-                {/* Result Top Summary */}
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-6 p-6 bg-gradient-to-r from-purple-50 via-indigo-50 to-purple-50 rounded-3xl border border-purple-100">
+              <div className="bg-white rounded-3xl shadow-md border border-slate-200 p-6 sm:p-8 space-y-8">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-6 p-6 bg-purple-50 rounded-3xl border border-purple-100">
                   <div className="flex items-center gap-5 text-center sm:text-left flex-col sm:flex-row">
                     <span className="text-6xl">{searchedProfile.sign.symbol}</span>
                     <div>
-                      <span className="text-xs font-extrabold text-purple-700 uppercase tracking-wider">Signe Calculé</span>
+                      <span className="text-xs font-extrabold text-purple-700 uppercase">Signe Calculé</span>
                       <h3 className="text-3xl font-black text-slate-900">{searchedProfile.sign.name}</h3>
-                      <p className="text-xs text-slate-500 font-medium">{searchedProfile.sign.dates} • Élément {searchedProfile.sign.element}</p>
+                      <p className="text-xs text-slate-500">{searchedProfile.sign.dates} • Élément {searchedProfile.sign.element}</p>
                     </div>
-                  </div>
-                  <div className="text-center sm:text-right">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-purple-200 text-purple-900">
-                      <Award size={14} /> Profilage 100% Vérifié
-                    </span>
                   </div>
                 </div>
 
-                {/* Grid 1: Top 10 Qualities & Top 10 Flaws */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  
-                  {/* Top 10 Qualities */}
                   <div className="bg-emerald-50/50 border border-emerald-100 rounded-3xl p-6 space-y-4">
                     <h4 className="text-emerald-950 font-bold text-base flex items-center gap-2">
-                      <Award className="text-emerald-600" size={20} /> Top 10 des Qualités Majeures
+                      <Award className="text-emerald-600" size={20} /> Top 10 des Qualités
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {searchedProfile.qualities.map((item, idx) => (
-                        <span key={idx} className="bg-white border border-emerald-200 text-emerald-900 text-xs font-bold px-3 py-1.5 rounded-xl shadow-2xs">
-                          {idx + 1}. {item}
+                        <span key={idx} className="bg-white border border-emerald-200 text-emerald-900 text-xs font-bold px-3 py-1.5 rounded-xl">
+                          {item}
                         </span>
                       ))}
                     </div>
                   </div>
 
-                  {/* Top 10 Flaws */}
                   <div className="bg-amber-50/50 border border-amber-100 rounded-3xl p-6 space-y-4">
                     <h4 className="text-amber-950 font-bold text-base flex items-center gap-2">
-                      <Info className="text-amber-600" size={20} /> Top 10 des Défauts & Vulnérabilités
+                      <Info className="text-amber-600" size={20} /> Top 10 des Défauts
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {searchedProfile.flaws.map((item, idx) => (
-                        <span key={idx} className="bg-white border border-amber-200 text-amber-900 text-xs font-bold px-3 py-1.5 rounded-xl shadow-2xs">
-                          {idx + 1}. {item}
+                        <span key={idx} className="bg-white border border-amber-200 text-amber-900 text-xs font-bold px-3 py-1.5 rounded-xl">
+                          {item}
                         </span>
                       ))}
                     </div>
                   </div>
-
                 </div>
 
-                {/* Grid 2: 5 Anecdotes & 5 Hidden Talents */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  
-                  {/* 5 Hidden Talents */}
-                  <div className="bg-purple-50/50 border border-purple-100 rounded-3xl p-6 space-y-4">
-                    <h4 className="text-purple-950 font-bold text-base flex items-center gap-2">
-                      <Gift className="text-purple-600" size={20} /> 5 Talents Cachés Méconnus
-                    </h4>
-                    <ul className="space-y-2.5 text-xs sm:text-sm text-slate-700">
-                      {searchedProfile.talents.map((talent, idx) => (
-                        <li key={idx} className="flex items-start gap-3 bg-white p-3 rounded-2xl border border-purple-100 shadow-2xs">
-                          <span className="w-5 h-5 rounded-full bg-purple-200 text-purple-900 text-xs font-extrabold flex items-center justify-center shrink-0 mt-0.5">
-                            {idx + 1}
-                          </span>
-                          <span className="font-medium text-slate-800">{talent}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* 5 Anecdotes */}
-                  <div className="bg-indigo-50/50 border border-indigo-100 rounded-3xl p-6 space-y-4">
-                    <h4 className="text-indigo-950 font-bold text-base flex items-center gap-2">
-                      <Compass className="text-indigo-600" size={20} /> 5 Anecdotes Particulières
-                    </h4>
-                    <ul className="space-y-2.5 text-xs sm:text-sm text-slate-700">
-                      {searchedProfile.anecdotes.map((anecdote, idx) => (
-                        <li key={idx} className="flex items-start gap-3 bg-white p-3 rounded-2xl border border-indigo-100 shadow-2xs">
-                          <span className="w-5 h-5 rounded-full bg-indigo-200 text-indigo-900 text-xs font-extrabold flex items-center justify-center shrink-0 mt-0.5">
-                            {idx + 1}
-                          </span>
-                          <span className="font-medium text-slate-800">{anecdote}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                </div>
-
-                {/* 10 Domains of Excellence */}
                 <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 space-y-4">
                   <h4 className="text-slate-900 font-bold text-base flex items-center gap-2">
-                    <Star size={20} className="text-amber-500 fill-amber-500" /> 10 Domaines d'Excellence & Métiers
+                    <Star size={20} className="text-amber-500 fill-amber-500" /> Domaines d'Excellence
                   </h4>
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
                     {searchedProfile.excellenceDomains.map((domain, idx) => (
-                      <div key={idx} className="bg-white p-3.5 rounded-2xl border border-slate-200 text-center font-bold text-xs text-slate-800 shadow-2xs hover:border-purple-300 transition">
+                      <div key={idx} className="bg-white p-3 rounded-2xl border border-slate-200 text-center font-bold text-xs text-slate-800">
                         {domain}
                       </div>
                     ))}
@@ -854,141 +594,7 @@ export default function App() {
           </div>
         )}
 
-        {/* ==================================================================== */}
-        {/* TAB 3: API & AUTOMATION DASHBOARD (PHASE 3 & 4)                      */}
-        {/* ==================================================================== */}
-        {activeTab === 'api' && (
-          <div className="space-y-6 sm:space-y-8 animate-fadeIn">
-            
-            <div className="text-center max-w-3xl mx-auto space-y-2">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold border border-emerald-200">
-                <Terminal size={13} className="text-emerald-600" />
-                <span>Documentation & Architecture SaaS Automatisée</span>
-              </div>
-              <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                Infrastructure & API publique
-              </h2>
-              <p className="text-slate-600 text-xs sm:text-sm max-w-xl mx-auto">
-                Consultez les requêtes JSON générées et le fonctionnement de l'automatisation matinale 08h00 UTC.
-              </p>
-            </div>
-
-            {/* Architecture Overview */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              
-              <div className="bg-white p-6 rounded-3xl border border-slate-200 space-y-3">
-                <div className="w-10 h-10 rounded-2xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold">
-                  <Database size={20} />
-                </div>
-                <h3 className="font-bold text-base text-slate-900">Base Déterministe</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  L'horoscope est calculé de manière prédictive via un hash combinant la date ISO du jour et l'identifiant du signe astrologique.
-                </p>
-              </div>
-
-              <div className="bg-white p-6 rounded-3xl border border-slate-200 space-y-3">
-                <div className="w-10 h-10 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold">
-                  <Clock size={20} />
-                </div>
-                <h3 className="font-bold text-base text-slate-900">Cron Job 08h00 UTC</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Une tâche automatisée planifiée rafraîchit les métriques d'alignement planétaire chaque nuit à 08h00 UTC précise.
-                </p>
-              </div>
-
-              <div className="bg-white p-6 rounded-3xl border border-slate-200 space-y-3">
-                <div className="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
-                  <Zap size={20} />
-                </div>
-                <h3 className="font-bold text-base text-slate-900">Accès Public REST</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Exportation fluide des données quotidiennes sous format JSON prêt pour l'intégration mobile, web ou widgets.
-                </p>
-              </div>
-
-            </div>
-
-            {/* API Endpoint Inspector Box */}
-            <div className="bg-slate-900 text-slate-100 rounded-3xl p-6 sm:p-8 space-y-4 shadow-xl border border-slate-800">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
-                <div className="flex items-center gap-3">
-                  <span className="px-2.5 py-1 rounded-lg text-xs font-extrabold bg-emerald-500 text-slate-950 uppercase">
-                    GET
-                  </span>
-                  <code className="text-xs sm:text-sm font-mono text-purple-300">
-                    /api/v1/horoscope?sign={selectedSign.id}&date={todayISO}
-                  </code>
-                </div>
-                <button
-                  onClick={() => copyToClipboard(JSON.stringify({ sign: selectedSign.id, date: todayISO, data: currentHoroscope }, null, 2))}
-                  className="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-3.5 py-2 rounded-xl border border-slate-700 transition"
-                >
-                  {copiedCode ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
-                  <span>{copiedCode ? 'Copié !' : 'Copier JSON'}</span>
-                </button>
-              </div>
-
-              {/* JSON Payload Preview */}
-              <pre className="font-mono text-xs text-emerald-400 bg-slate-950 p-4 sm:p-6 rounded-2xl overflow-x-auto border border-slate-800 leading-relaxed">
-{JSON.stringify({
-  status: 200,
-  updated_at: `${todayISO}T08:00:00Z`,
-  sign: selectedSign.id,
-  element: selectedSign.element,
-  horoscope: {
-    amour: currentHoroscope.amour,
-    travail: currentHoroscope.travail,
-    argent: currentHoroscope.argent,
-    sante: currentHoroscope.sante,
-    conseil_du_jour: currentHoroscope.conseil
-  }
-}, null, 2)}
-              </pre>
-            </div>
-
-          </div>
-        )}
-
       </main>
-
-      {/* ---------------------------------------------------------------------- */}
-      {/* MOBILE BOTTOM NAVIGATION BAR (MOBILE FIRST DESIGN)                    */}
-      {/* ---------------------------------------------------------------------- */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 z-50 md:hidden px-4 py-2">
-        <div className="grid grid-cols-3 gap-1 max-w-md mx-auto">
-          
-          <button
-            onClick={() => setActiveTab('horoscope')}
-            className={`flex flex-col items-center justify-center py-2 rounded-2xl text-[11px] font-bold transition ${
-              activeTab === 'horoscope' ? 'text-purple-800 bg-purple-50' : 'text-slate-500'
-            }`}
-          >
-            <Sun size={18} className="mb-0.5" />
-            <span>Horoscope</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('profiler')}
-            className={`flex flex-col items-center justify-center py-2 rounded-2xl text-[11px] font-bold transition ${
-              activeTab === 'profiler' ? 'text-purple-800 bg-purple-50' : 'text-slate-500'
-            }`}
-          >
-            <Search size={18} className="mb-0.5" />
-            <span>Profil</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('api')}
-            className={`flex flex-col items-center justify-center py-2 rounded-2xl text-[11px] font-bold transition ${
-              activeTab === 'api' ? 'text-purple-800 bg-purple-50' : 'text-slate-500'
-            }`}
-          >
-            <Terminal size={18} className="mb-0.5" />
-            <span>API & Automation</span>
-          </button>
-
-        </div>
-      </div>
 
     </div>
   );
