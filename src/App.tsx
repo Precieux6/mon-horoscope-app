@@ -302,7 +302,7 @@ export default function App() {
               }`}
             >
               <TrendingUp size={15} className={activeTab === 'mensuel' ? 'text-purple-600' : ''} />
-              <span>Tendances Mensuelles</span>
+              <span>Tendances mensuelles</span>
             </button>
 
             <button
