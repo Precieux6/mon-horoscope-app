@@ -1,0 +1,11 @@
+{
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ],
+  "crons": [
+    {
+      "path": "/api/generate-horoscope",
+      "schedule": "0 3 * * *"
+    }
+  ]
+}
