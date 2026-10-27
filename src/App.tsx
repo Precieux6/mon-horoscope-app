@@ -210,81 +210,117 @@ const getProfileForSign = (sign) => {
 };
 
 // ============================================================================
-// OPTIONS A & B : BASE DE TEXTES ÉLARGIE (12 VARIANTES) ET HACHAGE INDÉPENDANT
+// BASES DE TEXTES QUOTIDIENS ÉLARGIES (12 TEXTES UNIQUES DE 3 À 4 PHRASES)
 // ============================================================================
 
-const HOROSCOPE_TEXT_DATABASE = {
+const DAILY_TEXTS = {
   amour: [
-    "Vénus accentue la douceur de vos échanges affectifs aujourd'hui. En couple, l'écoute mutuelle permettra de dénouer un léger malentendu récent.",
-    "Un vent de passion souffle sur votre ciel sentimental. Les moments partagés avec votre partenaire seront emprunts de complicité et de sensualité.",
-    "Les alignements planétaires favorisent la clarté et l'harmonie amoureuse. C'est la journée idéale pour aborder sereinement les sujets profonds.",
-    "Votre sensibilité amoureuse est décuplée sous l'influence lunaire favorable. Vous saurez apporter le réconfort et l'attention nécessaires.",
-    "Une rencontre imprévue au détour d'une activité habituelle pourrait éveiller une vive curiosité chez les célibataires.",
-    "Le dialogue constructif est mis à l'honneur. Exprimez vos sentiments sans crainte d'être mal jugé par l'être aimé.",
-    "Un climat de tendresse enveloppe votre sphère privée. Profitez de instants privilégiés pour renforcer votre complicité.",
-    "L'audace sentimentale portera ses fruits. Osez faire le premier pas si vous attendez un signe de votre partenaire.",
-    "La journée invite à l'introspection romantique. Comprendre vos propres désirs facilitera vos choix relationnels.",
-    "Une vague de bien-être et de réconciliation illumine votre foyer. Lâchez prise sur les petits tracas du quotidien.",
-    "Vos charmes naturels opèrent à plein régime. Vous saurez charmer et retenir l'attention de la personne convoitée.",
-    "L'harmonie règne dans vos relations proches, favorisant les déclarations et les projets communs à deux."
+    "Vénus accentue la douceur de vos échanges affectifs aujourd'hui. En couple, l'écoute mutuelle permettra de dénouer un léger malentendu récent. Pour les célibataires, une rencontre imprévue au détour d'une activité habituelle pourrait éveiller une vive curiosité.",
+    "Un vent de passion souffle sur votre ciel sentimental dès les premières lueurs du jour. Les moments partagés avec votre partenaire seront empreints de complicité et de sensualité pure. Si vous cherchez l'amour, vos charmes naturels se révèleront particulièrement redoutables.",
+    "Les alignements planétaires favorisent grandement la clarté et l'harmonie amoureuse. C'est la journée idéale pour aborder sereinement les sujets profonds et clarifier vos attentes mutuelles. Votre cœur s'ouvre à de nouvelles perspectives relationnelles réjouissantes.",
+    "Votre sensibilité affective est décuplée sous une influence astrale très bienveillante. Vous saurez apporter le réconfort et l'attention indispensables à l'épanouissement de votre partenaire. Osez exprimer vos sentiments les plus sincères sans aucune hésitation.",
+    "Le dialogue constructif est mis à l'honneur dans votre sphère intime aujourd'hui. Vos projets à deux reçoivent des ondes positives très encourageantes pour l'avenir. Profitez de cette belle énergie pour raviver la flamme de la complicité.",
+    "Une atmosphère de tendresse inattendue enveloppe votre vie sentimentale au quotidien. Si des tensions existaient, elles se dissipent naturellement grâce à votre empathie. Les célibataires pourraient vivre un coup de cœur mémorable et inspirant.",
+    "L'audace relationnelle est récompensée par des retours affectifs très chaleureux. Prenez l'initiative d'organiser une soirée privilégiée avec l'élu de votre cœur. Votre pouvoir de séduction atteint des sommets qu'il serait dommage d'ignorer.",
+    "La journée invite à l'introspection romantique pour mieux comprendre vos désirs profonds. En couple, la complicité s'approfondit à travers des rires partagés et des projets simples. Laissez parler votre intuition première pour guider vos élans du cœur.",
+    "De belles surprises émotionnelles illuminent votre journée sur le plan du cœur. Votre bienveillance naturelle attire des ondes affectives hautement constructives. Savourez pleinement chaque instant de douceur partagée avec les vôtres.",
+    "Les astres vous incitent à lâcher prise sur vos exigences relationnelles excessives. Acceptez l'autre dans sa différence pour cultiver une paix intérieure durable. Une belle nouvelle conversation renforcera l'amour et la confiance mutuelle.",
+    "La passion s'invite dans votre quotidien amoureux avec une intensité remarquable. Exprimez haut et fort ce que vous ressentez au fond de votre âme. Votre partenaire saura se montrer à la hauteur de vos attentes les plus chères.",
+    "Un climat de sérénité et de complicité profonde embellit votre journée sentimentale. Profitez de ce répit astral pour consolider vos liens affectifs essentiels. La simplicité sera la clé de votre bonheur relationnel aujourd'hui."
   ],
   travail: [
-    "Mercure stimule votre acuité intellectuelle et votre efficacité au travail. Vos propositions lors des réunions retiendront l'attention.",
-    "Votre persévérance porte enfin ses fruits et débloque un projet en attente depuis plusieurs semaines.",
-    "Une journée dynamique s'annonce sur le plan professionnel avec de belles opportunités d'innovation et de créativité.",
-    "L'ambiance de travail est particulièrement collaborative et propice aux synergies constructives avec vos collègues.",
-    "Gérez vos priorités avec méthode pour venir à bout d'une charge de tâches importante sans stress inutile.",
-    "Votre sens du leadership naturel vous permet de galvaniser votre équipe face à un défi complexe.",
-    "Un retour positif de votre hiérarchie viendra valider vos récents efforts et renforcer votre confiance.",
-    "Restez ouvert aux critiques constructives : elles constituent un tremplin majeur pour votre évolution.",
-    "L'organisation et la rigueur technique seront vos meilleures armes pour boucler vos dossiers à temps.",
-    "Une opportunité de mobilité ou de nouvelle responsabilité pointe discrètement à l'horizon professionnel.",
-    "Faites confiance à votre intuition pour trancher rapidement sur un dossier épineux en fin de matinée.",
-    "La clarté de vos communications écrites et orales évitera tout malentendu avec vos partenaires d'affaires."
+    "Mercure stimule activement votre acuité intellectuelle et votre efficacité professionnelle. Vos propositions lors des réunions retiendront l'attention de vos supérieurs. C'est le moment idéal pour concrétiser des dossiers importants.",
+    "Votre persévérance porte enfin ses fruits et débloque un projet bloqué depuis longtemps. Vous saurez faire preuve d'un leadership rassembleur face à des défis méthodologiques. Vos efforts soutenus sont enfin reconnus à leur juste valeur.",
+    "Une journée très dynamique s'annonce sur le plan professionnel et carrieriste. Votre créativité débordante et votre réactivité immédiate seront vos meilleurs atouts. N'hésitez pas à porter des innovations audacieuses.",
+    "L'ambiance au bureau est particulièrement collaborative et propice aux synergies efficaces. Vous trouverez des solutions originales pour rationaliser votre emploi du temps chargé. Votre rigueur fait l'unanimité auprès de vos collègues.",
+    "Des opportunités inattendues se présentent dans votre sphère professionnelle aujourd'hui. Restez à l'affût des moindres signaux pour positionner vos pions stratégiquement. Votre intuition d'entrepreneur fera des merveilles absolues.",
+    "La gestion de vos priorités professionnelles demande une concentration de tous les instants. Ne vous laissez pas disperser par des sollicitations superflues et chronophages. Votre efficacité finale impressionnera votre entourage.",
+    "Un vent de nouveauté souffle sur vos activités professionnelles habituelles. Prenez des initiatives calculées pour réorienter un dossier vers le succès. Votre audace sera saluée par les décideurs clés de votre structure.",
+    "La journée favorise grandement le travail d'équipe et le partage d'expertises pointues. Vos compétences techniques feront merveille pour résoudre un problème épineux. Restez ouvert aux suggestions constructives de vos pairs.",
+    "Une belle reconnaissance hiérarchique vient valider vos efforts passés au travail. Restez fidèle à votre éthique professionnelle et continuez sur cette lancée victorieuse. Vos perspectives d'évolution s'annoncent particulièrement radieuses.",
+    "Organisez méthodiquement votre journée pour venir à bout de vos échéances urgentes. Votre concentration infaillible vous permettra d'abattre un travail considérable. Savourez la satisfaction du devoir accompli ce soir.",
+    "Les astres favorisent les négociations et la signature de nouveaux accords professionnels. Exposez vos arguments avec clarté, diplomatie et conviction assurée. Le succès est à portée de main si vous osez vous affirmer.",
+    "Votre créativité professionnelle trouve un écho extrêmement favorable auprès de votre équipe. C'est le moment idéal pour lancer un nouveau concept novateur. Foncez avec enthousiasme et méthode."
   ],
   argent: [
-    "Sur le plan financier, la prudence et la méthode vous permettent de consolider solidement vos acquis.",
-    "Vos finances affichent une belle stabilité grâce à votre gestion méthodique récente et réfléchie.",
-    "Les aspects astrologiques incitent à la réflexion stratégique concernant la répartition de votre patrimoine.",
-    "Gestion équilibrée et opportunités mesurées caractérisent ce secteur aujourd'hui sans mauvaise surprise.",
-    "Une rentrée d'argent inattendue ou un remboursement oublié pourrait agréablement alléger votre esprit.",
-    "Évitez les dépenses superflues dictées par l'impulsion du moment pour préserver votre épargne.",
-    "C'est le moment opportun pour comparer des contrats ou renégocier des charges fixes avantageuses.",
-    "Votre sens de l'anticipation financière vous met à l'abri des fluctuations passagères du marché.",
-    "Un investissement mûrement réfléchi commence à porter ses premiers fruits de manière tangible.",
-    "La rigueur budgétaire que vous maintenez est la clé de voûte de votre tranquillité d'esprit.",
-    "Restez sourd aux sollicitations commerciales trop agressives et concentrez-vous sur l'essentiel.",
-    "L'équilibre monétaire du jour favorise la planification avisée de vos futurs projets d'achats."
+    "Sur le plan financier, la prudence et la méthode vous permettent de consolider vos acquis. C'est une excellente journée pour réviser et optimiser votre budget global. Anticipez vos dépenses futures pour garder l'esprit totalement serein.",
+    "Vos finances affichent une belle stabilité grâce à votre gestion méthodique récente. Une rentrée d'argent inattendue pourrait agréablement venir pimenter votre journée. Profitez de cette aisance passagère pour gâter vos proches.",
+    "Les aspects astrologiques incitent à une réflexion stratégique concernant votre patrimoine. C'est le moment opportun pour comparer des contrats et réduire vos charges. Votre sens pratique vous évite des erreurs d'appréciation.",
+    "La gestion de votre budget requiert de la vigilance face aux tentations du moment. Résistez aux achats impulsifs qui déséquilibreraient vos comptes bancaires. La modération financière est la clé de votre tranquillité future.",
+    "Une opportunité financière intéressante se profile à l'horizon de votre journée. Étudiez minutieusement chaque détail avant de vous engager sur le long terme. Votre perspicacité pécuniaire fera des merveilles.",
+    "Vos efforts d'épargne commencent à porter leurs fruits de manière très encourageante. Maintenez cette discipline rigoureuse pour concrétiser vos projets d'avenir. Votre sécurité matérielle se renforce de jour en jour.",
+    "Un équilibre monétaire parfait caractérise votre situation financière actuelle. Vous savez exactement où placer vos pions pour faire fructifier vos deniers. Conservez cette belle clairvoyance pragmatique.",
+    "Soyez vigilant lors de transactions ou d'achats en ligne effectués ce jour. Prenez le temps de vérifier toutes les garanties avant de valider vos paiements. La prudence est votre meilleure assurance contre les imprévus.",
+    "Une rentrée pécuniaire liée à un travail ou un investissement passé se concrétise enfin. De quoi aborder les semaines à venir avec un large sourire aux lèvres. Réinvestissez intelligemment cette somme.",
+    "Votre intuition financière est particulièrement affûtée en cette période astrale. Écoutez vos impressions intérieures avant de prendre une décision d'achat majeure. Le bon sens paysan sera votre meilleur conseiller.",
+    "Consolidez votre épargne de précaution pour parer à toute éventualité matérielle. Les astres favorisent une gestion économe mais avisée de vos ressources. Votre avenir financier se construit sur des bases solides.",
+    "La chance sourit aux audacieux avisés dans le domaine de vos investissements. Analysez les opportunités du marché avec calme et discernement. Votre prospérité matérielle progresse régulièrement."
   ],
   sante: [
-    "Votre niveau d'énergie vitale est en nette hausse sous cette configuration astrale stimulante et active.",
-    "Une très bonne résistance physique générale vous accompagne durant toute cette journée bien remplie.",
-    "Forme et vitalité sont au rendez-vous, vous vous sentez capable de relever de nouveaux défis sportifs.",
-    "Votre capital santé bénéficie d'influences protectrices qui renforcent efficacement votre tonus.",
-    "Pensez à bien vous hydrater tout au long de la journée pour soutenir votre métabolisme interne.",
-    "Privilégiez des repas légers, colorés et équilibrés ce soir pour favoriser un sommeil réparateur.",
-    "La pratique de la respiration consciente ou de la méditation vous apportera une grande clarté mentale.",
-    "Accordez à votre corps le repos nécessaire pour compenser les efforts fournis ces derniers jours.",
-    "Une belle sensation d'harmonie entre le corps et l'esprit vous procure un tonus remarquable.",
-    "Profitez d'une bouffée d'oxygène en plein air pour oxygéner vos cellules et chasser les tensions.",
-    "Votre organisme réagit positivement aux nouvelles habitudes de bien-être que vous avez adoptées.",
-    "L'écoute attentive de vos biorythmes vous évitera toute baisse d'énergie inopinée."
+    "Votre niveau d'énergie vitale est en nette hausse sous cette configuration astrale stimulante. Pensez à bien vous hydrater tout au long de cette journée active. Une activité physique modérée complètera idéalement votre bien-être.",
+    "Une très bonne résistance physique générale vous accompagne durant toute cette journée. Privilégiez des repas légers et équilibrés pour préserver votre légèreté digestive. Votre corps vous remercie pour cette attention bienveillante.",
+    "Forme et vitalité sont au rendez-vous, vous vous sentez capable de déplacer des montagnes. Canalisez cet enthousiasme débordant à travers une séance de sport intense. Votre tonus musculaire rayonne de mille feux.",
+    "Votre capital santé bénéficie d'influences protectrices qui renforcent votre tonus immunitaire. La pratique de la respiration consciente vous apportera une grande clarté mentale. Accordez-vous des pauses de déconnexion totale.",
+    "L'écoute de votre corps doit devenir votre priorité absolue en ce jour. Offrez-vous une nuit de sommeil réparatrice pour recharger vos batteries à bloc. Votre organisme réclame un peu de calme et de douceur.",
+    "Un regain de dynamisme physique vous incite à reprendre une activité en plein air. Oxygénez vos poumons au contact de la nature pour chasser le stress accumulé. Votre vitalité retrouvée fait plaisir à voir.",
+    "Surveillez votre posture si vous passez des heures prolongées assis à un bureau. Des étirements réguliers soulageront efficacement vos tensions dorsales. Prenez soin de votre anatomie avec rigueur.",
+    "L'équilibre entre corps et esprit s'établit harmonieusement grâce aux astres. Pratiquez une activité relaxante comme le yoga ou la méditation guidée. Votre système nerveux vous en sera extrêmement reconnaissant.",
+    "Votre tonus est resplendissant et vous communiquez une joie de vivre communicative. Maintenez cette hygiène de vie saine qui constitue votre bouclier protecteur. Profitez de cette forme olympique pour bouger.",
+    "Une légère baisse de régime en fin de journée vous invite à lever le pied. Préparez-vous une infusion apaisante et couchez-vous plus tôt que prévu. Le repos est le meilleur des médicaments.",
+    "Votre vitalité physique s'accorde magnifiquement avec votre clarté psychologique. C'est le moment idéal pour démarrer une cure de vitamines ou de bien-être. Prenez soin de votre enveloppe corporelle.",
+    "L'énergie circule librement en vous, éliminant les toxines et les tensions superflues. Profitez de cette belle dynamique tonique pour accomplir vos objectifs sportifs. Votre corps rayonne d'une santé insolente."
   ],
   conseils: [
-    "Accordez-vous dix minutes de silence en début de matinée pour fixer vos intentions calmes.",
-    "Exprimez votre gratitude envers une personne qui vous a soutenu discrètement ces derniers temps.",
-    "Osez dire non aux demandes abusives pour préserver jalousement votre précieux temps personnel.",
-    "Faites confiance à votre intuition première avant de vous perdre dans une sur-analyse stérile.",
-    "Cultivez le lâcher-prise face aux petits imprévus qui échappent totalement à votre contrôle.",
-    "Prenez le temps d'écouter les conseils bienveissants de vos aînés ou de personnes expérimentées.",
-    "Simplifiez votre planning du jour en vous concentrant uniquement sur votre tâche prioritaire.",
-    "Célèbrez chaque petite victoire quotidienne sans attendre l'accomplissement de grands projets.",
-    "Faites preuve de bienveillance envers vous-même en acceptant le droit à l'imperfection.",
-    "Notez vos idées créatives sur un carnet dès qu'elles surgissent au cours de la journée.",
-    "Protégez votre espace mental en évitant de vous surcharger d'informations négatives superflues.",
-    "Sourirez aux difficultés : elles cachent souvent des leçons d'évolution déguisées."
+    "Accordez-vous dix minutes de méditation en début de matinée pour fixer vos intentions calmes. Cette discipline matinale guidera vos pas vers la sérénité la plus absolue. Restez centré sur l'essentiel en toute circonstance.",
+    "Exprimez votre gratitude sincère envers une personne qui vous a soutenu discrètement. Cet élan de générosité du cœur transformera positivement votre journée. Le bonheur se nourrit de ces petits gestes simples.",
+    "Osez dire un 'non' ferme et constructif aux demandes abusives de votre entourage. Préservez jalousement votre précieux temps personnel pour vous ressourcer. Votre équilibre mental dépend directement de cette autonomie.",
+    "Faites confiance à votre intuition première avant de vous perdre dans une sur-analyse stérile. Votre instinct possède une longueur d'avance que la logique pure ignore. Suivez votre petite voix intérieure.",
+    "Cultivez le lâcher-prise face aux petits tracas matériels indépendants de votre volonté. Tout finit toujours par trouver sa juste place au moment opportun. Souriez aux difficultés pour mieux les surmonter.",
+    "Prenez le temps d'écouter un proche qui traverse une période de questionnement. Votre écoute bienveillante et sans jugement fera des miracles relationnels. La solidarité humaine est votre plus grande force.",
+    "Simplifiez votre environnement immédiat pour clarifier instantanément vos pensées. Le rangement extérieur engendre l'apaisement intérieur. Offrez-vous ce bol d'air salutaire dès aujourd'hui.",
+    "Ne remettez pas au lendemain ce que vous pouvez accomplir avec joie dès à présent. L'action immédiate libère l'esprit du poids de la procrastination. Vous vous sentirez tellement plus léger ce soir.",
+    "Pratiquez l'auto-compassion et cessez d'être votre propre juge le plus sévère. Vous faites de votre mieux avec les ressources du moment présent. Traitez-vous avec la douceur d'un ami cher.",
+    "Ouvrez grand vos yeux face aux petites beautés ordinaires qui peuplent votre quotidien. Un rayon de soleil, un sourire ou un chant d'oiseau suffisent à illuminer l'âme. Émerveillez-vous sans compter.",
+    "Affirmez vos convictions intimes avec calme, élégance et une totale assurance. Vous avez le droit d'occuper pleinement votre espace d'expression légitime. Ne vous effacez plus jamais pour plaire.",
+    "Offrez-vous un moment de silence absolu, loin des écrans et des bruits parasites. Votre esprit a besoin de cette parenthèse enchantée pour se régénérer. La paix de l'âme commence ici."
   ]
 };
+
+// ============================================================================
+// HACHAGE MATHÉMATIQUE INDÉPENDANT PAR DOMAINE (OPTION B)
+// ============================================================================
+
+const getUniqueDailyIndex = (signId, dateStr, domainOffset) => {
+  let hash = 0;
+  const str = signId + "_" + dateStr + "_dom_" + domainOffset;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash << 5) - hash + str.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash);
+};
+
+const generateAutomatedHoroscope = (signId, dateStr) => {
+  const hAmour = getUniqueDailyIndex(signId, dateStr, 1);
+  const hTravail = getUniqueDailyIndex(signId, dateStr, 2);
+  const hArgent = getUniqueDailyIndex(signId, dateStr, 3);
+  const hSante = getUniqueDailyIndex(signId, dateStr, 4);
+  const hConseil = getUniqueDailyIndex(signId, dateStr, 5);
+
+  const len = 12; // 12 textes uniques disponibles dans chaque tableau
+
+  return {
+    amour: { text: DAILY_TEXTS.amour[hAmour % len], score: 70 + (hAmour % 28) },
+    travail: { text: DAILY_TEXTS.travail[hTravail % len], score: 68 + (hTravail % 30) },
+    argent: { text: DAILY_TEXTS.argent[hArgent % len], score: 72 + (hArgent % 26) },
+    sante: { text: DAILY_TEXTS.sante[hSante % len], score: 75 + (hSante % 23) },
+    conseil: DAILY_TEXTS.conseils[hConseil % len]
+  };
+};
+
+// ============================================================================
+// BASE DE TENDANCES MENSUELLES (TEXTES LONGS 6-10 PHRASES)
+// ============================================================================
 
 const MONTHLY_TRENDS_DATABASE = {
   amour: [
@@ -305,63 +341,24 @@ const MONTHLY_TRENDS_DATABASE = {
   sante: [
     "Votre niveau de vitalité et votre énergie physique sont en phase de transition importante ce mois-ci. Par conséquent, veillez à accorder une importance capitale à la qualité de votre sommeil et à une récupération régulière. Le surmenage professionnel ou l'accumulation de petits stress du quotidien pourraient se faire ressentir sur votre système immunitaire. Intégrez des temps de pause, de silence et de déconnexion numérique absolue dans votre routine quotidienne. Une activité physique douce, comme le yoga, le Pilates ou la natation, vous aidera à relâcher les tensions musculaires accumulées. Soyez également très attentif à votre alimentation en privilégiant des produits frais, de saison et vivants. Votre corps réclame de la bienveillance et un retour aux sources salutaire. En respectant vos limites biologiques, vous traverserez ce mois en conservant un équilibre intérieur remarquable et une sérénité retrouvée.",
     "Un magnifique regain d'énergie globale vous pousse à adopter de nouvelles routines de bien-être beaucoup plus saines et durables. C'est le moment idéal pour entreprendre une détox, reprendre en main votre condition physique ou démarrer un sport stimulant. Votre métabolisme répondra merveilleusement bien aux efforts modérés et réguliers que vous lui proposerez. Sur le plan psychologique, votre optimisme naturel revient en force, chassant les ruminations mentales et l'anxiété. Profitez de ce dynamisme pour passer du temps au grand air, vous oxygéner en forêt ou près de l'eau. Votre clarté d'esprit sera redoutable pour prendre de bonnes résolutions concernant votre hygiène de vie. Veillez toutefois à ne pas dilapider votre capital énergétique dans des excès d'enthousiasme soudains. La clé réside dans la constance, la régularité et l'écoute fine des signaux de votre organisme.",
-    "L'équilibre mental, la paix intérieure et la gestion émotionnelle se trouvent au tout premier plan de vos prioritées ce mois-ci. Prenez activement du temps pour vous ressourcer loin de l'agitation urbaine, du bruit et du stress relationnel. La pratique de la méditation, de la cohérence cardiaque ou de la lecture au calme apaisera durablement votre système nerveux. Votre corps physique has besoin de douceur, de massages, de bains chauds et d'un repos bien mérité. Si des petits bobos chroniques refaisaient surface, prenez-les en charge avec sérieux sans les négliger. Cultivez la gratitude au quotidien et entourez-vous exclusivement de personnes bienveillantes qui élèvent votre taux vibratoire. Ce mois est une véritable cure de jouvence spirituelle et corporelle si vous acceptez de ralentir la cadence. Votre force intérieure en ressortira magnifiquement régénérée et consolidée pour l'avenir."
+    "L'équilibre mental, la paix intérieure et la gestion émotionnelle se trouvent au tout premier plan de vos prioritées ce mois-ci. Prenez activement du temps pour vous ressourcer loin de l'agitation urbaine, du bruit et du stress relationnel. La pratique de la méditation, de la cohérence cardiaque ou de la lecture au calme apaisera durablement votre système nerveux. Votre corps physique a besoin de douceur, de massages, de bains chauds et d'un repos bien mérité. Si des petits bobos chroniques refaisaient surface, prenez-les en charge avec sérieux sans les négliger. Cultivez la gratitude au quotidien et entourez-vous exclusivement de personnes bienveillantes qui élèvent votre taux vibratoire. Ce mois est une véritable cure de jouvence spirituelle et corporelle si vous acceptez de ralentir la cadence. Votre force intérieure en ressortira magnifiquement régénérée et consolidée pour l'avenir."
   ]
 };
 
-// ============================================================================
-// HACHAGE STRICTEMENT INDÉPENDANT PAR DOMAINE ET PAR SIGNE (OPTION B)
-// ============================================================================
-
-const getDomainHash = (signId, dateStr, domainKey) => {
+const generateMonthlyTrends = (signId, yearMonthStr) => {
   let hash = 0;
-  const str = signId + "_" + domainKey + "_" + dateStr;
+  const str = signId + "_" + yearMonthStr;
   for (let i = 0; i < str.length; i++) {
     hash = (hash << 5) - hash + str.charCodeAt(i);
     hash |= 0;
   }
-  return Math.abs(hash);
-};
-
-const generateAutomatedHoroscope = (signId, dateStr) => {
-  const hAmour = getDomainHash(signId, dateStr, 'amour');
-  const hTravail = getDomainHash(signId, dateStr, 'travail');
-  const hArgent = getDomainHash(signId, dateStr, 'argent');
-  const hSante = getDomainHash(signId, dateStr, 'sante');
-  const hConseil = getDomainHash(signId, dateStr, 'conseil');
+  hash = Math.abs(hash);
 
   return {
-    amour: { 
-      text: HOROSCOPE_TEXT_DATABASE.amour[hAmour % HOROSCOPE_TEXT_DATABASE.amour.length], 
-      score: 70 + (hAmour % 28) 
-    },
-    travail: { 
-      text: HOROSCOPE_TEXT_DATABASE.travail[hTravail % HOROSCOPE_TEXT_DATABASE.travail.length], 
-      score: 68 + (hTravail % 30) 
-    },
-    argent: { 
-      text: HOROSCOPE_TEXT_DATABASE.argent[hArgent % HOROSCOPE_TEXT_DATABASE.argent.length], 
-      score: 72 + (hArgent % 26) 
-    },
-    sante: { 
-      text: HOROSCOPE_TEXT_DATABASE.sante[hSante % HOROSCOPE_TEXT_DATABASE.sante.length], 
-      score: 75 + (hSante % 23) 
-    },
-    conseil: HOROSCOPE_TEXT_DATABASE.conseils[hConseil % HOROSCOPE_TEXT_DATABASE.conseils.length]
-  };
-};
-
-const generateMonthlyTrends = (signId, yearMonthStr) => {
-  const hAmour = getDomainHash(signId, yearMonthStr, 'm_amour');
-  const hTravail = getDomainHash(signId, yearMonthStr, 'm_travail');
-  const hArgent = getDomainHash(signId, yearMonthStr, 'm_argent');
-  const hSante = getDomainHash(signId, yearMonthStr, 'm_sante');
-
-  return {
-    amour: MONTHLY_TRENDS_DATABASE.amour[hAmour % MONTHLY_TRENDS_DATABASE.amour.length],
-    travail: MONTHLY_TRENDS_DATABASE.travail[hTravail % MONTHLY_TRENDS_DATABASE.travail.length],
-    argent: MONTHLY_TRENDS_DATABASE.argent[hArgent % MONTHLY_TRENDS_DATABASE.argent.length],
-    sante: MONTHLY_TRENDS_DATABASE.sante[hSante % MONTHLY_TRENDS_DATABASE.sante.length],
+    amour: MONTHLY_TRENDS_DATABASE.amour[hash % MONTHLY_TRENDS_DATABASE.amour.length],
+    travail: MONTHLY_TRENDS_DATABASE.travail[(hash >> 1) % MONTHLY_TRENDS_DATABASE.travail.length],
+    argent: MONTHLY_TRENDS_DATABASE.argent[(hash >> 2) % MONTHLY_TRENDS_DATABASE.argent.length],
+    sante: MONTHLY_TRENDS_DATABASE.sante[(hash >> 3) % MONTHLY_TRENDS_DATABASE.sante.length],
   };
 };
 
