@@ -93,7 +93,7 @@ const COMPLETE_PROFILES_DATABASE = {
       "Ressent l'ambiance émotionnelle d'une pièce en une fraction de seconde.",
       "Gardera précieusement un simple ticket de cinéma qui lui rappelle un bon souvenir.",
       "Son foyer est son sanctuaire où il aime cuisiner pour les gens qu'il aime.",
-      "Si un ami a un problème, il será le premier sur place avec du réconfort.",
+      "Si un ami a un problème, il sera le premier sur place avec du réconfort.",
       "Son intuition dépasse très souvent la logique pure dans ses grands choix."
     ],
     talents: ["Instinct protecteur et accompagnement", "Sensibilité artistique et poétique", "Mémoire affective et visuelle remarquable", "Création d'espaces chaleureux et sécurisants", "Écoute bienveillante sans jugement"],
@@ -210,53 +210,82 @@ const getProfileForSign = (sign) => {
 };
 
 // ============================================================================
-// GENERATEURS DÉTERMINISTES
+// OPTIONS A & B : BASE DE TEXTES ÉLARGIE (12 VARIANTES) ET HACHAGE INDÉPENDANT
 // ============================================================================
-
-const getDailyHash = (signId, dateStr) => {
-  let hash = 0;
-  const str = signId + "_" + dateStr;
-  for (let i = 0; i < str.length; i++) {
-    hash = (hash << 5) - hash + str.charCodeAt(i);
-    hash |= 0;
-  }
-  return Math.abs(hash);
-};
 
 const HOROSCOPE_TEXT_DATABASE = {
   amour: [
-    "Vénus accentue la douceur de vos échanges affectifs aujourd'hui. En couple, l'écoute mutuelle permettra de dénouer un léger malentendu récent. Pour les célibataires, une rencontre imprévue au détour d'une activité habituelle pourrait éveiller une vive curiosité.",
-    "Un vent de passion souffle sur votre ciel sentimental. Les moments partagés avec votre partenaire seront emprunts de complicité et de sensualité. Si vous cherchez l'amour, vos charmes naturels seront particulièrement efficaces.",
-    "Les alignements planétaires favorisent la clarté et l'harmonie amoureuse. C'est la journée idéale pour aborder sereinement les sujets profonds et clarifier vos attentes mutuelles.",
-    "Votre sensibilité amoureuse est décuplée sous l'influence lunaire favorable. Vous saurez apporter le réconfort et l'attention nécessaires à l'épanouissement de votre relation."
+    "Vénus accentue la douceur de vos échanges affectifs aujourd'hui. En couple, l'écoute mutuelle permettra de dénouer un léger malentendu récent.",
+    "Un vent de passion souffle sur votre ciel sentimental. Les moments partagés avec votre partenaire seront emprunts de complicité et de sensualité.",
+    "Les alignements planétaires favorisent la clarté et l'harmonie amoureuse. C'est la journée idéale pour aborder sereinement les sujets profonds.",
+    "Votre sensibilité amoureuse est décuplée sous l'influence lunaire favorable. Vous saurez apporter le réconfort et l'attention nécessaires.",
+    "Une rencontre imprévue au détour d'une activité habituelle pourrait éveiller une vive curiosité chez les célibataires.",
+    "Le dialogue constructif est mis à l'honneur. Exprimez vos sentiments sans crainte d'être mal jugé par l'être aimé.",
+    "Un climat de tendresse enveloppe votre sphère privée. Profitez de instants privilégiés pour renforcer votre complicité.",
+    "L'audace sentimentale portera ses fruits. Osez faire le premier pas si vous attendez un signe de votre partenaire.",
+    "La journée invite à l'introspection romantique. Comprendre vos propres désirs facilitera vos choix relationnels.",
+    "Une vague de bien-être et de réconciliation illumine votre foyer. Lâchez prise sur les petits tracas du quotidien.",
+    "Vos charmes naturels opèrent à plein régime. Vous saurez charmer et retenir l'attention de la personne convoitée.",
+    "L'harmonie règne dans vos relations proches, favorisant les déclarations et les projets communs à deux."
   ],
   travail: [
-    "Mercure stimule votre acuité intellectuelle et votre efficacité au travail. Vos propositions lors des réunions retiendront l'attention de vos supérieurs ou partenaires.",
-    "Votre persévérance porte enfin ses fruits et débloque un projet en attente. Vous saurez faire preuve d'un leadership rassembleur face à des défis méthodologiques.",
-    "Une journée dynamique s'annonce sur le plan professionnel avec de belles opportunités d'innovation. Votre créativité et votre réactivité seront vos plus précieux atouts.",
-    "L'ambiance de travail est particulièrement collaborative et propice aux synergies. Vous trouverez des solutions originales pour rationaliser votre emploi du temps."
+    "Mercure stimule votre acuité intellectuelle et votre efficacité au travail. Vos propositions lors des réunions retiendront l'attention.",
+    "Votre persévérance porte enfin ses fruits et débloque un projet en attente depuis plusieurs semaines.",
+    "Une journée dynamique s'annonce sur le plan professionnel avec de belles opportunités d'innovation et de créativité.",
+    "L'ambiance de travail est particulièrement collaborative et propice aux synergies constructives avec vos collègues.",
+    "Gérez vos priorités avec méthode pour venir à bout d'une charge de tâches importante sans stress inutile.",
+    "Votre sens du leadership naturel vous permet de galvaniser votre équipe face à un défi complexe.",
+    "Un retour positif de votre hiérarchie viendra valider vos récents efforts et renforcer votre confiance.",
+    "Restez ouvert aux critiques constructives : elles constituent un tremplin majeur pour votre évolution.",
+    "L'organisation et la rigueur technique seront vos meilleures armes pour boucler vos dossiers à temps.",
+    "Une opportunité de mobilité ou de nouvelle responsabilité pointe discrètement à l'horizon professionnel.",
+    "Faites confiance à votre intuition pour trancher rapidement sur un dossier épineux en fin de matinée.",
+    "La clarté de vos communications écrites et orales évitera tout malentendu avec vos partenaires d'affaires."
   ],
   argent: [
-    "Sur le plan financier, la prudence et la méthode vous permettent de consolider vos acquis. C'est une excellente journée pour réviser votre budget global.",
-    "Vos finances affichent une belle stabilité grâce à votre gestion méthodique récente. Une rentrée d'argent inattendue pourrait agréablement vous surprendre.",
-    "Les aspects astrologiques incitent à la réflexion stratégique concernant votre patrimoine. C'est le moment opportun pour comparer des contrats.",
-    "Gestion équilibrée et opportunités mesurées caractérisent ce secteur aujourd'hui. Vous saurez résister aux sollicitations commerciales superflues."
+    "Sur le plan financier, la prudence et la méthode vous permettent de consolider solidement vos acquis.",
+    "Vos finances affichent une belle stabilité grâce à votre gestion méthodique récente et réfléchie.",
+    "Les aspects astrologiques incitent à la réflexion stratégique concernant la répartition de votre patrimoine.",
+    "Gestion équilibrée et opportunités mesurées caractérisent ce secteur aujourd'hui sans mauvaise surprise.",
+    "Une rentrée d'argent inattendue ou un remboursement oublié pourrait agréablement alléger votre esprit.",
+    "Évitez les dépenses superflues dictées par l'impulsion du moment pour préserver votre épargne.",
+    "C'est le moment opportun pour comparer des contrats ou renégocier des charges fixes avantageuses.",
+    "Votre sens de l'anticipation financière vous met à l'abri des fluctuations passagères du marché.",
+    "Un investissement mûrement réfléchi commence à porter ses premiers fruits de manière tangible.",
+    "La rigueur budgétaire que vous maintenez est la clé de voûte de votre tranquillité d'esprit.",
+    "Restez sourd aux sollicitations commerciales trop agressives et concentrez-vous sur l'essentiel.",
+    "L'équilibre monétaire du jour favorise la planification avisée de vos futurs projets d'achats."
   ],
   sante: [
-    "Votre niveau d'énergie vitale est en nette hausse sous cette configuration astrale stimulante. Pensez à bien vous hydrater tout au long de la journée.",
-    "Une très bonne résistance physique générale vous accompagne durant toute cette journée. Privilégiez des repas légers et équilibrés ce soir.",
-    "Forme et vitalité sont au rendez-vous, vous vous sentez capable de déplacer des montagnes. Canalisez cet enthousiasme à travers une séance de sport.",
-    "Votre capital santé bénéficie d'influences protectrices qui renforcent votre tonus. La pratique de la respiration consciente vous apportera une grande clarté."
+    "Votre niveau d'énergie vitale est en nette hausse sous cette configuration astrale stimulante et active.",
+    "Une très bonne résistance physique générale vous accompagne durant toute cette journée bien remplie.",
+    "Forme et vitalité sont au rendez-vous, vous vous sentez capable de relever de nouveaux défis sportifs.",
+    "Votre capital santé bénéficie d'influences protectrices qui renforcent efficacement votre tonus.",
+    "Pensez à bien vous hydrater tout au long de la journée pour soutenir votre métabolisme interne.",
+    "Privilégiez des repas légers, colorés et équilibrés ce soir pour favoriser un sommeil réparateur.",
+    "La pratique de la respiration consciente ou de la méditation vous apportera une grande clarté mentale.",
+    "Accordez à votre corps le repos nécessaire pour compenser les efforts fournis ces derniers jours.",
+    "Une belle sensation d'harmonie entre le corps et l'esprit vous procure un tonus remarquable.",
+    "Profitez d'une bouffée d'oxygène en plein air pour oxygéner vos cellules et chasser les tensions.",
+    "Votre organisme réagit positivement aux nouvelles habitudes de bien-être que vous avez adoptées.",
+    "L'écoute attentive de vos biorythmes vous évitera toute baisse d'énergie inopinée."
   ],
   conseils: [
-    "Accordez-vous dix minutes de méditation en début de matinée pour fixer vos intentions calmes.",
+    "Accordez-vous dix minutes de silence en début de matinée pour fixer vos intentions calmes.",
     "Exprimez votre gratitude envers une personne qui vous a soutenu discrètement ces derniers temps.",
-    "Osez dire non aux demandes abusives pour préserver votre précieux temps personnel.",
-    "Faites confiance à votre intuition première avant de vous perdre dans une sur-analyse."
+    "Osez dire non aux demandes abusives pour préserver jalousement votre précieux temps personnel.",
+    "Faites confiance à votre intuition première avant de vous perdre dans une sur-analyse stérile.",
+    "Cultivez le lâcher-prise face aux petits imprévus qui échappent totalement à votre contrôle.",
+    "Prenez le temps d'écouter les conseils bienveissants de vos aînés ou de personnes expérimentées.",
+    "Simplifiez votre planning du jour en vous concentrant uniquement sur votre tâche prioritaire.",
+    "Célèbrez chaque petite victoire quotidienne sans attendre l'accomplissement de grands projets.",
+    "Faites preuve de bienveillance envers vous-même en acceptant le droit à l'imperfection.",
+    "Notez vos idées créatives sur un carnet dès qu'elles surgissent au cours de la journée.",
+    "Protégez votre espace mental en évitant de vous surcharger d'informations négatives superflues.",
+    "Sourirez aux difficultés : elles cachent souvent des leçons d'évolution déguisées."
   ]
 };
 
-// Tendances mensuelles longues et détaillées (minimum 6 à 10 phrases par section)
 const MONTHLY_TRENDS_DATABASE = {
   amour: [
     "Ce mois-ci, les configurations astrales encouragent profondément la consolidation des liens affectifs et la sincérité absolue dans le dialogue à deux. C'est une période idéale pour dissiper les non-dits et poser de nouvelles bases relationnelles durables. Si vous êtes engagé dans une relation, la complicité se renforcera à travers des projets communs stimulants. Les astres favorisent également les moments d'introspection romantique, permettant de mieux comprendre les besoins cachés de votre partenaire. Pour les célibataires, le mois s'annonce riche en surprises relationnelles et en rencontres enrichissantes. Ne restez pas retranché dans vos habitudes et sortez de votre zone de confort. Votre charme naturel rayonnera intensément, attirant des personnes partageant vos aspirations profondes. Prenez le temps d'observer avant de vous engager émotionnellement, car la patience sera votre meilleure alliée pour bâtir une histoire solide. En fin de mois, un événement inopiné pourrait transformer positivement votre vision de la vie sentimentale.",
@@ -276,35 +305,63 @@ const MONTHLY_TRENDS_DATABASE = {
   sante: [
     "Votre niveau de vitalité et votre énergie physique sont en phase de transition importante ce mois-ci. Par conséquent, veillez à accorder une importance capitale à la qualité de votre sommeil et à une récupération régulière. Le surmenage professionnel ou l'accumulation de petits stress du quotidien pourraient se faire ressentir sur votre système immunitaire. Intégrez des temps de pause, de silence et de déconnexion numérique absolue dans votre routine quotidienne. Une activité physique douce, comme le yoga, le Pilates ou la natation, vous aidera à relâcher les tensions musculaires accumulées. Soyez également très attentif à votre alimentation en privilégiant des produits frais, de saison et vivants. Votre corps réclame de la bienveillance et un retour aux sources salutaire. En respectant vos limites biologiques, vous traverserez ce mois en conservant un équilibre intérieur remarquable et une sérénité retrouvée.",
     "Un magnifique regain d'énergie globale vous pousse à adopter de nouvelles routines de bien-être beaucoup plus saines et durables. C'est le moment idéal pour entreprendre une détox, reprendre en main votre condition physique ou démarrer un sport stimulant. Votre métabolisme répondra merveilleusement bien aux efforts modérés et réguliers que vous lui proposerez. Sur le plan psychologique, votre optimisme naturel revient en force, chassant les ruminations mentales et l'anxiété. Profitez de ce dynamisme pour passer du temps au grand air, vous oxygéner en forêt ou près de l'eau. Votre clarté d'esprit sera redoutable pour prendre de bonnes résolutions concernant votre hygiène de vie. Veillez toutefois à ne pas dilapider votre capital énergétique dans des excès d'enthousiasme soudains. La clé réside dans la constance, la régularité et l'écoute fine des signaux de votre organisme.",
-    "L'équilibre mental, la paix intérieure et la gestion émotionnelle se trouvent au tout premier plan de vos priorités ce mois-ci. Prenez activement du temps pour vous ressourcer loin de l'agitation urbaine, du bruit et du stress relationnel. La pratique de la méditation, de la cohérence cardiaque ou de la lecture au calme apaisera durablement votre système nerveux. Votre corps physique a besoin de douceur, de massages, de bains chauds et d'un repos bien mérité. Si des petits bobos chroniques refaisaient surface, prenez-les en charge avec sérieux sans les négliger. Cultivez la gratitude au quotidien et entourez-vous exclusivement de personnes bienveillantes qui élèvent votre taux vibratoire. Ce mois est une véritable cure de jouvence spirituelle et corporelle si vous acceptez de ralentir la cadence. Votre force intérieure en ressortira magnifiquement régénérée et consolidée pour l'avenir."
+    "L'équilibre mental, la paix intérieure et la gestion émotionnelle se trouvent au tout premier plan de vos prioritées ce mois-ci. Prenez activement du temps pour vous ressourcer loin de l'agitation urbaine, du bruit et du stress relationnel. La pratique de la méditation, de la cohérence cardiaque ou de la lecture au calme apaisera durablement votre système nerveux. Votre corps physique has besoin de douceur, de massages, de bains chauds et d'un repos bien mérité. Si des petits bobos chroniques refaisaient surface, prenez-les en charge avec sérieux sans les négliger. Cultivez la gratitude au quotidien et entourez-vous exclusivement de personnes bienveillantes qui élèvent votre taux vibratoire. Ce mois est une véritable cure de jouvence spirituelle et corporelle si vous acceptez de ralentir la cadence. Votre force intérieure en ressortira magnifiquement régénérée et consolidée pour l'avenir."
   ]
 };
 
-const generateAutomatedHoroscope = (signId, dateStr) => {
-  const hash = getDailyHash(signId, dateStr);
-  return {
-    amour: { text: HOROSCOPE_TEXT_DATABASE.amour[hash % HOROSCOPE_TEXT_DATABASE.amour.length], score: 70 + (hash % 28) },
-    travail: { text: HOROSCOPE_TEXT_DATABASE.travail[(hash >> 2) % HOROSCOPE_TEXT_DATABASE.travail.length], score: 68 + ((hash >> 3) % 30) },
-    argent: { text: HOROSCOPE_TEXT_DATABASE.argent[(hash >> 4) % HOROSCOPE_TEXT_DATABASE.argent.length], score: 72 + ((hash >> 5) % 26) },
-    sante: { text: HOROSCOPE_TEXT_DATABASE.sante[(hash >> 6) % HOROSCOPE_TEXT_DATABASE.sante.length], score: 75 + ((hash >> 7) % 23) },
-    conseil: HOROSCOPE_TEXT_DATABASE.conseils[(hash >> 8) % HOROSCOPE_TEXT_DATABASE.conseils.length]
-  };
-};
+// ============================================================================
+// HACHAGE STRICTEMENT INDÉPENDANT PAR DOMAINE ET PAR SIGNE (OPTION B)
+// ============================================================================
 
-const generateMonthlyTrends = (signId, yearMonthStr) => {
+const getDomainHash = (signId, dateStr, domainKey) => {
   let hash = 0;
-  const str = signId + "_" + yearMonthStr;
+  const str = signId + "_" + domainKey + "_" + dateStr;
   for (let i = 0; i < str.length; i++) {
     hash = (hash << 5) - hash + str.charCodeAt(i);
     hash |= 0;
   }
-  hash = Math.abs(hash);
+  return Math.abs(hash);
+};
+
+const generateAutomatedHoroscope = (signId, dateStr) => {
+  const hAmour = getDomainHash(signId, dateStr, 'amour');
+  const hTravail = getDomainHash(signId, dateStr, 'travail');
+  const hArgent = getDomainHash(signId, dateStr, 'argent');
+  const hSante = getDomainHash(signId, dateStr, 'sante');
+  const hConseil = getDomainHash(signId, dateStr, 'conseil');
 
   return {
-    amour: MONTHLY_TRENDS_DATABASE.amour[hash % MONTHLY_TRENDS_DATABASE.amour.length],
-    travail: MONTHLY_TRENDS_DATABASE.travail[(hash >> 1) % MONTHLY_TRENDS_DATABASE.travail.length],
-    argent: MONTHLY_TRENDS_DATABASE.argent[(hash >> 2) % MONTHLY_TRENDS_DATABASE.argent.length],
-    sante: MONTHLY_TRENDS_DATABASE.sante[(hash >> 3) % MONTHLY_TRENDS_DATABASE.sante.length],
+    amour: { 
+      text: HOROSCOPE_TEXT_DATABASE.amour[hAmour % HOROSCOPE_TEXT_DATABASE.amour.length], 
+      score: 70 + (hAmour % 28) 
+    },
+    travail: { 
+      text: HOROSCOPE_TEXT_DATABASE.travail[hTravail % HOROSCOPE_TEXT_DATABASE.travail.length], 
+      score: 68 + (hTravail % 30) 
+    },
+    argent: { 
+      text: HOROSCOPE_TEXT_DATABASE.argent[hArgent % HOROSCOPE_TEXT_DATABASE.argent.length], 
+      score: 72 + (hArgent % 26) 
+    },
+    sante: { 
+      text: HOROSCOPE_TEXT_DATABASE.sante[hSante % HOROSCOPE_TEXT_DATABASE.sante.length], 
+      score: 75 + (hSante % 23) 
+    },
+    conseil: HOROSCOPE_TEXT_DATABASE.conseils[hConseil % HOROSCOPE_TEXT_DATABASE.conseils.length]
+  };
+};
+
+const generateMonthlyTrends = (signId, yearMonthStr) => {
+  const hAmour = getDomainHash(signId, yearMonthStr, 'm_amour');
+  const hTravail = getDomainHash(signId, yearMonthStr, 'm_travail');
+  const hArgent = getDomainHash(signId, yearMonthStr, 'm_argent');
+  const hSante = getDomainHash(signId, yearMonthStr, 'm_sante');
+
+  return {
+    amour: MONTHLY_TRENDS_DATABASE.amour[hAmour % MONTHLY_TRENDS_DATABASE.amour.length],
+    travail: MONTHLY_TRENDS_DATABASE.travail[hTravail % MONTHLY_TRENDS_DATABASE.travail.length],
+    argent: MONTHLY_TRENDS_DATABASE.argent[hArgent % MONTHLY_TRENDS_DATABASE.argent.length],
+    sante: MONTHLY_TRENDS_DATABASE.sante[hSante % MONTHLY_TRENDS_DATABASE.sante.length],
   };
 };
 
@@ -398,7 +455,7 @@ export default function App() {
               }`}
             >
               <TrendingUp size={15} className={activeTab === 'mensuel' ? 'text-purple-600' : ''} />
-              <span>Tendances mensuelles</span>
+              <span>Tendances Mensuelles</span>
             </button>
 
             <button
@@ -431,7 +488,7 @@ export default function App() {
             
             <div className="text-center max-w-3xl mx-auto space-y-1 sm:space-y-2">
               <h2 className="text-xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                Mon horoscope au quotidien
+                Horoscope Astral Quotidien
               </h2>
               <p className="text-slate-600 text-xs sm:text-sm max-w-xl mx-auto">
                 Analyse détaillée pour le {todayFormatted}.
@@ -492,7 +549,7 @@ export default function App() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2.5">
                         <div className="p-2 bg-rose-100 text-rose-700 rounded-xl"><Heart size={18} /></div>
-                        <h4 className="text-sm sm:text-base font-bold text-rose-950">Amour & relations</h4>
+                        <h4 className="text-sm sm:text-base font-bold text-rose-950">Amour & Relations</h4>
                       </div>
                       <span className="text-xs font-extrabold bg-rose-100 text-rose-900 px-2.5 py-0.5 rounded-full">{currentHoroscope.amour.score}%</span>
                     </div>
@@ -503,7 +560,7 @@ export default function App() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2.5">
                         <div className="p-2 bg-sky-100 text-sky-700 rounded-xl"><Briefcase size={18} /></div>
-                        <h4 className="text-sm sm:text-base font-bold text-sky-950">Travail & carrière</h4>
+                        <h4 className="text-sm sm:text-base font-bold text-sky-950">Travail & Carrière</h4>
                       </div>
                       <span className="text-xs font-extrabold bg-sky-100 text-sky-900 px-2.5 py-0.5 rounded-full">{currentHoroscope.travail.score}%</span>
                     </div>
@@ -514,7 +571,7 @@ export default function App() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2.5">
                         <div className="p-2 bg-emerald-100 text-emerald-700 rounded-xl"><Wallet size={18} /></div>
-                        <h4 className="text-sm sm:text-base font-bold text-emerald-950">Argent & finances</h4>
+                        <h4 className="text-sm sm:text-base font-bold text-emerald-950">Argent & Finances</h4>
                       </div>
                       <span className="text-xs font-extrabold bg-emerald-100 text-emerald-900 px-2.5 py-0.5 rounded-full">{currentHoroscope.argent.score}%</span>
                     </div>
@@ -525,7 +582,7 @@ export default function App() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2.5">
                         <div className="p-2 bg-amber-100 text-amber-800 rounded-xl"><Activity size={18} /></div>
-                        <h4 className="text-sm sm:text-base font-bold text-amber-950">Santé & vitalité</h4>
+                        <h4 className="text-sm sm:text-base font-bold text-amber-950">Santé & Vitalité</h4>
                       </div>
                       <span className="text-xs font-extrabold bg-amber-100 text-amber-900 px-2.5 py-0.5 rounded-full">{currentHoroscope.sante.score}%</span>
                     </div>
@@ -551,13 +608,13 @@ export default function App() {
           </div>
         )}
 
-        {/* ONGLET 2 : TENDANCES MENSUELLES (CONTENUS APPROFONDIS 6-10 PHRASES) */}
+        {/* ONGLET 2 : TENDANCES MENSUELLES DÉTAILLÉES */}
         {activeTab === 'mensuel' && (
           <div className="space-y-4 sm:space-y-8 animate-fadeIn">
             
             <div className="text-center max-w-3xl mx-auto space-y-1 sm:space-y-2">
               <h2 className="text-xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                Tendances mensuelles détaillées
+                Tendances Mensuelles Détaillées
               </h2>
               <p className="text-slate-600 text-xs sm:text-sm max-w-xl mx-auto">
                 Bilan global et approfondi pour le mois de <strong className="text-purple-800 capitalize">{monthFormatted}</strong>.
@@ -611,13 +668,12 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Sections mensuelles en format pleine largeur pour bien lire les textes longs */}
               <div className="p-4 sm:p-8 space-y-6">
                 
                 <div className="bg-rose-50/40 border border-rose-100 p-5 sm:p-7 rounded-2xl sm:rounded-3xl space-y-3">
                   <div className="flex items-center gap-3">
                     <div className="p-2.5 bg-rose-100 text-rose-700 rounded-xl"><Heart size={20} /></div>
-                    <h4 className="text-base sm:text-lg font-bold text-rose-950">Amour & relations : tendances du mois</h4>
+                    <h4 className="text-base sm:text-lg font-bold text-rose-950">Amour & Relations - Tendances du Mois</h4>
                   </div>
                   <p className="text-slate-700 text-xs sm:text-sm leading-relaxed text-justify">{currentMonthlyTrends.amour}</p>
                 </div>
@@ -625,7 +681,7 @@ export default function App() {
                 <div className="bg-sky-50/40 border border-sky-100 p-5 sm:p-7 rounded-2xl sm:rounded-3xl space-y-3">
                   <div className="flex items-center gap-3">
                     <div className="p-2.5 bg-sky-100 text-sky-700 rounded-xl"><Briefcase size={20} /></div>
-                    <h4 className="text-base sm:text-lg font-bold text-sky-950">Travail & carrière : tendances du mois</h4>
+                    <h4 className="text-base sm:text-lg font-bold text-sky-950">Travail & Carrière - Tendances du Mois</h4>
                   </div>
                   <p className="text-slate-700 text-xs sm:text-sm leading-relaxed text-justify">{currentMonthlyTrends.travail}</p>
                 </div>
@@ -633,7 +689,7 @@ export default function App() {
                 <div className="bg-emerald-50/40 border border-emerald-100 p-5 sm:p-7 rounded-2xl sm:rounded-3xl space-y-3">
                   <div className="flex items-center gap-3">
                     <div className="p-2.5 bg-emerald-100 text-emerald-700 rounded-xl"><Wallet size={20} /></div>
-                    <h4 className="text-base sm:text-lg font-bold text-emerald-950">Argent & finances : tendances du mois</h4>
+                    <h4 className="text-base sm:text-lg font-bold text-emerald-950">Argent & Finances - Tendances du Mois</h4>
                   </div>
                   <p className="text-slate-700 text-xs sm:text-sm leading-relaxed text-justify">{currentMonthlyTrends.argent}</p>
                 </div>
@@ -641,7 +697,7 @@ export default function App() {
                 <div className="bg-amber-50/40 border border-amber-100 p-5 sm:p-7 rounded-2xl sm:rounded-3xl space-y-3">
                   <div className="flex items-center gap-3">
                     <div className="p-2.5 bg-amber-100 text-amber-800 rounded-xl"><Activity size={20} /></div>
-                    <h4 className="text-base sm:text-lg font-bold text-amber-950">Santé & vitalité : tendances du mois</h4>
+                    <h4 className="text-base sm:text-lg font-bold text-amber-950">Santé & Vitalité - Tendances du Mois</h4>
                   </div>
                   <p className="text-slate-700 text-xs sm:text-sm leading-relaxed text-justify">{currentMonthlyTrends.sante}</p>
                 </div>
@@ -659,7 +715,7 @@ export default function App() {
             
             <div className="text-center max-w-3xl mx-auto space-y-1 sm:space-y-2">
               <h2 className="text-xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                Profilage astrologique
+                Profilage Astrologique
               </h2>
               <p className="text-slate-600 text-xs sm:text-sm max-w-xl mx-auto">
                 Saisissez une date de naissance pour débloquer votre bilan complet.
@@ -705,7 +761,7 @@ export default function App() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                   <div className="bg-emerald-50/50 border border-emerald-100 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">
                     <h4 className="text-emerald-950 font-bold text-sm sm:text-base flex items-center gap-2">
-                      <Award className="text-emerald-600" size={18} /> Top 10 des qualités
+                      <Award className="text-emerald-600" size={18} /> Top 10 des Qualités
                     </h4>
                     <div className="flex flex-wrap gap-1.5 sm:gap-2">
                       {searchedProfile.qualities.map((item, idx) => (
@@ -718,7 +774,7 @@ export default function App() {
 
                   <div className="bg-amber-50/50 border border-amber-100 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">
                     <h4 className="text-amber-950 font-bold text-sm sm:text-base flex items-center gap-2">
-                      <Info className="text-amber-600" size={18} /> Top 10 des défauts
+                      <Info className="text-amber-600" size={18} /> Top 10 des Défauts
                     </h4>
                     <div className="flex flex-wrap gap-1.5 sm:gap-2">
                       {searchedProfile.flaws.map((item, idx) => (
@@ -733,7 +789,7 @@ export default function App() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                   <div className="bg-purple-50/50 border border-purple-100 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">
                     <h4 className="text-purple-950 font-bold text-sm sm:text-base flex items-center gap-2">
-                      <Gift className="text-purple-600" size={18} /> 5 talents cachés
+                      <Gift className="text-purple-600" size={18} /> 5 Talents Cachés
                     </h4>
                     <ul className="space-y-2 text-xs sm:text-sm text-slate-700">
                       {searchedProfile.talents.map((talent, idx) => (
@@ -749,7 +805,7 @@ export default function App() {
 
                   <div className="bg-indigo-50/50 border border-indigo-100 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">
                     <h4 className="text-indigo-950 font-bold text-sm sm:text-base flex items-center gap-2">
-                      <Compass className="text-indigo-600" size={18} /> 5 anecdotes particulières
+                      <Compass className="text-indigo-600" size={18} /> 5 Anecdotes Particulières
                     </h4>
                     <ul className="space-y-2 text-xs sm:text-sm text-slate-700">
                       {searchedProfile.anecdotes.map((anecdote, idx) => (
@@ -766,7 +822,7 @@ export default function App() {
 
                 <div className="bg-slate-50 border border-slate-200 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">
                   <h4 className="text-slate-900 font-bold text-sm sm:text-base flex items-center gap-2">
-                    <Star size={18} className="text-amber-500 fill-amber-500" /> Domaines d'excellence
+                    <Star size={18} className="text-amber-500 fill-amber-500" /> Domaines d'Excellence
                   </h4>
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
                     {searchedProfile.excellenceDomains.map((domain, idx) => (
