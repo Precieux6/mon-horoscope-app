@@ -278,12 +278,12 @@ export default function App() {
                 </span>
               </div>
               <p className="text-[11px] text-slate-500 font-medium hidden sm:block">
-                Moteur d'Astrologie Quotidien & Tendances Mensuelles
+                Moteur d'astrologie quotidien & tendances mensuelles
               </p>
             </div>
           </div>
 
-          {/* Navigation basculant entre Horoscope, Tendances Mensuelles et Profil */}
+          {/* Navigation basculant entre Horoscope, Tendances mensuelles & profil */}
           <nav className="flex items-center gap-1 bg-slate-100 p-1 rounded-2xl border border-slate-200/80">
             <button
               onClick={() => setActiveTab('horoscope')}
@@ -312,7 +312,7 @@ export default function App() {
               }`}
             >
               <Search size={15} className={activeTab === 'profiler' ? 'text-purple-600' : ''} />
-              <span>Mon Profil</span>
+              <span>Mon profil</span>
             </button>
           </nav>
 
@@ -335,7 +335,7 @@ export default function App() {
             
             <div className="text-center max-w-3xl mx-auto space-y-2">
               <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                Horoscope Astral Quotidien
+                Horoscope astral quotidien
               </h2>
               <p className="text-slate-600 text-xs sm:text-sm max-w-xl mx-auto">
                 Analyse détaillée pour chaque signe du zodiaque pour le {todayFormatted}.
@@ -401,7 +401,7 @@ export default function App() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div className="p-2.5 bg-rose-100 text-rose-700 rounded-2xl"><Heart size={22} /></div>
-                        <h4 className="text-base font-bold text-rose-950">Amour & Relations</h4>
+                        <h4 className="text-base font-bold text-rose-950">Amour & relations</h4>
                       </div>
                       <span className="text-xs font-extrabold bg-rose-100 text-rose-900 px-3 py-1 rounded-full">{currentHoroscope.amour.score}%</span>
                     </div>
@@ -412,7 +412,7 @@ export default function App() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div className="p-2.5 bg-sky-100 text-sky-700 rounded-2xl"><Briefcase size={22} /></div>
-                        <h4 className="text-base font-bold text-sky-950">Travail & Carrière</h4>
+                        <h4 className="text-base font-bold text-sky-950">Travail & carrière</h4>
                       </div>
                       <span className="text-xs font-extrabold bg-sky-100 text-sky-900 px-3 py-1 rounded-full">{currentHoroscope.travail.score}%</span>
                     </div>
@@ -423,7 +423,7 @@ export default function App() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div className="p-2.5 bg-emerald-100 text-emerald-700 rounded-2xl"><Wallet size={22} /></div>
-                        <h4 className="text-base font-bold text-emerald-950">Argent & Finances</h4>
+                        <h4 className="text-base font-bold text-emerald-950">Argent & finances</h4>
                       </div>
                       <span className="text-xs font-extrabold bg-emerald-100 text-emerald-900 px-3 py-1 rounded-full">{currentHoroscope.argent.score}%</span>
                     </div>
@@ -434,7 +434,7 @@ export default function App() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div className="p-2.5 bg-amber-100 text-amber-800 rounded-2xl"><Activity size={22} /></div>
-                        <h4 className="text-base font-bold text-amber-950">Santé & Vitalité</h4>
+                        <h4 className="text-base font-bold text-amber-950">Santé & vitalité</h4>
                       </div>
                       <span className="text-xs font-extrabold bg-amber-100 text-amber-900 px-3 py-1 rounded-full">{currentHoroscope.sante.score}%</span>
                     </div>
@@ -535,7 +535,7 @@ export default function App() {
                   <div className="bg-rose-50/40 border border-rose-100 p-6 rounded-3xl space-y-3">
                     <div className="flex items-center gap-3">
                       <div className="p-2.5 bg-rose-100 text-rose-700 rounded-2xl"><Heart size={20} /></div>
-                      <h4 className="text-base font-bold text-rose-950">Tendance Amour du Mois</h4>
+                      <h4 className="text-base font-bold text-rose-950">Tendance amour du mois</h4>
                     </div>
                     <p className="text-slate-700 text-sm leading-relaxed">{currentMonthlyTrends.amour}</p>
                   </div>
@@ -543,7 +543,7 @@ export default function App() {
                   <div className="bg-sky-50/40 border border-sky-100 p-6 rounded-3xl space-y-3">
                     <div className="flex items-center gap-3">
                       <div className="p-2.5 bg-sky-100 text-sky-700 rounded-2xl"><Briefcase size={20} /></div>
-                      <h4 className="text-base font-bold text-sky-950">Tendance Travail du Mois</h4>
+                      <h4 className="text-base font-bold text-sky-950">Tendance travail du mois</h4>
                     </div>
                     <p className="text-slate-700 text-sm leading-relaxed">{currentMonthlyTrends.travail}</p>
                   </div>
@@ -551,7 +551,7 @@ export default function App() {
                   <div className="bg-emerald-50/40 border border-emerald-100 p-6 rounded-3xl space-y-3">
                     <div className="flex items-center gap-3">
                       <div className="p-2.5 bg-emerald-100 text-emerald-700 rounded-2xl"><Wallet size={20} /></div>
-                      <h4 className="text-base font-bold text-emerald-950">Tendance Argent du Mois</h4>
+                      <h4 className="text-base font-bold text-emerald-950">Tendance argent du mois</h4>
                     </div>
                     <p className="text-slate-700 text-sm leading-relaxed">{currentMonthlyTrends.argent}</p>
                   </div>
@@ -559,7 +559,7 @@ export default function App() {
                   <div className="bg-amber-50/40 border border-amber-100 p-6 rounded-3xl space-y-3">
                     <div className="flex items-center gap-3">
                       <div className="p-2.5 bg-amber-100 text-amber-800 rounded-2xl"><Activity size={20} /></div>
-                      <h4 className="text-base font-bold text-amber-950">Tendance Santé du Mois</h4>
+                      <h4 className="text-base font-bold text-amber-950">Tendance santé du mois</h4>
                     </div>
                     <p className="text-slate-700 text-sm leading-relaxed">{currentMonthlyTrends.sante}</p>
                   </div>
@@ -624,7 +624,7 @@ export default function App() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="bg-emerald-50/50 border border-emerald-100 rounded-3xl p-6 space-y-4">
                     <h4 className="text-emerald-950 font-bold text-base flex items-center gap-2">
-                      <Award className="text-emerald-600" size={20} /> Top 10 des Qualités
+                      <Award className="text-emerald-600" size={20} /> Top 10 des qualités
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {searchedProfile.qualities.map((item, idx) => (
@@ -637,7 +637,7 @@ export default function App() {
 
                   <div className="bg-amber-50/50 border border-amber-100 rounded-3xl p-6 space-y-4">
                     <h4 className="text-amber-950 font-bold text-base flex items-center gap-2">
-                      <Info className="text-amber-600" size={20} /> Top 10 des Défauts
+                      <Info className="text-amber-600" size={20} /> Top 10 des défauts
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {searchedProfile.flaws.map((item, idx) => (
@@ -651,7 +651,7 @@ export default function App() {
 
                 <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 space-y-4">
                   <h4 className="text-slate-900 font-bold text-base flex items-center gap-2">
-                    <Star size={20} className="text-amber-500 fill-amber-500" /> Domaines d'Excellence
+                    <Star size={20} className="text-amber-500 fill-amber-500" /> Domaines d'excellence
                   </h4>
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
                     {searchedProfile.excellenceDomains.map((domain, idx) => (
