@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
   Sparkles, Heart, Briefcase, Wallet, Activity, Calendar, Search, 
-  Star, Compass, Gift, Award, CheckCircle2, Info
+  Star, Award, CheckCircle2, Info, TrendingUp
 } from 'lucide-react';
 
 // ============================================================================
@@ -50,157 +50,61 @@ const COMPLETE_PROFILES_DATABASE = {
   belier: {
     qualities: ["Audacieux", "Passionné", "Franc", "Pionnier", "Énergique", "Leader naturel", "Généreux", "Spontané", "Déterminé", "Optimiste"],
     flaws: ["Impulsif", "Impatient", "Autoritaire", "Têtu", "Téméraire", "Susceptible", "Compétitif", "Individualiste", "Direct à l'excès", "Imprévisible"],
-    anecdotes: [
-      "Le Bélier est souvent la première personne à se porter volontaire dans les défis impossibles.",
-      "Il préfère l'action immédiate aux longues négociations théoriques interminables.",
-      "Sa franchise directe et naturelle est souvent perçue comme une fraîcheur revigorante.",
-      "Possède la faculté unique de se relever en un temps record après un revers important.",
-      "S'ennuie très rapidement si ses projets ne bougent pas à un rythme effréné."
-    ],
-    talents: ["Prise de décision ultra-rapide sous haute pression", "Capacité à impulsions et démarrer de zéro", "Inspiration d'enthousiasme chez les collaborateurs", "Courage face aux incertitudes majeures", "Réactivité physique et mentale instantanée"],
     excellenceDomains: ["Entrepreneuriat", "Gestion de crise", "Sport de compétition", "Management stratégique", "Innovation disruptive", "Chirurgie & Urgences", "Vente & Négociation", "Aéronautique", "Arts martiaux", "Lancement de startups"]
   },
   taureau: {
     qualities: ["Loyal", "Patient", "Pragmatique", "Fiable", "Persévérant", "Épicurien", "Calme", "Protecteur", "Rationnel", "Méthodique"],
     flaws: ["Rancunier", "Possessif", "Têtu", "Réticent aux changements", "Matérialiste", "Rigide", "Lent au démarrage", "Gourmand excessif", "Indulgent", "Méfiant"],
-    anecdotes: [
-      "Il peut se souvenir exactement du goût d'un repas partagé il y a plus de 10 ans.",
-      "Sa loyauté amicale est solide comme un roc : un ami Taureau l'est pour la vie entière.",
-      "Ne bousculez jamais son rituel du matin sous peine de rompre sa sérénité.",
-      "A un instinct naturel infaillible pour dénicher les vraies bonnes affaires de valeur.",
-      "Sa colère est rarissime mais quand elle éclate, elle balaye tout sur son passage."
-    ],
-    talents: ["Gestion budgétaire et sécurisation patrimoniale", "Constance à toute épreuve dans l'effort", "Capacité à matérialiser les idées abstraites", "Sens de l'esthétique et du design tactile", "Maintien du calme au milieu de la panique"],
     excellenceDomains: ["Finance & Banque", "Gastronomie & Oenologie", "Architecture & Design", "Gestion immobilière", "Horticulture & Paysage", "Artisanat d'art", "Musique & Composition", "Ressources Humaines", "Investissement financier", "Patrimoine"]
   },
   gemeaux: {
     qualities: ["Adaptable", "Éloquent", "Curieux", "Vif d'esprit", "Sociable", "Polyvalent", "Enthousiaste", "Perspicace", "Inventif", "Pétillant"],
     flaws: ["Dispersé", "Superficiel", "Indécis", "Nerveux", "Inconstant", "Bavard", "Changeant", "Facilement distrait", "Ironique", "Tendance à procrastiner"],
-    anecdotes: [
-      "Il peut lire trois livres en même temps tout en écoutant un podcast intéressant.",
-      "A la capacité d'engager une conversation captivante avec absolument n'importe qui.",
-      "Apprend de nouveaux concepts en une vitesse qui déconcerte souvent son entourage.",
-      "Préfère cumuler les expériences plutôt que de s'enfermer dans une routine rigide.",
-      "Conserve une jeunesse d'esprit et un regard pétillant toute sa vie durant."
-    ],
-    talents: ["Synthèse rapide d'informations complexes", "Facilité d'apprentissage des langues", "Improvisation scénique et oratoire", "Création de ponts entre personnes différentes", "Multitâche fluide et efficace"],
     excellenceDomains: ["Journalisme & Médias", "Relations Publiques", "Marketing digital", "Enseignement", "Traduction & Interprétariat", "Développement logiciel", "Commerce international", "Animation & Événementiel", "Rédaction créative", "Médiation"]
   },
   cancer: {
     qualities: ["Intuitif", "Protecteur", "Empathique", "Dévoué", "Créatif", "Sensible", "Attentif", "Loyal", "Plein d'imagination", "Patient affectivement"],
     flaws: ["Susceptible", "Nostalgique", "Possessif", "Changement d'humeur", "Introverti", "Anxieux", "Réticent au risque", "Capricieux", "Protecteur à l'excès", "Dépendant"],
-    anecdotes: [
-      "Ressent l'ambiance émotionnelle d'une pièce en une fraction de seconde.",
-      "Gardera précieusement un simple ticket de cinéma qui lui rappelle un bon souvenir.",
-      "Son foyer est son sanctuaire où il aime cuisiner pour les gens qu'il aime.",
-      "Si un ami a un problème, il sera le premier sur place avec du réconfort.",
-      "Son intuition dépasse très souvent la logique pure dans ses grands choix."
-    ],
-    talents: ["Instinct protecteur et accompagnement", "Sensibilité artistique et poétique", "Mémoire affective et visuelle remarquable", "Création d'espaces chaleureux et sécurisants", "Écoute bienveillante sans jugement"],
     excellenceDomains: ["Psychologie & Thérapie", "Restauration & Hôtellerie", "Pédiatrie & Soins", "Architecture d'intérieur", "Histoire & Archéologie", "Écriture & Poésie", "Gestion de fondations", "Services à la personne", "Muséologie", "Immobilier résidentiel"]
   },
   lion: {
     qualities: ["Généreux", "Charmant", "Charismatique", "Loyal", "Protecteur", "Ambitieux", "Magnanime", "Créatif", "Sûr de lui", "Chaleureux"],
     flaws: ["Orgueilleux", "Théâtral", "Dominant", "Exigeant", "Centré sur soi", "Têtu", "Sensible au jugement", "Impétueux", "Extravagant", "Intolérant aux fautes"],
-    anecdotes: [
-      "Aime faire des cadeaux grandioses et voir le sourire sur le visage de ses proches.",
-      "Sa présence naturelle attire l'attention même lorsqu'il essaye d'être discret.",
-      "Ne supporte pas l'injustice commise envers les personnes plus faibles que lui.",
-      "Possède une loyauté absolue vers ceux qui ont gagné sa confiance sincère.",
-      "Travaillera sans relâche pour transformer un projet ordinaire en chef-d'œuvre."
-    ],
-    talents: ["Leadership motivant et inspirant", "Aise naturelle sur scène et en public", "Créativité visuelle et scénique", "Capacité à redonner confiance aux autres", "Gestion de projets d'envergure"],
     excellenceDomains: ["Arts du spectacle", "Direction générale", "Luxe & Haute couture", "Politique & Diplomatie", "Relations publiques", "Production cinématographique", "Mentorat de haut niveau", "Organisation de galas", "Design de marque", "Haut conseil"]
   },
   vierge: {
     qualities: ["Méthodique", "Précis", "Analytique", "Serviable", "Organisé", "Modeste", "Fiable", "Pragmatique", "Réfléchi", "Discret"],
     flaws: ["Perfectionniste", "Critique", "Anxieux", "Réservé", "Rigide", "Tendance au surmenage", "Minutieux à l'excès", "Indécis par analyse", "Inquiet", "Pessimiste"],
-    anecdotes: [
-      "Remarquera immédiatement la moindre coquille dans un document de cinquante pages.",
-      "Possède un système d'organisation personnel que personne d'autre ne peut déchiffrer.",
-      "Trouve une grande satisfaction à rendre un service utile et concret à autrui.",
-      "Son esprit analyse continuellement comment optimiser chaque processus.",
-      "Derrière sa discrétion se cache souvent un érudit aux connaissances impressionnantes."
-    ],
-    talents: ["Analyse de données et contrôle qualité", "Organisation méthodique optimale", "Détection instantanée des anomalies", "Sens du service et de l'amélioration continue", "Clarté de synthèse dans le détail"],
     excellenceDomains: ["Audit & Contrôle", "Médecine & Recherche", "Comptabilité & Analyse", "Ingénierie informatique", "Gestion de la qualité", "Sciences de données", "Édition & Correction", "Organisation logistique", "Diététique & Santé", "Archivage"]
   },
   balance: {
     qualities: ["Diplomate", "Équitable", "Sociable", "Élégant", "Charmant", "Pacifique", "Empathique", "Coopératif", "Raffiné", "Conciliant"],
     flaws: ["Indécis", "Évite les conflits", "Dépendant", "Influençable", "Superficiel", "Hésitant", "Soucieux du regard d'autrui", "Procrastinateur", "Trop indulgent", "Passif"],
-    anecdotes: [
-      "Peut passer une heure à peser le pour et le contre pour choisir un menu.",
-      "A un don inné pour apaiser une dispute houleuse en trouvant le juste milieu.",
-      "L'harmonie esthétique de son environnement influe directement sur son moral.",
-      "Préférera s'adapter au souhait du groupe plutôt qu'imposer son choix personnel.",
-      "Sa politesse et son tact ouvrent les portes les plus difficiles d'accès."
-    ],
-    talents: ["Négociation et médiation pacifique", "Sens raffiné de l'esthétique et des couleurs", "Capacité à percevoir tous les points de vue", "Création de partenariats durables", "Savoir-vivre et étiquette sociale"],
     excellenceDomains: ["Droit & Justice", "Médiation d'entreprise", "Diplomatie", "Design & Mode", "Conseil en image", "Relations internationales", "Ressources Humaines", "Coaching relationnel", "Muséographie", "Galerie d'art"]
   },
   scorpion: {
     qualities: ["Intense", "Passionné", "Perspicace", "Déterminé", "Loyal", "Magnétique", "Courageux", "Intuitif", "Ressource", "Profond"],
     flaws: ["Méfiant", "Rancunier", "Possessif", "Secret", "Impérieux", "Jaloux", "Intransigeant", "Partisan du tout ou rien", "Manipulateur", "Extrême"],
-    anecdotes: [
-      "Détecte les mensonges et les omissions en un simple regard attentif.",
-      "Conserve ses secrets les plus chers sous une carapace impénétrable.",
-      "Quand il s'investit dans une cause, il y met son âme entière sans retenue.",
-      "Capacité légendaire à se régénérer après les pires épreuves de l'existence.",
-      "Préfère une vérité qui blesse mais franche à un mensonge réconfortant."
-    ],
-    talents: ["Investigation et recherche approfondie", "Psychologie et détection des motivations", "Gestion de situations extrêmes et critiques", "Capacité de transformation personnelle", "Stratégie secrète et analyse complexe"],
     excellenceDomains: ["Psychiatrie & Psychanalyse", "Criminologie & Enquête", "Chirurgie spécialisée", "Cybersécurité", "Investissement en Capital-Risque", "Recherche scientifique", "Astrophysique", "Gestion de crises majeures", "Stratégie militaire", "Négociation complexe"]
   },
   sagittaire: {
     qualities: ["Optimiste", "Enthousiaste", "Chaleureux", "Philosophe", "Franc", "Indépendant", "Généreux", "Aventurier", "Visionnaire", "Tolérant"],
     flaws: ["Imprudent", "Direct à l'excès", "Impatient", "Promet trop", "Nerveux", "Dispersé", "Moralisateur", "Peur de l'engagement", "Inconstant", "Sans filtre"],
-    anecdotes: [
-      "Est toujours prêt à faire sa valise en cinq minutes pour une aventure imprévue.",
-      "Son optimisme est tellement communicatif qu'il remonte le moral de tout un groupe.",
-      "Aime débattre de philosophie, de voyages et de grands concepts jusqu'à l'aube.",
-      "Dit exactement ce qu'il pense sans aucune mauvaise intention sous-jacente.",
-      "A besoin d'espace et d'indépendance pour s'épanouir pleinement dans son travail."
-    ],
-    talents: ["Vision globale et réflexion stratégique", "Transmissions de connaissances et enseignement", "Adaptation instantanée aux cultures étrangères", "Enthousiasme communicatif contagieux", "Découverte d'opportunités d'avenir"],
     excellenceDomains: ["Enseignement supérieur", "Tourisme & Exploration", "Édition & Philosophie", "Commerce international", "Diplomatie culturelle", "Sports d'aventure", "Coaching de vie", "Traduction universelle", "Droit international", "Conférences"]
   },
   capricorne: {
     qualities: ["Ambitieux", "Discipliné", "Pragmatique", "Patient", "Prévoyant", "Labeur", "Responsable", "Intègre", "Méthodique", "Persévérant"],
     flaws: ["Austère", "Pessimiste", "Rigide", "Distanciation affective", "Perfectionniste", "Méfiance", "Travailleur compulsif", "Rancunier", "Sévère", "Réticent aux plaisirs"],
-    anecdotes: [
-      "Planifie souvent sa trajectoire professionnelle avec 10 ans d'avance.",
-      "Son humour est d'une finesse et d'un second degré irrésistibles quand il se détend.",
-      "Préfère la qualité durable et intemporelle aux tendances passagères.",
-      "Plus il vieillit, plus il apprend à profiter sereinement de la vie.",
-      "Est le pilier inébranlable sur lequel toute sa famille peut s'appuyer."
-    ],
-    talents: ["Planification stratégique sur le très long terme", "Endurance exceptionnelle face à l'effort", "Gestion rigoureuse des ressources et institutions", "Sang-froid inaltérable dans les crises", "Incorruptibilité et intégrité"],
     excellenceDomains: ["Direction d'entreprise", "Administration publique", "Bâtiment & Travaux Publics", "Ingénierie civile", "Finance & Comptabilité", "Gestion de fonds", "Politique économique", "Enseignement classique", "Architecture", "Haute magistrature"]
   },
   verseau: {
     qualities: ["Innovateur", "Humaniste", "Indépendant", "Original", "Visionnaire", "Fraternel", "Altruiste", "Intelligent", "Créatif", "Tolérant"],
     flaws: ["Détaché", "Imprévisible", "Entêté dans ses idées", "Rebelle sans cause", "Utopique", "Froid en apparence", "Individualiste", "Paradoxal", "Réticent au cadre", "Iconoclaste"],
-    anecdotes: [
-      "Pense souvent à des solutions innovantes que le monde ne comprendra que dans 5 ans.",
-      "Accorde une valeur suprême à ses amitiés et à sa liberté d'esprit.",
-      "Ne fera jamais quelque chose uniquement parce que 'ça s'est toujours fait ainsi'.",
-      "Peut paraître distant tout en se passionnant pour le bien-être de l'humanité entière.",
-      "Adore casser les codes et surprendre là où on ne l'attend absolument pas."
-    ],
-    talents: ["Anticipation des tendances futures", "Conception de systèmes disruptifs", "Fédération de communautés diverses", "Créativité technologique et conceptuelle", "Esprit critique indépendant des dogmes"],
     excellenceDomains: ["Technologies avancées", "Aéronautique & Espace", "Sciences de l'environnement", "Sociologie & Recherche", "Intelligence Artificielle", "Action humanitaire", "Ingénierie réseau", "Invention & Brevets", "Mouvements citoyens", "E-Sport"]
   },
   poissons: {
     qualities: ["Empathique", "Intuitif", "Créatif", "Inspiré", "Généreux", "Compassionnel", "Dévoué", "Artiste", "Doux", "Rêveur"],
     flaws: ["Hypersensible", "Idéaliste", "Fuite de la réalité", "Influençable", "Indécis", "Anxieux", "Tendance au sacrifice", "Désordonné", "Confus", "Nostalgique"],
-    anecdotes: [
-      "Son monde intérieur est une source inépuisable d'histoires et de création.",
-      "Ressent tellement la peine d'autrui qu'il fait tout pour essayer de la soulager.",
-      "Ses rêves nocturnes lui apportent parfois des réponses claires à ses interrogations.",
-      "S'épanouit pleinement au contact de la musique, de la mer et de la poésie.",
-      "Possède une sagesse émotionnelle qui surprend ceux qui ne voient que son côté rêveur."
-    ],
-    talents: ["Inspiration artistique et musicale illimitée", "Compréhension empathique instantanée", "Adaptabilité fluide aux environnements", "Facilité pour la méditation et le soin", "Imagination narrative et poétique"],
     excellenceDomains: ["Musique & Composition", "Cinéma & Réalisation", "Psychologie & Soins palliatifs", "Poésie & Littérature", "Thérapies holistiques", "Bénévolat & Humanitaire", "Océanographie", "Arts visuels", "Danse & Expression corporelle", "Coaching spirituel"]
   }
 };
@@ -210,7 +114,7 @@ const getProfileForSign = (sign) => {
 };
 
 // ============================================================================
-// GÉNÉRATEUR D'HOROSCOPE QUOTIDIEN DÉTERMINISTE
+// GÉNÉRATEURS DÉTERMINISTES (QUOTIDIEN & MENSUEL)
 // ============================================================================
 
 const getDailyHash = (signId, dateStr) => {
@@ -256,6 +160,29 @@ const HOROSCOPE_TEXT_DATABASE = {
   ]
 };
 
+const MONTHLY_TRENDS_DATABASE = {
+  amour: [
+    "Ce mois-ci, les configurations astrales encouragent la consolidation des liens affectifs et la sincérité dans le dialogue. Une période idéale pour dissiper les non-dits.",
+    "Un climat passionnel et constructif enveloppe votre vie sentimentale tout au long de ce mois. Les projets à deux prennent une belle impulsion.",
+    "La patience et l'écoute seront vos meilleurs atouts relationnels ce mois-ci pour rééquilibrer l'harmonie et renforcer la complicité au sein de votre couple."
+  ],
+  travail: [
+    "Le mois est marqué par une accélération de vos projets professionnels. Votre capacité d'adaptation fera toute la différence face aux nouveaux défis.",
+    "Une période faste pour la reconnaissance de vos efforts passés. Des opportunités d'évolution ou de collaboration stratégique se profilent à l'horizon.",
+    "Concentrez-vous sur la structuration à long terme de vos dossiers. Ce mois favorise la rigueur méthodologique et la consolidation de vos acquis."
+  ],
+  argent: [
+    "La gestion de vos finances demande de la prévoyance ce mois-ci. Évitez les investissements impulsifs et privilégiez la constitution d'une épargne de sécurité.",
+    "Un mois stable sur le plan pécuniaire, propice à la révision de votre budget et à la planification avisée de vos futurs projets d'investissement.",
+    "Des rentrées inattendues ou une opportunité de réaménagement budgétaire allègeront vos charges. Profitez-en pour consolider votre patrimoine."
+  ],
+  sante: [
+    "Votre vitalité est en transition ce mois-ci : veillez à accorder une importance capitale à la qualité de votre sommeil et à une récupération physique régulière.",
+    "Un regain d'énergie vous pousse à adopter de nouvelles routines de bien-être plus saines. C'est le moment idéal pour démarrer une activité physique.",
+    "L'équilibre mental est au premier plan. Prenez du temps pour vous ressourcer loin du stress quotidien et cultivez la sérénité intérieure."
+  ]
+};
+
 const generateAutomatedHoroscope = (signId, dateStr) => {
   const hash = getDailyHash(signId, dateStr);
   return {
@@ -267,27 +194,54 @@ const generateAutomatedHoroscope = (signId, dateStr) => {
   };
 };
 
+const generateMonthlyTrends = (signId, yearMonthStr) => {
+  let hash = 0;
+  const str = signId + "_" + yearMonthStr;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash << 5) - hash + str.charCodeAt(i);
+    hash |= 0;
+  }
+  hash = Math.abs(hash);
+
+  return {
+    amour: MONTHLY_TRENDS_DATABASE.amour[hash % MONTHLY_TRENDS_DATABASE.amour.length],
+    travail: MONTHLY_TRENDS_DATABASE.travail[(hash >> 1) % MONTHLY_TRENDS_DATABASE.travail.length],
+    argent: MONTHLY_TRENDS_DATABASE.argent[(hash >> 2) % MONTHLY_TRENDS_DATABASE.argent.length],
+    sante: MONTHLY_TRENDS_DATABASE.sante[(hash >> 3) % MONTHLY_TRENDS_DATABASE.sante.length],
+  };
+};
+
 // ============================================================================
 // COMPOSANT PRINCIPAL DE L'APPLICATION
 // ============================================================================
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('horoscope'); // 'horoscope' | 'profiler'
+  const [activeTab, setActiveTab] = useState('horoscope'); // 'horoscope' | 'mensuel' | 'profiler'
   const [selectedSign, setSelectedSign] = useState(ZODIAC_SIGNS[0]);
   
   const [birthdateInput, setBirthdateInput] = useState('1995-07-23');
   const [searchedProfile, setSearchedProfile] = useState(null);
 
   const todayISO = useMemo(() => new Date().toISOString().split('T')[0], []);
+  const yearMonthISO = useMemo(() => todayISO.slice(0, 7), [todayISO]); // ex: "2026-10"
+  
   const todayFormatted = useMemo(() => {
     return new Date().toLocaleDateString('fr-FR', {
       weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
     });
   }, []);
 
+  const monthFormatted = useMemo(() => {
+    return new Date().toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+  }, []);
+
   const currentHoroscope = useMemo(() => {
     return generateAutomatedHoroscope(selectedSign.id, todayISO);
   }, [selectedSign, todayISO]);
+
+  const currentMonthlyTrends = useMemo(() => {
+    return generateMonthlyTrends(selectedSign.id, yearMonthISO);
+  }, [selectedSign, yearMonthISO]);
 
   useEffect(() => {
     if (birthdateInput) {
@@ -306,7 +260,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 font-sans antialiased pb-24 sm:pb-12 flex flex-col selection:bg-purple-200 selection:text-purple-900">
       
-      {/* BARRE DE NAVIGATION PRINCIPALE (ÉPURÉE SANS CRON NI API) */}
+      {/* BARRE DE NAVIGATION PRINCIPALE */}
       <header className="bg-white/90 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-40 shadow-2xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between">
           
@@ -324,16 +278,16 @@ export default function App() {
                 </span>
               </div>
               <p className="text-[11px] text-slate-500 font-medium hidden sm:block">
-                Moteur d'astrologie quotidien & profilage
+                Moteur d'Astrologie Quotidien & Tendances Mensuelles
               </p>
             </div>
           </div>
 
-          {/* Navigation basculant entre Horoscope et Profil */}
+          {/* Navigation basculant entre Horoscope, Tendances Mensuelles et Profil */}
           <nav className="flex items-center gap-1 bg-slate-100 p-1 rounded-2xl border border-slate-200/80">
             <button
               onClick={() => setActiveTab('horoscope')}
-              className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-xl transition-all duration-200 ${
+              className={`flex items-center gap-2 px-3 sm:px-4 py-2 text-xs font-bold rounded-xl transition-all duration-200 ${
                 activeTab === 'horoscope' ? 'bg-white text-purple-800 shadow-xs' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -342,8 +296,18 @@ export default function App() {
             </button>
 
             <button
+              onClick={() => setActiveTab('mensuel')}
+              className={`flex items-center gap-2 px-3 sm:px-4 py-2 text-xs font-bold rounded-xl transition-all duration-200 ${
+                activeTab === 'mensuel' ? 'bg-white text-purple-800 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <TrendingUp size={15} className={activeTab === 'mensuel' ? 'text-purple-600' : ''} />
+              <span>Tendances Mensuelles</span>
+            </button>
+
+            <button
               onClick={() => setActiveTab('profiler')}
-              className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-xl transition-all duration-200 ${
+              className={`flex items-center gap-2 px-3 sm:px-4 py-2 text-xs font-bold rounded-xl transition-all duration-200 ${
                 activeTab === 'profiler' ? 'bg-white text-purple-800 shadow-xs' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -365,13 +329,13 @@ export default function App() {
       {/* CONTENEUR PRINCIPAL */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 sm:pt-8 flex-1 w-full">
 
-        {/* ONGLET 1 : HOROSCOPE DU JOUR AVEC GRILLE 4x3 */}
+        {/* ONGLET 1 : HOROSCOPE DU JOUR (GRILLE 4x3) */}
         {activeTab === 'horoscope' && (
           <div className="space-y-6 sm:space-y-8 animate-fadeIn">
             
             <div className="text-center max-w-3xl mx-auto space-y-2">
               <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                Horoscope quotidien
+                Horoscope Astral Quotidien
               </h2>
               <p className="text-slate-600 text-xs sm:text-sm max-w-xl mx-auto">
                 Analyse détaillée pour chaque signe du zodiaque pour le {todayFormatted}.
@@ -389,7 +353,6 @@ export default function App() {
                 </span>
               </div>
 
-              {/* grid-cols-2 sur mobile, grid-cols-4 sur écrans larges pour faire un format 4x3 parfait (12 éléments) */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {ZODIAC_SIGNS.map((sign) => {
                   const isSelected = selectedSign.id === sign.id;
@@ -438,7 +401,7 @@ export default function App() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div className="p-2.5 bg-rose-100 text-rose-700 rounded-2xl"><Heart size={22} /></div>
-                        <h4 className="text-base font-bold text-rose-950">Amour & relations</h4>
+                        <h4 className="text-base font-bold text-rose-950">Amour & Relations</h4>
                       </div>
                       <span className="text-xs font-extrabold bg-rose-100 text-rose-900 px-3 py-1 rounded-full">{currentHoroscope.amour.score}%</span>
                     </div>
@@ -449,7 +412,7 @@ export default function App() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div className="p-2.5 bg-sky-100 text-sky-700 rounded-2xl"><Briefcase size={22} /></div>
-                        <h4 className="text-base font-bold text-sky-950">Travail & carrière</h4>
+                        <h4 className="text-base font-bold text-sky-950">Travail & Carrière</h4>
                       </div>
                       <span className="text-xs font-extrabold bg-sky-100 text-sky-900 px-3 py-1 rounded-full">{currentHoroscope.travail.score}%</span>
                     </div>
@@ -460,7 +423,7 @@ export default function App() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div className="p-2.5 bg-emerald-100 text-emerald-700 rounded-2xl"><Wallet size={22} /></div>
-                        <h4 className="text-base font-bold text-emerald-950">Argent & finances</h4>
+                        <h4 className="text-base font-bold text-emerald-950">Argent & Finances</h4>
                       </div>
                       <span className="text-xs font-extrabold bg-emerald-100 text-emerald-900 px-3 py-1 rounded-full">{currentHoroscope.argent.score}%</span>
                     </div>
@@ -471,7 +434,7 @@ export default function App() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div className="p-2.5 bg-amber-100 text-amber-800 rounded-2xl"><Activity size={22} /></div>
-                        <h4 className="text-base font-bold text-amber-950">Santé & vitalité</h4>
+                        <h4 className="text-base font-bold text-amber-950">Santé & Vitalité</h4>
                       </div>
                       <span className="text-xs font-extrabold bg-amber-100 text-amber-900 px-3 py-1 rounded-full">{currentHoroscope.sante.score}%</span>
                     </div>
@@ -498,13 +461,124 @@ export default function App() {
           </div>
         )}
 
-        {/* ONGLET 2 : PROFILER ASTROLOGIQUE */}
+        {/* ONGLET 2 : TENDANCES ASTROLOGIQUES MENSUELLES (NOUVELLE FENÊTRE) */}
+        {activeTab === 'mensuel' && (
+          <div className="space-y-6 sm:space-y-8 animate-fadeIn">
+            
+            <div className="text-center max-w-3xl mx-auto space-y-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-100 text-purple-800 text-xs font-semibold border border-purple-200">
+                <Calendar size={13} className="text-purple-600" />
+                <span>Actualisation automatique au changement de mois</span>
+              </div>
+              <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
+                Tendances Astrologiques Mensuelles
+              </h2>
+              <p className="text-slate-600 text-xs sm:text-sm max-w-xl mx-auto">
+                Grandes orientations et prédictions globales pour le mois de <strong className="text-purple-800 capitalize">{monthFormatted}</strong>.
+              </p>
+            </div>
+
+            {/* SÉLECTEUR DE SIGNES EN FORMAT STRICT 4x3 POUR LES TENDANCES MENSUELLES */}
+            <div className="bg-white p-5 rounded-3xl shadow-sm border border-slate-200/90 space-y-3">
+              <div className="flex items-center justify-between px-1">
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                  Sélectionnez un signe du zodiaque :
+                </p>
+                <span className="text-xs text-purple-700 font-semibold">
+                  Signe actif : <strong className="text-slate-900">{selectedSign.name}</strong>
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {ZODIAC_SIGNS.map((sign) => {
+                  const isSelected = selectedSign.id === sign.id;
+                  return (
+                    <button
+                      key={sign.id}
+                      onClick={() => setSelectedSign(sign)}
+                      className={`flex items-center gap-3 p-3.5 rounded-2xl transition duration-200 border text-left group ${
+                        isSelected
+                          ? 'bg-gradient-to-r from-purple-50 to-indigo-50 border-purple-500 text-purple-900 shadow-sm ring-2 ring-purple-500/20'
+                          : 'border-slate-100 bg-slate-50/60 hover:bg-slate-100 text-slate-700 hover:border-slate-300'
+                      }`}
+                    >
+                      <span className="text-3xl shrink-0 group-hover:scale-110 transition">{sign.symbol}</span>
+                      <div className="overflow-hidden">
+                        <p className="text-xs font-bold truncate">{sign.name}</p>
+                        <p className="text-[10px] text-slate-400">{sign.element} • {sign.planet}</p>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* VUE DES TENDANCES MENSUELLES PAR DOMAINE */}
+            <div className="bg-white rounded-3xl shadow-md border border-slate-200 overflow-hidden space-y-6">
+              
+              <div className={`bg-gradient-to-r ${selectedSign.color} text-white p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6`}>
+                <div className="flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left">
+                  <div className="w-20 h-20 rounded-3xl bg-white/15 backdrop-blur-md flex items-center justify-center text-5xl border border-white/20 shadow-inner">
+                    {selectedSign.symbol}
+                  </div>
+                  <div>
+                    <span className="text-xs uppercase bg-white/20 px-3 py-1 rounded-full font-bold">Bilan de {monthFormatted}</span>
+                    <h3 className="text-3xl font-black tracking-tight mt-1">{selectedSign.name}</h3>
+                    <p className="text-white/90 text-xs sm:text-sm mt-1 font-medium">{selectedSign.dates} • Élément {selectedSign.element}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-6 sm:p-8 space-y-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  
+                  <div className="bg-rose-50/40 border border-rose-100 p-6 rounded-3xl space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2.5 bg-rose-100 text-rose-700 rounded-2xl"><Heart size={20} /></div>
+                      <h4 className="text-base font-bold text-rose-950">Tendance Amour du Mois</h4>
+                    </div>
+                    <p className="text-slate-700 text-sm leading-relaxed">{currentMonthlyTrends.amour}</p>
+                  </div>
+
+                  <div className="bg-sky-50/40 border border-sky-100 p-6 rounded-3xl space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2.5 bg-sky-100 text-sky-700 rounded-2xl"><Briefcase size={20} /></div>
+                      <h4 className="text-base font-bold text-sky-950">Tendance Travail du Mois</h4>
+                    </div>
+                    <p className="text-slate-700 text-sm leading-relaxed">{currentMonthlyTrends.travail}</p>
+                  </div>
+
+                  <div className="bg-emerald-50/40 border border-emerald-100 p-6 rounded-3xl space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2.5 bg-emerald-100 text-emerald-700 rounded-2xl"><Wallet size={20} /></div>
+                      <h4 className="text-base font-bold text-emerald-950">Tendance Argent du Mois</h4>
+                    </div>
+                    <p className="text-slate-700 text-sm leading-relaxed">{currentMonthlyTrends.argent}</p>
+                  </div>
+
+                  <div className="bg-amber-50/40 border border-amber-100 p-6 rounded-3xl space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2.5 bg-amber-100 text-amber-800 rounded-2xl"><Activity size={20} /></div>
+                      <h4 className="text-base font-bold text-amber-950">Tendance Santé du Mois</h4>
+                    </div>
+                    <p className="text-slate-700 text-sm leading-relaxed">{currentMonthlyTrends.sante}</p>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        )}
+
+        {/* ONGLET 3 : PROFILER ASTROLOGIQUE */}
         {activeTab === 'profiler' && (
           <div className="space-y-6 sm:space-y-8 animate-fadeIn">
             
             <div className="text-center max-w-3xl mx-auto space-y-2">
               <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                Moteur de profilage astrologique
+                Moteur de Profilage Astrologique
               </h2>
               <p className="text-slate-600 text-xs sm:text-sm max-w-xl mx-auto">
                 Saisissez votre date de naissance pour découvrir votre profil complet.
@@ -550,7 +624,7 @@ export default function App() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="bg-emerald-50/50 border border-emerald-100 rounded-3xl p-6 space-y-4">
                     <h4 className="text-emerald-950 font-bold text-base flex items-center gap-2">
-                      <Award className="text-emerald-600" size={20} /> Top 10 des qualités
+                      <Award className="text-emerald-600" size={20} /> Top 10 des Qualités
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {searchedProfile.qualities.map((item, idx) => (
@@ -563,7 +637,7 @@ export default function App() {
 
                   <div className="bg-amber-50/50 border border-amber-100 rounded-3xl p-6 space-y-4">
                     <h4 className="text-amber-950 font-bold text-base flex items-center gap-2">
-                      <Info className="text-amber-600" size={20} /> Top 10 des défauts
+                      <Info className="text-amber-600" size={20} /> Top 10 des Défauts
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {searchedProfile.flaws.map((item, idx) => (
@@ -577,7 +651,7 @@ export default function App() {
 
                 <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 space-y-4">
                   <h4 className="text-slate-900 font-bold text-base flex items-center gap-2">
-                    <Star size={20} className="text-amber-500 fill-amber-500" /> Domaines d'excellence
+                    <Star size={20} className="text-amber-500 fill-amber-500" /> Domaines d'Excellence
                   </h4>
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
                     {searchedProfile.excellenceDomains.map((domain, idx) => (
