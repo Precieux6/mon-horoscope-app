@@ -46,6 +46,58 @@ const getZodiacSignFromDate = (dateString) => {
   return ZODIAC_SIGNS[0];
 };
 
+const getDetailedProfileForDate = (dateString) => {
+  if (!dateString) return null;
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return null;
+
+  const sign = getZodiacSignFromDate(dateString);
+  if (!sign) return null;
+
+  const baseProfile = COMPLETE_PROFILES_DATABASE[sign.id] || COMPLETE_PROFILES_DATABASE.belier;
+  const year = date.getUTCFullYear();
+
+  let yearHash = 0;
+  const yearStr = year.toString();
+  for (let i = 0; i < yearStr.length; i++) {
+    yearHash = (yearHash << 5) - yearHash + yearStr.charCodeAt(i);
+    yearHash |= 0;
+  }
+  yearHash = Math.abs(yearHash);
+
+  const qualityShift = yearHash % baseProfile.qualities.length;
+  const rotatedQualities = [
+    ...baseProfile.qualities.slice(qualityShift),
+    ...baseProfile.qualities.slice(0, qualityShift)
+  ];
+
+  const talentShift = (yearHash + 2) % baseProfile.talents.length;
+  const rotatedTalents = [
+    ...baseProfile.talents.slice(talentShift),
+    ...baseProfile.talents.slice(0, talentShift)
+  ];
+
+  const planetaryInfluences = [
+    "Cycle de Jupiter : Année axée sur l'expansion, l'audace et les opportunités professionnelles majeures.",
+    "Cycle de Saturne : Année structurante apportant maturité précoce, rigueur et persévérance.",
+    "Cycle d'Uranus : Année marquée par l'indépendance, l'esprit d'innovation et les changements créatifs.",
+    "Cycle de Neptune : Année stimulant l'intuition artistique, la sensibilité empathique et la créativité.",
+    "Cycle de Pluton : Année de force intérieure profonde, de résilience et de métamorphose personnelle."
+  ];
+  const dominantPlanet = planetaryInfluences[yearHash % planetaryInfluences.length];
+
+  return {
+    sign,
+    birthYear: year,
+    dominantPlanet,
+    qualities: rotatedQualities,
+    flaws: baseProfile.flaws,
+    anecdotes: baseProfile.anecdotes,
+    talents: rotatedTalents,
+    excellenceDomains: baseProfile.excellenceDomains
+  };
+};
+
 const COMPLETE_PROFILES_DATABASE = {
   belier: {
     qualities: ["Audacieux", "Passionné", "Franc", "Pionnier", "Énergique", "Leader naturel", "Généreux", "Spontané", "Déterminé", "Optimiste"],
@@ -414,16 +466,16 @@ export default function App() {
 
   useEffect(() => {
     if (birthdateInput) {
-      const sign = getZodiacSignFromDate(birthdateInput);
-      if (sign) setSearchedProfile({ sign, ...getProfileForSign(sign) });
+      const profile = getDetailedProfileForDate(birthdateInput);
+      if (profile) setSearchedProfile(profile);
     }
   }, []);
 
   const handleProfileSearch = (e) => {
     e.preventDefault();
     if (!birthdateInput) return;
-    const sign = getZodiacSignFromDate(birthdateInput);
-    if (sign) setSearchedProfile({ sign, ...getProfileForSign(sign) });
+    const profile = getDetailedProfileForDate(birthdateInput);
+    if (profile) setSearchedProfile(profile);
   };
 
   return (
@@ -765,18 +817,25 @@ export default function App() {
             </div>
 
             {searchedProfile && (
-              <div className="bg-white rounded-2xl sm:rounded-3xl shadow-md border border-slate-200 p-4 sm:p-8 space-y-6 sm:space-y-8">
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 sm:p-6 bg-purple-50 rounded-2xl sm:rounded-3xl border border-purple-100 text-center sm:text-left">
-                  <div className="flex items-center gap-4 flex-col sm:flex-row">
-                    <span className="text-5xl sm:text-6xl">{searchedProfile.sign.symbol}</span>
-                    <div>
-                      <span className="text-[10px] sm:text-xs font-extrabold text-purple-700 uppercase">Signe Calculé</span>
-                      <h3 className="text-2xl sm:text-3xl font-black text-slate-900">{searchedProfile.sign.name}</h3>
-                      <p className="text-xs text-slate-500">{searchedProfile.sign.dates} • Élément {searchedProfile.sign.element}</p>
-                    </div>
-                  </div>
-                </div>
-
+  <div className="bg-white rounded-2xl sm:rounded-3xl shadow-md border border-slate-200 p-4 sm:p-8 space-y-6 sm:space-y-8 animate-fadeIn">
+    
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 sm:p-6 bg-purple-50 rounded-2xl sm:rounded-3xl border border-purple-100 text-center sm:text-left">
+      <div className="flex items-center gap-4 flex-col sm:flex-row">
+        <span className="text-5xl sm:text-6xl">{searchedProfile.sign.symbol}</span>
+        <div>
+          <span className="text-[10px] sm:text-xs font-extrabold text-purple-700 uppercase">
+            Signe Calculé • Année {searchedProfile.birthYear}
+          </span>
+          <h3 className="text-2xl sm:text-3xl font-black text-slate-900">{searchedProfile.sign.name}</h3>
+          <p className="text-xs text-slate-500">{searchedProfile.sign.dates} • Élément {searchedProfile.sign.element}</p>
+        </div>
+      </div>
+      
+      <div className="bg-white p-3.5 rounded-2xl border border-purple-200 text-xs text-purple-900 max-w-xs shadow-2xs text-left">
+        <strong className="block text-purple-950 font-bold mb-1">🔑 Empreinte planétaire de l'année :</strong>
+        <p className="text-slate-600 text-[11px] leading-relaxed">{searchedProfile.dominantPlanet}</p>
+      </div>
+    </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                   <div className="bg-emerald-50/50 border border-emerald-100 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">
                     <h4 className="text-emerald-950 font-bold text-sm sm:text-base flex items-center gap-2">
