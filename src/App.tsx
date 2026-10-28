@@ -205,7 +205,6 @@ const getNumerologyData = (dateString, fullName) => {
     maturityText,
     summaryText
   };
-};
 
   // Générateur de résumé hautement personnalisé et non répétitif
   const introPool = [
