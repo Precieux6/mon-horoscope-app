@@ -5,7 +5,7 @@ import {
 } from 'lucide-react';
 
 // ============================================================================
-// BASE DE DONNÉES ASTROLOGIQUE (12 SIGNES DU ZODIAQUE)
+// BASE DE DONNÉES SIDÉRALE (12 SIGNES DU ZODIAQUE)
 // ============================================================================
 
 const ZODIAC_SIGNS = [
@@ -24,7 +24,7 @@ const ZODIAC_SIGNS = [
 ];
 
 // ============================================================================
-// MOTEUR DE CONVERSION ASTROLOGIQUE (AYANAMSA LAHIRI)
+// MOTEUR DE CONVERSION SIDÉRALE (AYANAMSA LAHIRI)
 // ============================================================================
 
 const getSiderealSignFromDate = (dateString) => {
@@ -394,7 +394,7 @@ const getDetailedProfileForDate = (dateString, fullName) => {
 };
 
 // ============================================================================
-// TEXTES QUOTIDIENS (4 à 6 phrases) ET MENSUELS (8 à 10 phrases)
+// TEXTES QUOTIDIENS ET MENSUELS (8 à 10 phrases denses)
 // ============================================================================
 
 const DAILY_TEXTS = {
@@ -416,7 +416,7 @@ const DAILY_TEXTS = {
   sante: [
     "Votre niveau d'énergie vitale est en nette hausse sous cette configuration astrale particulièrement stimulante. Pensez à bien vous hydrater et à vous oxygéner au grand air tout au long de cette journée active. Une activité physique modérée complètera idéalement votre quête de bien-être corporel. Votre organisme vous remercie pour cette attention quotidienne et bienveillante. Profitez de cette forme olympique pour accomplir vos objectifs.",
     "Une très bonne résistance physique générale vous accompagne du matin jusqu'au soir sans faille. Privilégiez des moments de respiration consciente pour évacuer les micro-tensions mentales accumulées. Votre capital santé bénéficie d'influences protectrices qui renforcent votre tonus immunitaire global. Accordez-vous des pauses de déconnexion numérique totale pour apaiser votre système nerveux. Votre corps rayonne d'une vitalité harmonieuse.",
-    "L'équilibre entre votre corps et votre esprit s'établit avec une remarquable fluidité. Pratiquez une activité relaxante ou un sport tonique selon vos envies profondes du moment. Votre tonus resplendissant vous permet d'aborder vos tâches avec le sourire. Veillez toutefois à respecter une coupure salutaire dès les premières baisses de régime vespérales. Prenez soin de votre enveloppe corporelle avec douceur."
+    "L'équilibre entre votre corps et votre esprit s'établit avec une remarquable fluidité. Pratiquez une activité relaxante ou un sport tonique selon vos besoins réels du moment. Votre tonus resplendissant vous permet d'aborder vos tâches avec le sourire. Veillez toutefois à respecter une coupure salutaire dès les premières baisses de régime vespérales. Prenez soin de votre enveloppe corporelle avec douceur."
   ],
   conseils: [
     "Accordez-vous dix minutes de silence absolu en début de matinée pour fixer vos intentions calmes. Cette discipline intérieure guidera vos pas vers la sérénité la plus totale.",
@@ -425,11 +425,29 @@ const DAILY_TEXTS = {
   ]
 };
 
-const MONTHLY_TRENDS_DATABASE = [
-  "Ce mois-ci, les configurations sidérales majeures encouragent profondément la consolidation de vos acquis et la clarté dans vos ambitions de vie. Votre capacité d'adaptation exceptionnelle face aux transits planétaires fera toute la différence dans vos projets personnels et professionnels. C'est une période idéale pour dissiper les doutes persistants et poser de nouvelles bases relationnelles durables. Sur le plan de la carrière, vos initiatives audacieuses trouveront un écho très favorable auprès de votre hiérarchie. Veillez toutefois à préserver votre capital énergétique en intercalant des temps de repos salvateurs. Vos finances s'équilibrent grâce à une rigueur de gestion que vous maintenez avec constance. En amour, la sincérité des échanges renforcera la complicité au sein de votre foyer. Restez constamment à l'écoute de votre intuition profonde pour saisir les opportunités cachées au tournant.",
-  "Une période hautement transformatrice et lumineuse s'ouvre grandement à vous tout au long de ce mois. Les énergies cosmiques favorisent activement la concrétisation de vos aspirations de long terme et le renforcement de vos liens affectifs. Votre créativité débordante vous permettra de surmonter avec brio les obstacles administratifs ou techniques. Sur le plan pécuniaire, la maîtrise de vos ressources matérielles vous garantit une tranquillité d'esprit remarquable. Cultivez la persévérance face aux petits changements de programme qui viendront pimenter votre quotidien. Les astres soutiennent également vos démarches de bien-être physique et de rééquilibrage de l'hygiène de vie. En amour, la passion s'allie harmonieusement à la tendresse pour transformer votre quotidien en un havre de paix. Prenez le temps de célébrer chaque petite victoire acquise avec panache et détermination.",
-  "Sous l'impulsion directe des cycles sidéraux réels, ce mois met en lumière votre formidable potentiel créatif et votre leadership naturel. C'est le moment idéal et privilégié pour réajuster vos priorités existentielles, entreprendre de nouveaux projets d'envergure et rayonner intensément. Vos relations professionnelles s'enrichissent grâce à un partage d'expertises constructif et hautement inspirant. Sur le plan financier, la diversification de vos sources de revenus commence à porter ses fruits de manière très encourageante. Prenez soin de votre corps en instaurant des routines de détente physique adaptées à vos besoins réels. Les influences de Vénus et de Jupiter garantissent des moments de bonheur partagé inoubliables en famille ou en couple. En restant fidèle à votre éthique et à vos convictions intimes, vous édifiez une trajectoire d'exception. L'univers tout entier conspire pour aligner vos efforts avec une réussite éclatante et méritée."
-];
+// Bases spécifiques et distinctes pour chaque domaine des tendances mensuelles (8 à 10 phrases denses)
+const MONTHLY_DATABASES = {
+  amour: [
+    "Ce mois-ci, les configurations sidérales majeures encouragent profondément la consolidation de vos liens affectifs et la sincérité absolue dans le dialogue à deux. C'est une période idéale pour dissiper les non-dits et poser de nouvelles bases relationnelles durables. Si vous êtes engagé dans une relation, la complicité se renforcera à travers des projets communs stimulants et des moments de partage privilégiés. Les astres favorisent également les moments d'introspection romantique, permettant de mieux comprendre les besoins cachés de votre partenaire. Pour les célibataires, le mois s'annonce riche en surprises relationnelles et en rencontres enrichissantes dans des cadres inhabituels. Ne restez pas retranché dans vos habitudes routinières et sortez résolument de votre zone de confort. Votre charme naturel rayonnera intensément, attirant irrésistiblement des personnes partageant vos aspirations profondes. Prenez le temps d'observer avant de vous engager émotionnellement, car la patience sera votre meilleure alliée pour bâtir une histoire solide. En fin de mois, un événement inopiné transformera positivement votre vision de la vie sentimentale.",
+    "Un climat passionnel, constructif et profondément transformateur enveloppe votre vie sentimentale tout au long de ce mois. Les projets à deux prennent une impulsion inattendue, vous poussant à concrétiser des envies longtemps remises à plus tard par manque de temps. Les tensions passées s'estompent pour laisser place à une écoute mutuelle et bienveillante de chaque instant. Si vous traversez une phase de doute, ce mois vous offre l'opportunité royale de clarifier vos sentiments avec beaucoup de sagesse. Pour les cœurs solitaires, une attirance magnétique pourrait naître dans un cadre professionnel ou culturel inattendu. L'audace sera amplement récompensée, alors n'hésitez pas à exprimer clairement vos intentions affectives les plus sincères. Les influences bienveillantes de Vénus garantissent des moments de tendresse inoubliables et un magnifique renouveau de la flamme. Veillez toutefois à ne pas imposer un rythme trop effréné à votre partenaire, car chacun a grand besoin de son espace personnel. Cultivez la tolérance et la spontanéité pour traverser ce cycle astral sous les meilleurs auspices.",
+    "La patience, la diplomatie et l'écoute attentive seront vos meilleurs atouts relationnels ce mois-ci pour rééquilibrer l'harmonie cosmique. Si des désaccords récents ont fragilisé votre couple, les astres vous invitent à renouer le dialogue avec un calme olympien et beaucoup d'empathie. C'est le moment privilégié pour pardonner, tourner définitivement la page et repartir sur des fondations émotionnelles saines. Les célibataires bénéficieront d'un rayonnement discret mais particulièrement captivant pour les esprits fins et curieux. Plutôt que de multiplier les aventures éphémères, vous rechercherez instinctivement la profondeur et l'authenticité chez l'autre. Les discussions nocturnes et les partages intellectuels nourriront intensément votre besoin de connexion vraie. Votre intuition sera un guide infaillible pour repérer les profils toxiques et vous tourner vers les bonnes personnes. Profitez pleinement de cette période pour cultiver l'amour de soi, car c'est en étant en paix avec vous-même que vous attirerez l'harmonie durable."
+  ],
+  travail: [
+    "Le mois est marqué par une accélération fulgurante de vos projets professionnels et de vos ambitions personnelles les plus chères. Votre capacité d'adaptation hors du commun fera toute la différence face aux défis complexes qui se présenteront à vous. C'est le moment idéal pour faire valoir vos compétences, proposer des idées novatrices et impressionner durablement votre hiérarchie. Si vous portez un projet de création ou de reconversion, les planètes alignent leurs énergies pour vous soutenir sans faille. Ne craignez pas de prendre des responsabilités supplémentaires, car votre leadership naturel saura mobiliser les équipes autour de vous. Restez toutefois vigilant face au stress et veillez à structurer rigoureusement votre emploi du temps pour éviter l'épuisement. Les collaborations à l'international ou les échanges avec des experts extérieurs s'avéreront extrêmement fructueux. En fin de période, une reconnaissance tangible de vos efforts couronnera votre persévérance et validera vos choix stratégiques.",
+    "Une période particulièrement faste s'ouvre à vous pour la reconnaissance de vos efforts passés et de votre rigueur quotidienne au bureau. Des opportunités d'évolution de carrière, de promotion fulgurante ou de collaboration stratégique se profilent nettement à l'horizon. Votre créativité technique et votre sens aigu de l'analyse vous permettront de résoudre des situations bloquées depuis des semaines. N'hésitez pas à endosser un rôle de mentor ou de guide auprès de collaborateurs plus juniors, cela valorisera grandement votre expertise. Les négociations salariales ou les revalorisations de contrats bénéficient d'un excellent influx astral qu'il faut saisir. Gardez néanmoins les pieds sur terre et conservez une approche méthodique face aux propositions trop séduisantes en apparence. Votre réputation professionnelle sortira grandie de ce cycle, renforçant durablement votre position sur le marché. C'est le moment idéal pour semer les graines de vos succès futurs à long terme.",
+    "Concentrez-vous prioritairement sur la structuration à long terme et la consolidation minutieuse de vos dossiers en cours de traitement. Ce mois favorise grandement la rigueur méthodologique, l'apurement des tâches administratives et l'optimisation des processus de travail. Si vous ressentez une certaine lassitude dans vos fonctions actuelles, profitez de ce mois pour réévaluer sereinement vos objectifs de carrière. Des formations qualifiantes ou l'apprentissage de nouvelles compétences enrichiront grandement votre profil sur le marché. Les relations avec vos collègues et supérieurs seront empreintes de constructivité, à condition d'éviter l'entêtement stérile. Cultivez la flexibilité mentale lorsque des imprévus viendront bousculer votre planning initialement établi. Votre persévérance silencieuse finira par porter ses fruits de la manière la plus éclatante qui soit. Restez concentré sur l'excellence de votre travail et ne vous laissez pas distraire par les bruits de couloir."
+  ],
+  argent: [
+    "La gestion de vos finances personnelles demande de la prévoyance et de la lucidité tout au long de ce mois de transition. Évitez absolument les investissements impulsifs dictés par des coups de tête ou des sollicitations commerciales trop agressives. Privilégiez résolument la constitution ou le renforcement d'une épargne de sécurité face aux incertitudes économiques mondiales. C'est un cycle particulièrement propice à l'audit rigoureux de vos abonnements, dépenses superflues et charges fixes. Si vous envisagez un achat immobilier ou un placement financier d'envergure, prenez le temps de consulter des spécialistes. La modération et la discipline budgétaire d'aujourd'hui garantissent votre sérénité matérielle de demain. Une rentrée d'argent inattendue, liée à un vieux dossier, pourrait vous inciter à la légèreté : résistez à la tentation du gaspillage. En adoptant une posture de gestionnaire avisé, vous consoliderez durablement votre assise patrimoniale.",
+    "Un mois globalement stable sur le plan pécuniaire, particulièrement propice à la révision de votre budget et à la planification avisée. Vous bénéficiez d'une lucidité remarquable pour identifier les placements porteurs et sécuriser vos sources de revenus. Si vous gérez une entreprise ou des finances partagées, la transparence totale sera la clé pour éviter les malentendus. Une opportunité de diversification de vos revenus pourrait se présenter par le biais d'une activité secondaire ou d'un investissement astucieux. Ne précipitez aucune signature de contrat financier sans avoir lu attentivement chaque ligne des petites clauses. Votre patience sera largement récompensée par une croissance progressive et saine de votre capital personnel. Profitez de cette stabilité pour planifier sereinement vos futurs projets de vie ou voyages à venir. L'équilibre monétaire que vous construisez maintenant vous apportera un confort psychologique inestimable.",
+    "Des rentrées d'argent inattendues, une prime méritée ou une opportunité de réaménagement budgétaire viendront grandement alléger vos charges ce mois-ci. Profitez de cette bouffée d'oxygène financière pour solder des dettes anciennes et réassainir définitivement vos comptes bancaires. Les astres favorisent les transactions honnêtes, les règlements de successions ou les négociations de prêts aux taux avantageux. Néanmoins, veillez à ne pas modifier radicalement votre train de vie face à cette amélioration passagère. Restez fidèle aux principes de modération et d'épargne qui font votre force depuis de longues années. C'est également le moment idéal pour faire preuve de générosité mesurée envers vos proches ou soutenir une cause qui vous tient à cœur. Votre rapport à l'argent gagne en maturité et en apaisement profond. La sécurité matérielle n'est plus une source d'anxiété, mais un outil puissant au service de votre liberté d'action."
+  ],
+  sante: [
+    "Votre niveau de vitalité et votre énergie physique globale sont en phase de transition importante ce mois-ci. Par conséquent, veillez à accorder une importance capitale à la qualité de votre sommeil et à une récupération régulière. Le surmenage professionnel ou l'accumulation de petits stress du quotidien pourraient se faire ressentir sur votre immunité. Intégrez des temps de pause, de silence et de déconnexion numérique absolue dans votre routine quotidienne. Une activité physique douce, comme le yoga ou la natation, vous aidera à relâcher les tensions musculaires. Soyez également très attentif à votre alimentation en privilégiant des produits frais, de saison et vivants. Votre corps réclame de la bienveillance et un retour aux sources salutaire. En respectant vos limites biologiques, vous traverserez ce mois en conservant un équilibre intérieur remarquable et une sérénité retrouvée.",
+    "Un magnifique regain d'énergie globale vous pousse à adopter de nouvelles routines de bien-être beaucoup plus saines et durables. C'est le moment idéal pour entreprendre une détox, reprendre en main votre condition physique ou démarrer un sport stimulant. Votre métabolisme répondra merveilleusement bien aux efforts modérés et réguliers que vous lui proposerez. Sur le plan psychologique, votre optimisme naturel revient en force, chassant les ruminations mentales et l'anxiété. Profitez de ce dynamisme pour passer du temps au grand air, vous oxygéner en forêt ou près de l'eau. Votre clarté d'esprit sera redoutable pour prendre de bonnes résolutions concernant votre hygiène de vie. Veillez toutefois à ne pas dilapider votre capital énergétique dans des excès d'enthousiasme soudains. La clé réside dans la constance, la régularité et l'écoute fine des signaux de votre organisme.",
+    "L'équilibre mental, la paix intérieure et la gestion émotionnelle se trouvent au tout premier plan de vos priorités ce mois-ci. Prenez activement du temps pour vous ressourcer loin de l'agitation urbaine, du bruit et du stress relationnel. La pratique de la méditation, de la cohérence cardiaque ou de la lecture au calme apaisera durablement votre système nerveux. Votre corps physique a besoin de douceur, de massages, de bains chauds et d'un repos bien mérité. Si des petits bobos chroniques refaisaient surface, prenez-les en charge avec sérieux sans les négliger. Cultivez la gratitude au quotidien et entourez-vous exclusivement de personnes bienveillantes qui élèvent votre taux vibratoire. Ce mois est une véritable cure de jouvence spirituelle et corporelle si vous acceptez de ralentir la cadence. Votre force intérieure en ressortira magnifiquement régénérée et consolidée pour l'avenir."
+  ]
+};
 
 const generateAutomatedHoroscope = (signId, dateStr) => {
   const signIndex = ZODIAC_SIGNS.findIndex(s => s.id === signId);
@@ -468,12 +486,18 @@ const generateMonthlyTrends = (signId, yearMonthStr) => {
   }
   hash = Math.abs(hash);
 
-  const trend = MONTHLY_TRENDS_DATABASE[(safeIndex + hash) % MONTHLY_TRENDS_DATABASE.length];
+  const idxAmour = (safeIndex + hash) % MONTHLY_DATABASES.amour.length;
+  const idxTravail = (safeIndex + hash + 1) % MONTHLY_DATABASES.travail.length;
+  const idxArgent = (safeIndex + hash + 2) % MONTHLY_DATABASES.argent.length;
+  const idxSante = (safeIndex + hash + 3) % MONTHLY_DATABASES.sante.length;
+  const idxConseil = (safeIndex + hash + 4) % DAILY_TEXTS.conseils.length;
+
   return {
-    amour: trend,
-    travail: trend,
-    argent: trend,
-    sante: trend
+    amour: { text: MONTHLY_DATABASES.amour[idxAmour], score: 78 + (idxAmour * 2) % 20 },
+    travail: { text: MONTHLY_DATABASES.travail[idxTravail], score: 74 + (idxTravail * 3) % 23 },
+    argent: { text: MONTHLY_DATABASES.argent[idxArgent], score: 76 + (idxArgent * 4) % 21 },
+    sante: { text: MONTHLY_DATABASES.sante[idxSante], score: 81 + (idxSante * 2) % 17 },
+    conseil: DAILY_TEXTS.conseils[idxConseil]
   };
 };
 
@@ -568,7 +592,7 @@ export default function App() {
               }`}
             >
               <Sparkles size={15} className={activeTab === 'horoscope' ? 'text-purple-600' : ''} />
-              <span>Horoscope journalier</span>
+              <span>Horoscope Sidéral</span>
             </button>
 
             <button
@@ -611,7 +635,7 @@ export default function App() {
             
             <div className="text-center max-w-3xl mx-auto space-y-1 sm:space-y-2">
               <h2 className="text-xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                Mon horoscope au quotidien avec Maîtr Folly Valère TOSSOU
+                Horoscope Sidéral Quotidien
               </h2>
               <p className="text-slate-600 text-xs sm:text-sm max-w-xl mx-auto">
                 Prévisions basées sur les constellations réelles pour le {todayFormatted}.
@@ -734,16 +758,16 @@ export default function App() {
           </div>
         )}
 
-        {/* ONGLET 2 : TENDANCES MENSUELLES */}
+        {/* ONGLET 2 : TENDANCES MENSUELLES (Même disposition rigoureuse que le journalier) */}
         {activeTab === 'mensuel' && (
           <div className="space-y-4 sm:space-y-8 animate-fadeIn">
             
             <div className="text-center max-w-3xl mx-auto space-y-1 sm:space-y-2">
               <h2 className="text-xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                Tendances mensuelles avec Maîtr Folly Valère TOSSOU
+                Tendances Mensuelles Sidérales
               </h2>
               <p className="text-slate-600 text-xs sm:text-sm max-w-xl mx-auto">
-                Bilan global pour le mois de <strong className="text-purple-800 capitalize">{monthFormatted}</strong>.
+                Bilan global et approfondi pour le mois de <strong className="text-purple-800 capitalize">{monthFormatted}</strong>.
               </p>
             </div>
 
@@ -788,44 +812,70 @@ export default function App() {
                   {selectedSign.symbol}
                 </div>
                 <div>
-                  <span className="text-[10px] uppercase bg-white/20 px-2.5 py-0.5 rounded-full font-bold">Bilan de {monthFormatted}</span>
+                  <span className="text-[10px] uppercase bg-white/20 px-2.5 py-0.5 rounded-full font-bold">Grand Bilan de {monthFormatted}</span>
                   <h3 className="text-2xl sm:text-3xl font-black tracking-tight mt-1">{selectedSign.name} Sidéral</h3>
                   <p className="text-white/90 text-xs sm:text-sm mt-0.5 font-medium">{selectedSign.dates} • Élément {selectedSign.element}</p>
                 </div>
               </div>
 
-              <div className="p-4 sm:p-8 space-y-6">
+              <div className="p-4 sm:p-8 space-y-4 sm:space-y-8">
                 
-                <div className="bg-rose-50/40 border border-rose-100 p-5 sm:p-7 rounded-2xl sm:rounded-3xl space-y-3">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2.5 bg-rose-100 text-rose-700 rounded-xl"><Heart size={20} /></div>
-                    <h4 className="text-base sm:text-lg font-bold text-rose-950">Amour & relations</h4>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                  
+                  <div className="bg-rose-50/40 border border-rose-100 p-4 sm:p-6 rounded-2xl sm:rounded-3xl space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2.5">
+                        <div className="p-2 bg-rose-100 text-rose-700 rounded-xl"><Heart size={18} /></div>
+                        <h4 className="text-sm sm:text-base font-bold text-rose-950">Amour & relations</h4>
+                      </div>
+                      <span className="text-xs font-extrabold bg-rose-100 text-rose-900 px-2.5 py-0.5 rounded-full">{currentMonthlyTrends.amour.score}%</span>
+                    </div>
+                    <p className="text-slate-700 text-xs sm:text-sm leading-relaxed text-justify">{currentMonthlyTrends.amour.text}</p>
                   </div>
-                  <p className="text-slate-700 text-xs sm:text-sm leading-relaxed text-justify">{currentMonthlyTrends.amour}</p>
+
+                  <div className="bg-sky-50/40 border border-sky-100 p-4 sm:p-6 rounded-2xl sm:rounded-3xl space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2.5">
+                        <div className="p-2 bg-sky-100 text-sky-700 rounded-xl"><Briefcase size={18} /></div>
+                        <h4 className="text-sm sm:text-base font-bold text-sky-950">Travail & carrière</h4>
+                      </div>
+                      <span className="text-xs font-extrabold bg-sky-100 text-sky-900 px-2.5 py-0.5 rounded-full">{currentMonthlyTrends.travail.score}%</span>
+                    </div>
+                    <p className="text-slate-700 text-xs sm:text-sm leading-relaxed text-justify">{currentMonthlyTrends.travail.text}</p>
+                  </div>
+
+                  <div className="bg-emerald-50/40 border border-emerald-100 p-4 sm:p-6 rounded-2xl sm:rounded-3xl space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2.5">
+                        <div className="p-2 bg-emerald-100 text-emerald-700 rounded-xl"><Wallet size={18} /></div>
+                        <h4 className="text-sm sm:text-base font-bold text-emerald-950">Argent & finances</h4>
+                      </div>
+                      <span className="text-xs font-extrabold bg-emerald-100 text-emerald-900 px-2.5 py-0.5 rounded-full">{currentMonthlyTrends.argent.score}%</span>
+                    </div>
+                    <p className="text-slate-700 text-xs sm:text-sm leading-relaxed text-justify">{currentMonthlyTrends.argent.text}</p>
+                  </div>
+
+                  <div className="bg-amber-50/40 border border-amber-100 p-4 sm:p-6 rounded-2xl sm:rounded-3xl space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2.5">
+                        <div className="p-2 bg-amber-100 text-amber-800 rounded-xl"><Activity size={18} /></div>
+                        <h4 className="text-sm sm:text-base font-bold text-amber-950">Santé & vitalité</h4>
+                      </div>
+                      <span className="text-xs font-extrabold bg-amber-100 text-amber-900 px-2.5 py-0.5 rounded-full">{currentMonthlyTrends.sante.score}%</span>
+                    </div>
+                    <p className="text-slate-700 text-xs sm:text-sm leading-relaxed text-justify">{currentMonthlyTrends.sante.text}</p>
+                  </div>
+
                 </div>
 
-                <div className="bg-sky-50/40 border border-sky-100 p-5 sm:p-7 rounded-2xl sm:rounded-3xl space-y-3">
+                <div className="bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-950 text-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl shadow-lg">
                   <div className="flex items-center gap-3">
-                    <div className="p-2.5 bg-sky-100 text-sky-700 rounded-xl"><Briefcase size={20} /></div>
-                    <h4 className="text-base sm:text-lg font-bold text-sky-950">Travail & carrière</h4>
+                    <div className="w-10 h-10 rounded-xl bg-amber-400 text-slate-900 flex items-center justify-center font-bold text-lg shrink-0">💡</div>
+                    <div>
+                      <span className="text-[10px] sm:text-xs font-bold text-amber-300 uppercase tracking-widest block">Conseil Mensuel Sidéral</span>
+                      <p className="text-xs sm:text-base italic text-purple-100 mt-0.5">"{currentMonthlyTrends.conseil}"</p>
+                    </div>
                   </div>
-                  <p className="text-slate-700 text-xs sm:text-sm leading-relaxed text-justify">{currentMonthlyTrends.travail}</p>
-                </div>
-
-                <div className="bg-emerald-50/40 border border-emerald-100 p-5 sm:p-7 rounded-2xl sm:rounded-3xl space-y-3">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2.5 bg-emerald-100 text-emerald-700 rounded-xl"><Wallet size={20} /></div>
-                    <h4 className="text-base sm:text-lg font-bold text-emerald-950">Argent & finances</h4>
-                  </div>
-                  <p className="text-slate-700 text-xs sm:text-sm leading-relaxed text-justify">{currentMonthlyTrends.argent}</p>
-                </div>
-
-                <div className="bg-amber-50/40 border border-amber-100 p-5 sm:p-7 rounded-2xl sm:rounded-3xl space-y-3">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2.5 bg-amber-100 text-amber-800 rounded-xl"><Activity size={20} /></div>
-                    <h4 className="text-base sm:text-lg font-bold text-amber-950">Santé & vitalité</h4>
-                  </div>
-                  <p className="text-slate-700 text-xs sm:text-sm leading-relaxed text-justify">{currentMonthlyTrends.sante}</p>
                 </div>
 
               </div>
@@ -837,16 +887,16 @@ export default function App() {
           </div>
         )}
 
-        {/* ONGLET 3 : PROFILER ASTROLOGIQUE & NUMÉROLOGIQUE */}
+        {/* ONGLET 3 : PROFILER SIDÉRAL & NUMÉROLOGIQUE */}
         {activeTab === 'profiler' && (
           <div className="space-y-4 sm:space-y-8 animate-fadeIn">
             
             <div className="text-center max-w-3xl mx-auto space-y-1 sm:space-y-2">
               <h2 className="text-xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                Profilage astrologique & numérologique
+                Profilage Sidéral & Numérologique
               </h2>
               <p className="text-slate-600 text-xs sm:text-sm max-w-xl mx-auto">
-                Découvrez votre signe astronomique réel combiné à votre numérologie complète.
+                Découvrez votre signe astronomique réel (sidéral) combiné à votre numérologie complète.
               </p>
             </div>
 
@@ -897,7 +947,7 @@ export default function App() {
                     <span className="text-5xl sm:text-6xl">{searchedProfile.sign.symbol}</span>
                     <div>
                       <span className="text-[10px] sm:text-xs font-extrabold text-purple-700 uppercase">
-                        Signe • Année {searchedProfile.birthYear}
+                        Signe Sidéral Calculé • Année {searchedProfile.birthYear}
                       </span>
                       <h3 className="text-2xl sm:text-3xl font-black text-slate-900">{searchedProfile.sign.name} Sidéral</h3>
                       <p className="text-xs text-slate-500">{searchedProfile.sign.dates} • Élément {searchedProfile.sign.element}</p>
@@ -905,7 +955,7 @@ export default function App() {
                   </div>
                   
                   <div className="bg-white p-3.5 rounded-2xl border border-purple-200 text-xs text-purple-900 max-w-xs shadow-2xs text-left">
-                    <strong className="block text-purple-950 font-bold mb-1">🔑 Transit :</strong>
+                    <strong className="block text-purple-950 font-bold mb-1">🔑 Transit Sidéral :</strong>
                     <p className="text-slate-600 text-[11px] leading-relaxed">{searchedProfile.dominantPlanet}</p>
                   </div>
                 </div>
@@ -1023,7 +1073,7 @@ export default function App() {
                 {/* SYNTHÈSE GLOBALE */}
                 <div className="bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-950 text-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl shadow-xl space-y-3">
                   <h4 className="text-amber-300 font-black text-base sm:text-lg uppercase tracking-wider flex items-center gap-2">
-                    <Star size={20} className="text-amber-400 fill-amber-400" /> Synthèse astrologique & numérologique
+                    <Star size={20} className="text-amber-400 fill-amber-400" /> Synthèse Sidérale & Numérologique
                   </h4>
                   <p className="text-purple-100 text-xs sm:text-sm leading-relaxed text-justify font-medium">
                     {searchedProfile.numerology.summaryText}
