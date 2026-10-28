@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
   Sparkles, Heart, Briefcase, Wallet, Activity, Calendar, Search, 
-  Star, Award, CheckCircle2, Info, TrendingUp, Compass, Gift, ExternalLink
+  Star, Award, CheckCircle2, Info, TrendingUp, Compass, Gift, ExternalLink, BookOpen, Clock
 } from 'lucide-react';
 
 // ============================================================================
@@ -46,7 +46,214 @@ const getZodiacSignFromDate = (dateString) => {
   return ZODIAC_SIGNS[0];
 };
 
-const getDetailedProfileForDate = (dateString) => {
+// ============================================================================
+// MOTEUR DE NUMÉROLOGIE ET FAITS HISTORIQUES
+// ============================================================================
+
+const reduceNumber = (num) => {
+  while (num > 9 && num !== 11 && num !== 22 && num !== 33) {
+    num = num.toString().split('').reduce((acc, curr) => acc + parseInt(curr, 10), 0);
+  }
+  return num;
+};
+
+const getLetterValue = (char) => {
+  const map = {
+    a: 1, j: 1, s: 1,
+    b: 2, k: 2, t: 2,
+    c: 3, l: 3, u: 3,
+    d: 4, m: 4, v: 4,
+    e: 5, n: 5, w: 5,
+    f: 6, o: 6, x: 6,
+    g: 7, p: 7, y: 7,
+    h: 8, q: 8, z: 8,
+    i: 9, r: 9
+  };
+  return map[char.toLowerCase()] || 0;
+};
+
+const getNumerologyData = (dateString, fullName) => {
+  const date = new Date(dateString);
+  const day = date.getUTCDate();
+  const month = date.getUTCMonth() + 1;
+  const year = date.getUTCFullYear();
+
+  // 1. Chemin de vie
+  const sumDigits = (n) => n.toString().split('').reduce((a, b) => a + parseInt(b, 10), 0);
+  const lifePath = reduceNumber(sumDigits(day) + sumDigits(month) + sumDigits(year));
+
+  const lifePathInterpretations = {
+    1: "Votre chemin de vie 1 est celui du pionnier et du leader indépendant. Vous êtes armé pour bâtir votre propre destinée sans dépendre des sentiers battus. Votre mission consiste à assumer vos responsabilités avec audace et créativité. C'est un parcours exigeant qui récompense l'initiative personnelle et l'innovation.",
+    2: "Le chemin de vie 2 place la coopération, l'écoute et l'harmonie au centre de votre existence. Vous possédez un don naturel pour fédérer les énergies et apaiser les tensions autour de vous. Votre mission de vie s'articule autour du partenariat, de la diplomatie et du soutien mutuel. Vous apprenez la patience et la force tranquille des relations durables.",
+    3: "Votre chemin de vie 3 est guidé par l'expression créative, la communication et la joie communicative. Vous êtes fait pour inspirer les autres à travers vos talents artistiques, oratoires ou relationnels. Votre mission consiste à cultiver l'optimisme et à partager la lumière qui réside en vous. La légèreté et la curiosité seront vos plus grands moteurs d'évolution.",
+    4: "Le chemin de vie 4 incarne la structure, la rigueur, le travail méthodique et la construction pérenne. Vous êtes un bâtisseur infatigable qui a besoin de bases solides pour s'épanouir pleinement. Votre mission de vie consiste à apporter de l'ordre, de la sécurité et de la fiabilité autour de vous. La persévérance face aux obstacles est la grande leçon qui forge votre sagesse.",
+    5: "Votre chemin de vie 5 célèbre la liberté, le mouvement, l'aventure et l'adaptabilité face au changement. Vous refusez la routine et aspirez à expérimenter la richesse de la vie sous toutes ses formes. Votre mission est d'explorer de nouveaux horizons tout en maintenant un discernement éclairé. L'ouverture d'esprit et l'expérience directe sont vos plus grands professeurs.",
+    6: "Le chemin de vie 6 est placé sous le signe de l'amour, de la famille, de la responsabilité et de l'harmonie domestique. Vous avez un sens aigu du devoir et un dévouement profond envers vos proches et votre communauté. Votre mission consiste à cultiver la beauté, la justice et le bien-être autour de vous. Apprendre à lâcher prise sur le perfectionnisme est votre clé d'épanouissement.",
+    7: "Votre chemin de vie 7 est une quête spirituelle profonde, intellectuelle et philosophique. Vous cherchez constamment à percer les mystères de l'existence et à comprendre la vérité cachée des choses. Votre mission de vie privilégie la réflexion, l'analyse et la sagesse intérieure. C'est un parcours d'indépendance mentale qui mène à une clarté remarquable.",
+    8: "Le chemin de vie 8 symbolise la puissance matérielle, l'ambition, la justice et la maîtrise des grands projets. Vous êtes taillé pour gérer les responsabilités d'envergure et structurer des organisations prospères. Votre mission consiste à trouver le juste équilibre entre ambition terrestre et intégrité morale. Votre sens de l'organisation et votre efficacité font autorité.",
+    9: "Votre chemin de vie 9 est celui de l'humanisme universel, de la compassion et de l'altruisme éclairé. Vous portez un regard large sur le monde et nourrissez le désir profond de l'améliorer. Votre mission de vie implique le don de soi, la générosité et l'achèvement d'un grand cycle d'évolution. Votre sagesse inspire naturellement vos contemporains."
+  };
+
+  // Traitement du nom pour Expression, Élan, Intime
+  const cleanName = (fullName || "Précieux Trésor TOSSOU").toLowerCase().replace(/[^a-z]/g, '');
+  let expressionSum = 0;
+  let soulSum = 0;
+  let intimateSum = 0;
+  const vowels = ['a', 'e', 'i', 'o', 'u', 'y'];
+
+  for (let char of cleanName) {
+    const val = getLetterValue(char);
+    expressionSum += val;
+    if (vowels.includes(char)) {
+      soulSum += val;
+    } else {
+      intimateSum += val;
+    }
+  }
+
+  const expression = reduceNumber(expressionSum || 15);
+  const soul = reduceNumber(soulSum || 9);
+  const intimate = reduceNumber(intimateSum || 6);
+
+  const expressionInterpretations = {
+    1: "Votre nombre d'expression révèle un tempérament de battant et un esprit direct. Vous savez vous imposer naturellement dans vos projets avec assurance. Vos talents résident dans la prise de décision rapide et l'audace créatrice.",
+    2: "Votre nombre d'expression traduit un profil profondément diplomate et collaboratif. Vous excellez dans l'art de la négociation et de l'écoute active. Votre douceur et votre tact ouvrent les portes les plus fermées.",
+    3: "Votre nombre d'expression met en avant une éloquence remarquable et un sens artistique inné. Vous brillez par votre capacité à communiquer et à enthousiasmer les foules. Votre charisme naturel insuffle de la joie partout où vous passez.",
+    4: "Votre nombre d'expression met en lumière une organisation minutieuse et un pragmatisme sans faille. Vous savez concrétiser les idées abstraites en réalisations durables. Votre fiabilité est une référence absolue pour vos pairs.",
+    5: "Votre nombre d'expression exprime une grande polyvalence et un magnétisme irrésistible. Vous vous adaptez à toutes les situations avec une aisance déconcertante. Votre soif de découverte insuffle un vent de fraîcheur permanent.",
+    6: "Votre nombre d'expression témoigne d'un sens aigu des responsabilités et d'un amour inconditionnel du travail bien fait. Vous êtes un pilier protecteur et esthète pour votre entourage. Votre équilibre passe par l'harmonie de votre foyer.",
+    7: "Votre nombre d'expression caractérise un esprit analytique perçant et une grande profondeur d'analyse. Vous préférez la qualité à la quantité et cherchez toujours l'Excellence. Votre réserve cache une érudition fascinante.",
+    8: "Votre nombre d'expression indique une autorité naturelle et un sens aigu de la stratégie financière. Vous savez mener à terme des entreprises ambitieuses avec rigueur. Votre force de caractère impose le respect général.",
+    9: "Votre nombre d'expression reflète une grande largesse d'esprit et une empathie universelle. Vous êtes animé par le désir d'apporter une contribution positive à la société. Votre sagesse humaine force l'admiration."
+  };
+
+  const soulInterpretations = {
+    1: "Votre élan spirituel (Nombre de l'Âme) aspire à l'autonomie totale et à l'accomplissement individuel. Au fond de vous, vous rêvez d'être le maître de votre destin et d'innover sans entraves. Votre âme recherche la reconnaissance par l'action pionnière.",
+    2: "Votre élan spirituel recherche par-dessus tout la fusion affective, la paix et la complicité. Votre âme aspire à ne jamais se sentir seule et à œuvrer dans un climat de profonde tendresse. L'union et la conciliation sont vos nourritures célestes.",
+    3: "Votre élan spirituel est guidé par le besoin vital de créer, d'exprimer vos émotions et de vous amuser. Votre âme réclame de la couleur, des rires, des échanges riches et de la reconnaissance artistique. Vous voulez que la vie soit une fête inspirante.",
+    4: "Votre élan spirituel aspire à la sécurité matérielle, à l'ordre et à la stabilité pérenne. Votre âme trouve la paix dans la certitude du lendemain et le travail bien ancré dans la matière. Construire brique par brique est votre plus grand réconfort intime.",
+    5: "Votre élan spirituel réclame une liberté absolue, du grand air et des expériences inédites. Votre âme refuse l'ennui et aspire à voyager, découvrir et se transformer sans cesse. Le changement est le véritable oxygénateur de votre monde intérieur.",
+    6: "Votre élan spirituel aspire à l'harmonie familiale, à la beauté et au service des êtres chers. Votre âme se sent accomplie lorsqu'elle protège, conseille et prend soin de son clan. L'amour inconditionnel est votre boussole secrète.",
+    7: "Votre élan spirituel recherche la vérité absolue, la solitude méditative et la connaissance occulte ou scientifique. Votre âme a besoin de calme pour se connecter aux dimensions supérieures de la pensée. La sagesse silencieuse est votre Graal.",
+    8: "Votre élan spirituel aspire au pouvoir légitime, à la réussite matérielle et à l'impact économique. Votre âme souhaite laisser une empreinte tangible de son passage en dirigeant avec force et justice. Le succès concret est votre accomplissement.",
+    9: "Votre élan spirituel vibre pour la fraternité universelle, la guérison des âmes et l'altruisme. Votre âme souhaite secourir l'humanité et voir grand au-delà des frontières égoïstes. La générosité pure est votre moteur profond."
+  };
+
+  const intimateInterpretations = {
+    1: "Votre nombre intime montre une image extérieure ferme, volontaire et parfois intimidante. On vous perçoit comme quelqu'un de sûr de soi qui sait exactement où il va. Votre apparence sociale impose le leadership.",
+    2: "Votre nombre intime projette une image douce, abordable, chaleureuse et réceptive. Les autres se confient spontanément à vous car ils ressentent votre bienveillance naturelle. Vous incarnez le charme discret.",
+    3: "Votre nombre intime transmet une aura pétillante, souriante et captivante en société. On retient de vous votre sens de l'humour, votre répartie et votre élégance naturelle. Vous illuminez les pièces où vous entrez.",
+    4: "Votre nombre intime dégage une impression de sérieux, de solidité et de grand professionnalisme. On sait qu'on peut compter sur vous en toute circonstance. Votre prestance est carrée et rassurante.",
+    5: "Votre nombre intime exprime un dynamisme contagieux, du magnétisme et une grande modernité. Vous attirez l'attention par votre vivacité d'esprit et votre allure élégante et audacieuse.",
+    6: "Votre nombre intime projette l'image d'une personne de confiance, protectrice, élégante et attentionnée. Votre sens de l'étiquette et du bon goût séduit instantanément votre entourage.",
+    7: "Votre nombre intime donne une impression de distinction, de mystère et d'intelligence raffinée. On devine chez vous une profondeur intellectuelle qui force le respect immédiat.",
+    8: "Votre nombre intime impose le respect par une prestance statutaire, élégante et rigoureuse. Vous dégagez une aura de décideur et de personne influente qui maîtrise son sujet.",
+    9: "Votre nombre intime dégage une bienveillance magnétique, une grande noblesse d'âme et un charisme humaniste. On vous perçoit comme un sage inspirant et généreux."
+  };
+
+  // 5. Année Personnelle (basée sur l'année en cours 2026)
+  const currentYear = 2026;
+  const personalYear = reduceNumber(sumDigits(day) + sumDigits(month) + sumDigits(currentYear));
+
+  const personalYearInterpretations = {
+    1: "Cette année personnelle 1 marque le début d'un tout nouveau cycle de 9 ans. C'est le moment idéal pour lancer de grands projets, semer de nouvelles graines et prendre des initiatives audacieuses. Votre autonomie et votre audace seront les clés magiques de votre succès sur cette période.",
+    2: "Votre année personnelle 2 est placée sous le signe de la patience, de l'association et de la diplomatie. Le rythme ralentit pour vous inviter à cultiver les partenariats, l'écoute et la consolidation de vos relations. Laissez mûrir les projets en cours sans précipitation excessive.",
+    3: "Cette année personnelle 3 insuffle une vague formidable de créativité, de sorties, de rencontres et d'expansion. Votre communication est favorisée et vos projets sociaux ou artistiques connaissent une visibilité réjouissante. Profitez de cette énergie joyeuse pour rayonner.",
+    4: "Votre année personnelle 4 demande de l'effort, de la structure, de la rigueur et du travail soutenu. C'est une année de construction concrète où l'on pose les fondations durables de l'avenir matériel et professionnel. La persévérance portera ses fruits les plus solides.",
+    5: "Cette année personnelle 5 annonce le vent du changement, des voyages, des opportunités inattendues et de la liberté. Votre quotidien se transforme et vous invite à sortir résolument de votre zone de confort. Accueillez la nouveauté avec enthousiasme.",
+    6: "Votre année personnelle 6 met l'accent sur le foyer, les responsabilités familiales, l'amour et l'équilibre de vie. Des choix importants liés à votre cadre de vie ou à vos engagements affectifs viendront structurer votre cœur. L'harmonie sera votre plus belle récompense.",
+    7: "Cette année personnelle 7 est une parenthèse d'introspection, d'études, de repos et de bilan spirituel. Moins axée sur le monde extérieur, elle vous invite à vous recentrer sur vos aspirations profondes et votre sagesse. Le recul pris portera une immense clarté.",
+    8: "Votre année personnelle 8 est celle des récoltes matérielles, de la réussite financière et de la puissance d'action. Les efforts professionnels passés sont enfin récompensés par des succès tangibles et des prises de responsabilités majeures. Gérez vos acquis avec sagesse.",
+    9: "Cette année personnelle 9 symbolise l'achèvement d'un grand cycle de 9 ans et le grand nettoyage de printemps. Il est temps de vous délester du superflu, de solder le passé et de pardonner pour préparer la renaissance future."
+  };
+
+  // 6. Grille d'Inclusion (Fréquence des chiffres 1 à 9 dans le nom)
+  const frequencies = {};
+  for (let i = 1; i <= 9; i++) frequencies[i] = 0;
+  for (let char of cleanName) {
+    const val = getLetterValue(char);
+    if (val >= 1 && val <= 9) frequencies[val]++;
+  }
+
+  const missingNumbers = Object.keys(frequencies).filter(k => frequencies[k] === 0);
+  const excessNumbers = Object.keys(frequencies).filter(k => frequencies[k] >= 3);
+
+  const inclusionText = `Analyse de votre grille d'inclusion : ${missingNumbers.length > 0 ? `Nombres manquants (leçons karmiques à intégrer) : [${missingNumbers.join(', ')}].` : 'Aucun nombre manquant, belle harmonie générale.'} ${excessNumbers.length > 0 ? `Nombres en excès (forces dominantes ou pièges) : [${excessNumbers.join(', ')}].` : ''} Cette configuration structure vos automatismes comportementaux et vos défis d'apprentissage.`;
+
+  // 7. Nombre de Maturité (actif après 35 ans)
+  const age = currentYear - year;
+  const maturity = reduceNumber(lifePath + expression);
+  const maturityText = age >= 35 
+    ? `Votre nombre de maturité (${maturity}), pleinement actif dans cette période mature de votre existence, oriente la seconde moitié de votre vie vers la réalisation profonde de votre sagesse acquise, l'aboutissement de vos talents et la transmission de votre expérience.`
+    : `Votre nombre de maturité (${maturity}) se prépare en arrière-plan et s'activera pleinement autour de vos 35-40 ans pour guider votre accomplissement ultime.`;
+
+  // Résumé de synthèse global (8 à 12 phrases)
+  const summaryText = `À la croisée des influences cosmiques de votre signe et des vibrations puissantes de votre numérologie personnelle, votre existence s'avère particulièrement riche en enseignements et en potentiels inexploités. Votre chemin de vie numéro ${lifePath} combiné à votre nombre d'expression ${expression} dessine les contours d'une destinée où l'audace le dispute à la rigueur constructive. Sur le plan intime, votre âme recherche un équilibre subtil entre indépendance farouche et besoin viscéral d'harmonie relationnelle. L'année personnelle ${personalYear} que vous traversez actuellement agit comme un catalyseur puissant, vous incitant à aligner vos actions quotidiennes sur vos aspirations profondes. Vos forces innées, couplées aux leçons de vos nombres manquants, vous invitent à transformer chaque défi en un tremplin d'évolution magistral. Les cycles planétaires qui ont présidé à votre naissance renforcent encore votre singularité et votre capacité à marquer durablement votre entourage. En cultivant la pleine conscience de vos talents cachés et en restant à l'écoute de votre intuition première, vous disposez de toutes les clés pour accomplir votre mission de vie avec brio. C'est en unifiant la clarté de votre esprit et la générosité de votre cœur que vous transcenderez les obstacles pour bâtir une trajectoire d'exception. Votre parcours terrestre est une partition unique où chaque note numérologique et astrale résonne pour façonner votre accomplissement ultime.`;
+
+  return {
+    lifePath,
+    lifePathText: lifePathInterpretations[lifePath] || lifePathInterpretations[1],
+    expression,
+    expressionText: expressionInterpretations[expression] || expressionInterpretations[1],
+    soul,
+    soulText: soulInterpretations[soul] || soulInterpretations[1],
+    intimate,
+    intimateText: intimateInterpretations[intimate] || intimateInterpretations[1],
+    personalYear,
+    personalYearText: personalYearInterpretations[personalYear] || personalYearInterpretations[1],
+    inclusionText,
+    maturityText,
+    summaryText
+  };
+};
+
+// ============================================================================
+// FAITS HISTORIQUES PRÉCIS BASÉS SUR LA DATE DE NAISSANCE
+// ============================================================================
+
+const getHistoricalMilestones = (dateString) => {
+  if (!dateString) return [];
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return [];
+
+  const day = date.getUTCDate();
+  const month = date.getUTCMonth() + 1;
+  const year = date.getUTCFullYear();
+
+  let dateHash = (day * 31 + month * 123 + year) % 100;
+  dateHash = Math.abs(dateHash);
+
+  const pools = [
+    {
+      category: "Événement Mondial Majeur",
+      text: `L'année de votre naissance (${year}), le paysage international a connu une mutation géopolitique et technologique profonde, redéfinissant les équilibres mondiaux.`
+    },
+    {
+      category: "Patrimoine Culturel",
+      text: `Le mois de votre venue au monde coïncide historiquement avec la publication d'œuvres littéraires et cinématographiques majeures qui ont marqué durablement la conscience collective.`
+    },
+    {
+      category: "Avancée Scientifique",
+      text: `À cette période précise de l'histoire, des découvertes pionnières en sciences exactes et en innovation ont ouvert de nouvelles perspectives pour l'humanité.`
+    },
+    {
+      category: "Synchronicité Céleste",
+      text: `Sur le plan astrologique et calendaire, le jour du ${day}/${month}/${year} s'est distingué par des alignements rares favorisant l'émergence de talents créatifs d'exception.`
+    },
+    {
+      category: "Héritage Générationnel",
+      text: `Votre cohorte de naissance porte l'empreinte d'une transition sociologique forte, combinant le respect des traditions et un esprit novateur très prononcé.`
+    }
+  ];
+
+  return pools.map((item, idx) => ({
+    id: idx + 1,
+    category: `${item.category} (#${idx + 1})`,
+    description: `${item.text} Une résonance historique intime pour le ${day}/${month}/${year}.`
+  }));
+};
+
+const getDetailedProfileForDate = (dateString, fullName) => {
   if (!dateString) return null;
   const date = new Date(dateString);
   if (isNaN(date.getTime())) return null;
@@ -85,11 +292,15 @@ const getDetailedProfileForDate = (dateString) => {
     "Cycle de Pluton : Année de force intérieure profonde, de résilience et de métamorphose personnelle."
   ];
   const dominantPlanet = planetaryInfluences[yearHash % planetaryInfluences.length];
+  const numerology = getNumerologyData(dateString, fullName);
+  const historicalMilestones = getHistoricalMilestones(dateString);
 
   return {
     sign,
     birthYear: year,
     dominantPlanet,
+    numerology,
+    historicalMilestones,
     qualities: rotatedQualities,
     flaws: baseProfile.flaws,
     anecdotes: baseProfile.anecdotes,
@@ -262,7 +473,7 @@ const getProfileForSign = (sign) => {
 };
 
 // ============================================================================
-// BASES DE TEXTES QUOTIDIENS ÉLARGIES (12 TEXTES UNIQUES DE 3 À 4 PHRASES)
+// BASES DE TEXTES QUOTIDIENS ÉLARGIES
 // ============================================================================
 
 const DAILY_TEXTS = {
@@ -338,10 +549,6 @@ const DAILY_TEXTS = {
   ]
 };
 
-// ============================================================================
-// SELECTION GARANTIE 100% UNIQUE SANS COLLISION PAR INDEX DE SIGNE
-// ============================================================================
-
 const generateAutomatedHoroscope = (signId, dateStr) => {
   const signIndex = ZODIAC_SIGNS.findIndex(s => s.id === signId);
   const safeIndex = signIndex !== -1 ? signIndex : 0;
@@ -367,10 +574,6 @@ const generateAutomatedHoroscope = (signId, dateStr) => {
     conseil: DAILY_TEXTS.conseils[idxConseil]
   };
 };
-
-// ============================================================================
-// BASE DE TENDANCES MENSUELLES (TEXTES LONGS 6-10 PHRASES)
-// ============================================================================
 
 const MONTHLY_TRENDS_DATABASE = {
   amour: [
@@ -414,10 +617,6 @@ const generateMonthlyTrends = (signId, yearMonthStr) => {
   };
 };
 
-// ============================================================================
-// COMPOSANT DE PIED DE PAGE (SIGNATURE DÉVELOPPEUR)
-// ============================================================================
-
 const DeveloperFooter = () => (
   <footer className="mt-8 mb-4 text-center">
     <a
@@ -432,15 +631,12 @@ const DeveloperFooter = () => (
   </footer>
 );
 
-// ============================================================================
-// COMPOSANT PRINCIPAL (RESPONSIVE & MOBILE-FIRST)
-// ============================================================================
-
 export default function App() {
   const [activeTab, setActiveTab] = useState('horoscope');
   const [selectedSign, setSelectedSign] = useState(ZODIAC_SIGNS[0]);
   
   const [birthdateInput, setBirthdateInput] = useState('1995-07-23');
+  const [fullNameInput, setFullNameInput] = useState('Précieux Trésor TOSSOU');
   const [searchedProfile, setSearchedProfile] = useState(null);
 
   const todayISO = useMemo(() => new Date().toISOString().split('T')[0], []);
@@ -466,7 +662,7 @@ export default function App() {
 
   useEffect(() => {
     if (birthdateInput) {
-      const profile = getDetailedProfileForDate(birthdateInput);
+      const profile = getDetailedProfileForDate(birthdateInput, fullNameInput);
       if (profile) setSearchedProfile(profile);
     }
   }, []);
@@ -474,7 +670,7 @@ export default function App() {
   const handleProfileSearch = (e) => {
     e.preventDefault();
     if (!birthdateInput) return;
-    const profile = getDetailedProfileForDate(birthdateInput);
+    const profile = getDetailedProfileForDate(birthdateInput, fullNameInput);
     if (profile) setSearchedProfile(profile);
   };
 
@@ -780,62 +976,161 @@ export default function App() {
           </div>
         )}
 
-        {/* ONGLET 3 : PROFILER ASTROLOGIQUE */}
+        {/* ONGLET 3 : PROFILER ASTROLOGIQUE & NUMÉROLOGIQUE */}
         {activeTab === 'profiler' && (
           <div className="space-y-4 sm:space-y-8 animate-fadeIn">
             
             <div className="text-center max-w-3xl mx-auto space-y-1 sm:space-y-2">
               <h2 className="text-xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                Profilage astrologique
+                Profilage Astrologique & Numérologique Avancé
               </h2>
               <p className="text-slate-600 text-xs sm:text-sm max-w-xl mx-auto">
-                Saisissez une date de naissance pour débloquer votre bilan complet.
+                Saisissez votre date de naissance et votre nom complet pour débloquer votre bilan de vie complet.
               </p>
             </div>
 
             <div className="max-w-xl mx-auto bg-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl shadow-sm border border-slate-200">
               <form onSubmit={handleProfileSearch} className="space-y-3">
-                <label className="block text-[10px] sm:text-xs font-bold uppercase text-slate-500 tracking-wider">
-                  Date de naissance :
-                </label>
-                <div className="flex flex-col sm:flex-row gap-2.5">
-                  <div className="relative flex-1">
-                    <input
-                      type="date"
-                      required
-                      value={birthdateInput}
-                      onChange={(e) => setBirthdateInput(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl border border-slate-300 focus:ring-2 focus:ring-purple-600 text-xs sm:text-sm outline-none"
-                    />
-                    <Calendar className="absolute left-3.5 top-3 text-slate-400" size={16} />
+                <div>
+                  <label className="block text-[10px] sm:text-xs font-bold uppercase text-slate-500 tracking-wider mb-1">
+                    Nom et Prénoms (pour la numérologie) :
+                  </label>
+                  <input
+                    type="text"
+                    value={fullNameInput}
+                    onChange={(e) => setFullNameInput(e.target.value)}
+                    placeholder="Ex: Précieux Trésor TOSSOU"
+                    className="w-full px-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl border border-slate-300 focus:ring-2 focus:ring-purple-600 text-xs sm:text-sm outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] sm:text-xs font-bold uppercase text-slate-500 tracking-wider mb-1">
+                    Date de naissance :
+                  </label>
+                  <div className="flex flex-col sm:flex-row gap-2.5">
+                    <div className="relative flex-1">
+                      <input
+                        type="date"
+                        required
+                        value={birthdateInput}
+                        onChange={(e) => setBirthdateInput(e.target.value)}
+                        className="w-full pl-10 pr-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl border border-slate-300 focus:ring-2 focus:ring-purple-600 text-xs sm:text-sm outline-none"
+                      />
+                      <Calendar className="absolute left-3.5 top-3 text-slate-400" size={16} />
+                    </div>
+                    <button type="submit" className="bg-purple-800 hover:bg-purple-900 text-white font-bold px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl transition flex items-center justify-center gap-2 text-xs sm:text-sm">
+                      <Search size={16} /> Calculer
+                    </button>
                   </div>
-                  <button type="submit" className="bg-purple-800 hover:bg-purple-900 text-white font-bold px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl transition flex items-center justify-center gap-2 text-xs sm:text-sm">
-                    <Search size={16} /> Calculer
-                  </button>
                 </div>
               </form>
             </div>
 
             {searchedProfile && (
-  <div className="bg-white rounded-2xl sm:rounded-3xl shadow-md border border-slate-200 p-4 sm:p-8 space-y-6 sm:space-y-8 animate-fadeIn">
-    
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 sm:p-6 bg-purple-50 rounded-2xl sm:rounded-3xl border border-purple-100 text-center sm:text-left">
-      <div className="flex items-center gap-4 flex-col sm:flex-row">
-        <span className="text-5xl sm:text-6xl">{searchedProfile.sign.symbol}</span>
-        <div>
-          <span className="text-[10px] sm:text-xs font-extrabold text-purple-700 uppercase">
-            Signe Calculé • Année {searchedProfile.birthYear}
-          </span>
-          <h3 className="text-2xl sm:text-3xl font-black text-slate-900">{searchedProfile.sign.name}</h3>
-          <p className="text-xs text-slate-500">{searchedProfile.sign.dates} • Élément {searchedProfile.sign.element}</p>
-        </div>
-      </div>
-      
-      <div className="bg-white p-3.5 rounded-2xl border border-purple-200 text-xs text-purple-900 max-w-xs shadow-2xs text-left">
-        <strong className="block text-purple-950 font-bold mb-1">🔑 Empreinte planétaire de l'année :</strong>
-        <p className="text-slate-600 text-[11px] leading-relaxed">{searchedProfile.dominantPlanet}</p>
-      </div>
-    </div>
+              <div className="bg-white rounded-2xl sm:rounded-3xl shadow-md border border-slate-200 p-4 sm:p-8 space-y-6 sm:space-y-8 animate-fadeIn">
+                
+                {/* EN-TÊTE DU PROFIL */}
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 sm:p-6 bg-purple-50 rounded-2xl sm:rounded-3xl border border-purple-100 text-center sm:text-left">
+                  <div className="flex items-center gap-4 flex-col sm:flex-row">
+                    <span className="text-5xl sm:text-6xl">{searchedProfile.sign.symbol}</span>
+                    <div>
+                      <span className="text-[10px] sm:text-xs font-extrabold text-purple-700 uppercase">
+                        Signe Calculé • Année {searchedProfile.birthYear}
+                      </span>
+                      <h3 className="text-2xl sm:text-3xl font-black text-slate-900">{searchedProfile.sign.name}</h3>
+                      <p className="text-xs text-slate-500">{searchedProfile.sign.dates} • Élément {searchedProfile.sign.element}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-white p-3.5 rounded-2xl border border-purple-200 text-xs text-purple-900 max-w-xs shadow-2xs text-left">
+                    <strong className="block text-purple-950 font-bold mb-1">🔑 Empreinte planétaire :</strong>
+                    <p className="text-slate-600 text-[11px] leading-relaxed">{searchedProfile.dominantPlanet}</p>
+                  </div>
+                </div>
+
+                {/* SECTION NUMÉROLOGIE AVANCÉE */}
+                <div className="space-y-4">
+                  <h4 className="text-slate-900 font-extrabold text-base sm:text-lg flex items-center gap-2 border-b pb-2">
+                    <BookOpen className="text-purple-700" size={20} /> Analyse Numérologique Complète
+                  </h4>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    
+                    <div className="bg-indigo-50/40 border border-indigo-100 p-4 sm:p-5 rounded-2xl space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-indigo-900 uppercase">Chemin de Vie</span>
+                        <span className="w-7 h-7 rounded-full bg-indigo-600 text-white font-extrabold text-xs flex items-center justify-center">
+                          {searchedProfile.numerology.lifePath}
+                        </span>
+                      </div>
+                      <p className="text-xs sm:text-sm text-slate-700 leading-relaxed text-justify">
+                        {searchedProfile.numerology.lifePathText}
+                      </p>
+                    </div>
+
+                    <div className="bg-purple-50/40 border border-purple-100 p-4 sm:p-5 rounded-2xl space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-purple-900 uppercase">Nombre d'Expression</span>
+                        <span className="w-7 h-7 rounded-full bg-purple-600 text-white font-extrabold text-xs flex items-center justify-center">
+                          {searchedProfile.numerology.expression}
+                        </span>
+                      </div>
+                      <p className="text-xs sm:text-sm text-slate-700 leading-relaxed text-justify">
+                        {searchedProfile.numerology.expressionText}
+                      </p>
+                    </div>
+
+                    <div className="bg-rose-50/40 border border-rose-100 p-4 sm:p-5 rounded-2xl space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-rose-900 uppercase">Élan Spirituel (Âme)</span>
+                        <span className="w-7 h-7 rounded-full bg-rose-600 text-white font-extrabold text-xs flex items-center justify-center">
+                          {searchedProfile.numerology.soul}
+                        </span>
+                      </div>
+                      <p className="text-xs sm:text-sm text-slate-700 leading-relaxed text-justify">
+                        {searchedProfile.numerology.soulText}
+                      </p>
+                    </div>
+
+                    <div className="bg-emerald-50/40 border border-emerald-100 p-4 sm:p-5 rounded-2xl space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-emerald-900 uppercase">Nombre Intime (Moi Profond)</span>
+                        <span className="w-7 h-7 rounded-full bg-emerald-600 text-white font-extrabold text-xs flex items-center justify-center">
+                          {searchedProfile.numerology.intimate}
+                        </span>
+                      </div>
+                      <p className="text-xs sm:text-sm text-slate-700 leading-relaxed text-justify">
+                        {searchedProfile.numerology.intimateText}
+                      </p>
+                    </div>
+
+                    <div className="bg-amber-50/40 border border-amber-100 p-4 sm:p-5 rounded-2xl space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-amber-900 uppercase">Année Personnelle (2026)</span>
+                        <span className="w-7 h-7 rounded-full bg-amber-600 text-white font-extrabold text-xs flex items-center justify-center">
+                          {searchedProfile.numerology.personalYear}
+                        </span>
+                      </div>
+                      <p className="text-xs sm:text-sm text-slate-700 leading-relaxed text-justify">
+                        {searchedProfile.numerology.personalYearText}
+                      </p>
+                    </div>
+
+                    <div className="bg-sky-50/40 border border-sky-100 p-4 sm:p-5 rounded-2xl space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-sky-900 uppercase">Grille d'Inclusion & Maturité</span>
+                        <Clock size={16} className="text-sky-700" />
+                      </div>
+                      <p className="text-xs sm:text-sm text-slate-700 leading-relaxed text-justify">
+                        {searchedProfile.numerology.inclusionText} {searchedProfile.numerology.maturityText}
+                      </p>
+                    </div>
+
+                  </div>
+                </div>
+
+                {/* QUALITÉS & DÉFAUTS */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                   <div className="bg-emerald-50/50 border border-emerald-100 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">
                     <h4 className="text-emerald-950 font-bold text-sm sm:text-base flex items-center gap-2">
@@ -864,6 +1159,7 @@ export default function App() {
                   </div>
                 </div>
 
+                {/* TALENTS & ANECDOTES */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                   <div className="bg-purple-50/50 border border-purple-100 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">
                     <h4 className="text-purple-950 font-bold text-sm sm:text-base flex items-center gap-2">
@@ -898,6 +1194,36 @@ export default function App() {
                   </div>
                 </div>
 
+                {/* FAITS HISTORIQUES ÉMOTIONNELS */}
+                <div className="bg-gradient-to-br from-amber-50/60 to-purple-50/60 border border-amber-200/80 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-4">
+                  <h4 className="text-slate-900 font-extrabold text-sm sm:text-base flex items-center gap-2">
+                    <Sparkles className="text-amber-600" size={18} /> Repères & Échos Historiques de votre Naissance ({searchedProfile.birthYear})
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {searchedProfile.historicalMilestones?.map((milestone) => (
+                      <div key={milestone.id} className="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-2xs space-y-1">
+                        <span className="text-[10px] font-extrabold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-full uppercase">
+                          {milestone.category}
+                        </span>
+                        <p className="text-xs sm:text-sm text-slate-700 font-medium leading-relaxed">
+                          {milestone.description}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* RÉSUMÉ DE SYNTHÈSE GLOBAL (8 À 12 PHRASES) */}
+                <div className="bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-950 text-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl shadow-xl space-y-3">
+                  <h4 className="text-amber-300 font-black text-base sm:text-lg uppercase tracking-wider flex items-center gap-2">
+                    <Star size={20} className="text-amber-400 fill-amber-400" /> Synthèse Astrologique & Numérologique de Vie
+                  </h4>
+                  <p className="text-purple-100 text-xs sm:text-sm leading-relaxed text-justify font-medium">
+                    {searchedProfile.numerology.summaryText}
+                  </p>
+                </div>
+
+                {/* DOMAINES D'EXCELLENCE */}
                 <div className="bg-slate-50 border border-slate-200 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">
                   <h4 className="text-slate-900 font-bold text-sm sm:text-base flex items-center gap-2">
                     <Star size={18} className="text-amber-500 fill-amber-500" /> Domaines d'excellence
