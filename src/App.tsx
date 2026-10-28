@@ -1193,26 +1193,7 @@ export default function App() {
                     </ul>
                   </div>
                 </div>
-
-                {/* FAITS HISTORIQUES ÉMOTIONNELS */}
-                <div className="bg-gradient-to-br from-amber-50/60 to-purple-50/60 border border-amber-200/80 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-4">
-                  <h4 className="text-slate-900 font-extrabold text-sm sm:text-base flex items-center gap-2">
-                    <Sparkles className="text-amber-600" size={18} /> Repères & Échos Historiques de votre Naissance ({searchedProfile.birthYear})
-                  </h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {searchedProfile.historicalMilestones?.map((milestone) => (
-                      <div key={milestone.id} className="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-2xs space-y-1">
-                        <span className="text-[10px] font-extrabold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-full uppercase">
-                          {milestone.category}
-                        </span>
-                        <p className="text-xs sm:text-sm text-slate-700 font-medium leading-relaxed">
-                          {milestone.description}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
+                
                 {/* RÉSUMÉ DE SYNTHÈSE GLOBAL (8 À 12 PHRASES) */}
                 <div className="bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-950 text-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl shadow-xl space-y-3">
                   <h4 className="text-amber-300 font-black text-base sm:text-lg uppercase tracking-wider flex items-center gap-2">
