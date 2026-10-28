@@ -5,7 +5,7 @@ import {
 } from 'lucide-react';
 
 // ============================================================================
-// BASE DE DONNÉES SIDÉRALE ET TROPICALE (12 SIGNES DU ZODIAQUE)
+// BASE DE DONNÉES SIDÉRALE (12 SIGNES DU ZODIAQUE)
 // ============================================================================
 
 const ZODIAC_SIGNS = [
@@ -32,8 +32,6 @@ const getSiderealSignFromDate = (dateString) => {
   const date = new Date(dateString);
   if (isNaN(date.getTime())) return null;
 
-  // Calcul astronomique approximatif de la déviation sidérale (Ayanamsa ~24 degrés)
-  // Décalage d'environ 24 jours en arrière par rapport au zodiaque tropical
   const siderealDate = new Date(date.getTime());
   siderealDate.setUTCDate(siderealDate.getUTCDate() - 24);
 
@@ -204,7 +202,7 @@ const COMPLETE_PROFILES_DATABASE = {
     excellenceDomains: ["Entrepreneuriat", "Gestion de crise", "Sport de haut niveau", "Innovation", "Aéronautique", "Chirurgie", "Stratégie", "Startup", "Défense", "Exploration"]
   },
   taureau: {
-    qualities: ["Loyal", "Patient", "Pragmatique", "Fiable", "Constante sidérale", "Épicurien", "Ancré", "Protecteur", "Solide", "Méthodique"],
+    qualities: ["Loyal", "Patient", "Pragmatique", "Fiable", "Constance sidérale", "Épicurien", "Ancré", "Protecteur", "Solide", "Méthodique"],
     flaws: ["Rancunier", "Possessif", "Têtu", "Réticent au changement", "Matérialiste", "Rigide", "Lent", "Gourmand", "Inflexible", "Méfiant"],
     anecdotes: [
       "Ancré dans la constellation réelle du Taureau, son sens de la matière est absolu.",
@@ -353,7 +351,6 @@ const getDetailedProfileForDate = (dateString, fullName) => {
   const date = new Date(dateString);
   if (isNaN(date.getTime())) return null;
 
-  // Utilisation de l'astrologie sidérale calculée
   const sign = getSiderealSignFromDate(dateString);
   if (!sign) return null;
 
@@ -397,46 +394,42 @@ const getDetailedProfileForDate = (dateString, fullName) => {
 };
 
 // ============================================================================
-// TEXTES QUOTIDIENS ET MENSUELS DYNAMIQUES
+// TEXTES QUOTIDIENS (4 à 6 phrases) ET MENSUELS (8 à 10 phrases)
 // ============================================================================
 
 const DAILY_TEXTS = {
   amour: [
-    "Les influences sidérales de Vénus apportent une clarté remarquable dans vos échanges affectifs. En couple, l'écoute mutuelle dissipe les derniers non-dits. Célibataire, une rencontre magnétique pourrait marquer un tournant inspirant.",
-    "Un climat passionnel et constructif enveloppe votre sphère sentimentale. Les astres récompensent l'audace du cœur et la sincérité des intentions partagées.",
-    "La configuration céleste invite à la tendresse et à la consolidation de vos liens essentiels. Exprimez vos sentiments avec authenticité.",
-    "Une vague d'empathie et de complicité profonde illumine votre journée relationnelle. Profitez de ces ondes bienveillantes pour raviver la flamme.",
-    "L'alignement planétaire favorise le dialogue intime et l'apaisement des tensions passées. Ouvrez grand votre cœur aux belles surprises."
+    "Les influences sidérales de Vénus apportent une clarté remarquable dans vos échanges affectifs du jour. En couple, l'écoute mutuelle et sincère permettra de dissiper définitivement les derniers non-dits. Célibataire, une rencontre magnétique et inattendue pourrait marquer un tournant émotionnel particulièrement inspirant. Osez exprimer vos sentiments profonds sans craindre le regard des autres. Votre vulnérabilité deviendra votre plus bel atout de séduction.",
+    "Un climat passionnel, constructif et chaleureux enveloppe votre sphère sentimentale dès les premières lueurs du jour. Les astres récompensent grandement l'audace du cœur ainsi que la franchise de vos intentions partagées. Prenez le temps d'organiser une parenthèse exclusive avec l'élu de votre cœur pour raviver la flamme. Si vous cherchez l'âme sœur, votre rayonnement naturel attirera les bonnes énergies. La tendresse partagée sera la clé de votre équilibre intime.",
+    "La configuration céleste invite à une profonde introspection romantique pour mieux comprendre vos désirs affectifs. En binôme, la complicité s'accroît à travers des projets simples et des rires complaisants. Laissez parler votre intuition première pour guider vos élans passionnés sans calcul excessif. Les tensions récentes s'évaporent naturellement sous l'effet d'une bienveillance réciproque. Profitez pleinement de chaque instant de douceur partagée."
   ],
   travail: [
-    "Votre acuité intellectuelle stimulée par les transits favorise l'aboutissement de vos dossiers prioritaires. Vos idées novatrices retiennent l'attention.",
-    "La persévérance professionnelle porte ses fruits. Un leadership naturel vous permet de mobiliser efficacement vos collaborateurs autour d'un projet clé.",
-    "Dynamisme et réactivité caractérisent votre journée professionnelle. Osez porter des propositions audacieuses auprès des décideurs.",
-    "L'ambiance de travail est propice aux synergies constructives. Votre rigueur technique fait l'unanimité.",
-    "Des opportunités stratégiques se profilent. Restez concentré sur vos objectifs à long terme pour maximiser vos succès."
+    "Votre acuité intellectuelle, fortement stimulée par les transits planétaires du moment, favorise l'aboutissement rapide de vos dossiers prioritaires. Vos idées novatrices et audacieuses retiendront l'attention bienveillante de vos supérieurs hiérarchiques. C'est le moment idéal pour poser de nouveaux jalons stratégiques dans votre carrière. Veillez toutefois à maintenir une communication claire et apaisée avec vos collègues de bureau. Votre efficacité opérationnelle fera l'unanimité tout au long de la journée.",
+    "La persévérance professionnelle que vous cultivez depuis des semaines porte enfin ses fruits de manière éclatante. Un leadership naturel et rassembleur vous permet de mobiliser efficacement vos collaborateurs autour d'un projet clé. Ne craignez pas de prendre de nouvelles responsabilités, car les astres soutiennent vos ambitions à long terme. Votre réactivité face aux imprévus techniques impressionnera durablement les décideurs. Savourez pleinement la reconnaissance légitime de vos efforts passés.",
+    "Une journée très dynamique s'annonce sur le plan professionnel, marquée par des opportunités de collaboration inédites. Prenez des initiatives calculées pour réorienter un dossier complexe vers un succès garanti. Votre créativité technique et votre sens aigu de l'organisation débloqueront des situations figées. Restez ouvert aux suggestions constructives formulées par vos pairs les plus expérimentés. Votre rigueur quotidienne constitue le socle solide de votre ascension future."
   ],
   argent: [
-    "La gestion rigoureuse de vos finances consolide votre assise matérielle. C'est le moment idéal pour optimiser votre budget avec clairvoyance.",
-    "Stabilité pécuniaire et opportunité d'investissement judicieux. Analysez chaque détail avant de vous engager sur le long terme.",
-    "Vos efforts d'épargne et votre pragmatisme vous mettent à l'abri des imprévus. Maintenez cette discipline éclairée.",
-    "Une rentrée d'argent inattendue ou un réajustement budgétaire favorable allège vos charges. Gérez vos acquis avec sagesse.",
-    "L'intuition financière est au rendez-vous. Écoutez votre bon sens pour sécuriser votre prospérité future."
+    "La gestion rigoureuse et méthodique de vos finances personnelles consolide durablement votre assise matérielle. C'est une excellente journée pour réviser votre budget global et optimiser vos sources de revenus. Anticipez vos dépenses futures pour garder l'esprit totalement serein face aux fluctuations économiques. Vos efforts d'épargne commencent à payer de plus en plus clairement. La modération financière demeure le meilleur garant de votre tranquillité d'esprit.",
+    "Stabilité pécuniaire et opportunité d'investissement judicieux se profilent au cœur de votre journée. Analysez minutieusement chaque petite clause contractuelle avant de vous engager sur le long terme. Votre perspicacité financière vous évitera des erreurs d'appréciation malvenues. Profitez de cette aisance passagère pour sécuriser vos arrières et gâter vos proches. La chance sourit aux esprits avisés qui savent patienter.",
+    "Vos efforts d'épargne et votre pragmatisme inné vous mettent résolument à l'abri des mauvaises surprises. Maintenez cette discipline financière éclairée pour concrétiser vos projets d'avenir les plus chers. Une rentrée d'argent inattendue pourrait venir rééquilibrer un vieux poste de dépense. Écoutez votre bon sens paysan avant de valider une transaction importante. Votre prospérité matérielle progresse de façon saine et régulière."
   ],
   sante: [
-    "Niveau d'énergie vitale en hausse. Une activité physique modérée et une hydratation soignée complètent votre bien-être.",
-    "Résistance physique remarquable. Privilégiez des moments de respiration consciente pour un équilibre corps-esprit parfait.",
-    "Capital santé renforcé par des influences protectrices. Accordez-vous des pauses de déconnexion salutaires.",
-    "Vitalité resplendissante. C'est le moment idéal pour canaliser votre dynamisme dans une pratique sportive stimulante.",
-    "Équilibre harmonieux. Écoutez les signaux de votre organisme pour préserver votre capital énergétique."
+    "Votre niveau d'énergie vitale est en nette hausse sous cette configuration astrale particulièrement stimulante. Pensez à bien vous hydrater et à vous oxygéner au grand air tout au long de cette journée active. Une activité physique modérée complètera idéalement votre quête de bien-être corporel. Votre organisme vous remercie pour cette attention quotidienne et bienveillante. Profitez de cette forme olympique pour accomplir vos objectifs.",
+    "Une très bonne résistance physique générale vous accompagne du matin jusqu'au soir sans faille. Privilégiez des moments de respiration consciente pour évacuer les micro-tensions mentales accumulées. Votre capital santé bénéficie d'influences protectrices qui renforcent votre tonus immunitaire global. Accordez-vous des pauses de déconnexion numérique totale pour apaiser votre système nerveux. Votre corps rayonne d'une vitalité harmonieuse.",
+    "L'équilibre entre votre corps et votre esprit s'établit avec une remarquable fluidité. Pratiquez une activité relaxante ou un sport tonique selon vos envies profondes du moment. Votre tonus resplendissant vous permet d'aborder vos tâches avec le sourire. Veillez toutefois à respecter une coupure salutaire dès les premières baisses de régime vespérales. Prenez soin de votre enveloppe corporelle avec douceur."
   ],
   conseils: [
-    "Fixez vos intentions dès le matin dans le calme pour guider votre journée vers l'essentiel.",
-    "Cultivez la gratitude et osez poser des limites saines face aux sollicitations superflues.",
-    "Faites confiance à votre intuition première : elle possède une longueur d'avance.",
-    "Simplifiez votre environnement pour clarifier instantanément vos pensées profondes.",
-    "Accordez-vous un moment de silence absolu pour régénérer votre paix intérieure."
+    "Accordez-vous dix minutes de silence absolu en début de matinée pour fixer vos intentions calmes. Cette discipline intérieure guidera vos pas vers la sérénité la plus totale.",
+    "Faites confiance à votre intuition première avant de vous perdre dans une sur-analyse stérile. Votre instinct possède une longueur d'avance inestimable.",
+    "Simplifiez votre environnement immédiat pour clarifier instantanément vos pensées. Le rangement extérieur engendre toujours un apaisement intérieur profond."
   ]
 };
+
+const MONTHLY_TRENDS_DATABASE = [
+  "Ce mois-ci, les configurations sidérales majeures encouragent profondément la consolidation de vos acquis et la clarté dans vos ambitions de vie. Votre capacité d'adaptation exceptionnelle face aux transits planétaires fera toute la différence dans vos projets personnels et professionnels. C'est une période idéale pour dissiper les doutes persistants et poser de nouvelles bases relationnelles durables. Sur le plan de la carrière, vos initiatives audacieuses trouveront un écho très favorable auprès de votre hiérarchie. Veillez toutefois à préserver votre capital énergétique en intercalant des temps de repos salvateurs. Vos finances s'équilibrent grâce à une rigueur de gestion que vous maintenez avec constance. En amour, la sincérité des échanges renforcera la complicité au sein de votre foyer. Restez constamment à l'écoute de votre intuition profonde pour saisir les opportunités cachées au tournant.",
+  "Une période hautement transformatrice et lumineuse s'ouvre grandement à vous tout au long de ce mois. Les énergies cosmiques favorisent activement la concrétisation de vos aspirations de long terme et le renforcement de vos liens affectifs. Votre créativité débordante vous permettra de surmonter avec brio les obstacles administratifs ou techniques. Sur le plan pécuniaire, la maîtrise de vos ressources matérielles vous garantit une tranquillité d'esprit remarquable. Cultivez la persévérance face aux petits changements de programme qui viendront pimenter votre quotidien. Les astres soutiennent également vos démarches de bien-être physique et de rééquilibrage de l'hygiène de vie. En amour, la passion s'allie harmonieusement à la tendresse pour transformer votre quotidien en un havre de paix. Prenez le temps de célébrer chaque petite victoire acquise avec panache et détermination.",
+  "Sous l'impulsion directe des cycles sidéraux réels, ce mois met en lumière votre formidable potentiel créatif et votre leadership naturel. C'est le moment idéal et privilégié pour réajuster vos priorités existentielles, entreprendre de nouveaux projets d'envergure et rayonner intensément. Vos relations professionnelles s'enrichissent grâce à un partage d'expertises constructif et hautement inspirant. Sur le plan financier, la diversification de vos sources de revenus commence à porter ses fruits de manière très encourageante. Prenez soin de votre corps en instaurant des routines de détente physique adaptées à vos besoins réels. Les influences de Vénus et de Jupiter garantissent des moments de bonheur partagé inoubliables en famille ou en couple. En restant fidèle à votre éthique et à vos convictions intimes, vous édifiez une trajectoire d'exception. L'univers tout entier conspire pour aligner vos efforts avec une réussite éclatante et méritée."
+];
 
 const generateAutomatedHoroscope = (signId, dateStr) => {
   const signIndex = ZODIAC_SIGNS.findIndex(s => s.id === signId);
@@ -464,12 +457,6 @@ const generateAutomatedHoroscope = (signId, dateStr) => {
   };
 };
 
-const MONTHLY_TRENDS_DATABASE = [
-  "Ce mois-ci, les configurations sidérales majeures encouragent la consolidation des acquis et la clarté dans les ambitions. Votre capacité d'adaptation aux transits planétaires fera toute la différence dans vos projets personnels et professionnels. Restez à l'écoute de votre intuition profonde.",
-  "Une période hautement transformatrice s'ouvre à vous. Les énergies cosmiques favorisent la concrétisation des aspirations de long terme, le renforcement des liens affectifs et la maîtrise de vos ressources matérielles. Cultivez la persévérance.",
-  "Sous l'impulsion des cycles sidéraux réels, ce mois met en lumière votre potentiel créatif et votre leadership. C'est le moment idéal pour réajuster vos priorités, entreprendre de nouveaux projets et rayonner dans vos domaines d'excellence."
-];
-
 const generateMonthlyTrends = (signId, yearMonthStr) => {
   const signIndex = ZODIAC_SIGNS.findIndex(s => s.id === signId);
   const safeIndex = signIndex !== -1 ? signIndex : 0;
@@ -483,10 +470,10 @@ const generateMonthlyTrends = (signId, yearMonthStr) => {
 
   const trend = MONTHLY_TRENDS_DATABASE[(safeIndex + hash) % MONTHLY_TRENDS_DATABASE.length];
   return {
-    amour: `Sur le plan affectif : ${trend}`,
-    travail: `Sur le plan professionnel : ${trend}`,
-    argent: `Sur le plan financier : ${trend}`,
-    sante: `Sur le plan de la vitalité : ${trend}`
+    amour: trend,
+    travail: trend,
+    argent: trend,
+    sante: trend
   };
 };
 
