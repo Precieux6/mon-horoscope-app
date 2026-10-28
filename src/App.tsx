@@ -78,7 +78,7 @@ const getNumerologyData = (dateString, fullName) => {
   const month = date.getUTCMonth() + 1;
   const year = date.getUTCFullYear();
 
-  // 1. Chemin de vie
+  // 1. Chemin de vie (Somme réduite du jour + mois + année de naissance)
   const sumDigits = (n) => n.toString().split('').reduce((a, b) => a + parseInt(b, 10), 0);
   const lifePath = reduceNumber(sumDigits(day) + sumDigits(month) + sumDigits(year));
 
@@ -94,26 +94,33 @@ const getNumerologyData = (dateString, fullName) => {
     9: "Votre chemin de vie 9 est celui de l'humanisme universel, de la compassion et de l'altruisme éclairé. Vous portez un regard large sur le monde et nourrissez le désir profond de l'améliorer. Votre mission de vie implique le don de soi, la générosité et l'achèvement d'un grand cycle d'évolution. Votre sagesse inspire naturellement vos contemporains."
   };
 
-  // Traitement du nom pour Expression, Élan, Intime
-  const cleanName = (fullName || "Précieux Trésor TOSSOU").toLowerCase().replace(/[^a-z]/g, '');
+  // 2, 3, 4 : Traitement rigoureux et propre du NOM COMPLET saisi par l'utilisateur
+  const sanitizedName = (fullName || "Anonyme").trim().toLowerCase().replace(/[^a-zàâäéèêëîïôöùûüç]/g, '');
+  
   let expressionSum = 0;
   let soulSum = 0;
   let intimateSum = 0;
-  const vowels = ['a', 'e', 'i', 'o', 'u', 'y'];
+  const vowels = ['a', 'e', 'i', 'o', 'u', 'y', 'à', 'â', 'ä', 'é', 'è', 'ê', 'ë', 'î', 'ï', 'ô', 'ö', 'ù', 'û', 'ü'];
 
-  for (let char of cleanName) {
+  // Grille d'inclusion : initialisation des fréquences de 1 à 9
+  const frequencies = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
+
+  for (let char of sanitizedName) {
     const val = getLetterValue(char);
-    expressionSum += val;
-    if (vowels.includes(char)) {
-      soulSum += val;
-    } else {
-      intimateSum += val;
+    if (val >= 1 && val <= 9) {
+      expressionSum += val;
+      frequencies[val]++;
+      if (vowels.includes(char)) {
+        soulSum += val; // Élan Spirituel (Voyelles)
+      } else {
+        intimateSum += val; // Nombre Intime (Consonnes)
+      }
     }
   }
 
-  const expression = reduceNumber(expressionSum || 15);
-  const soul = reduceNumber(soulSum || 9);
-  const intimate = reduceNumber(intimateSum || 6);
+  const expression = reduceNumber(expressionSum || 1);
+  const soul = reduceNumber(soulSum || 1);
+  const intimate = reduceNumber(intimateSum || 1);
 
   const expressionInterpretations = {
     1: "Votre nombre d'expression révèle un tempérament de battant et un esprit direct. Vous savez vous imposer naturellement dans vos projets avec assurance. Vos talents résident dans la prise de décision rapide et l'audace créatrice.",
@@ -142,7 +149,7 @@ const getNumerologyData = (dateString, fullName) => {
   const intimateInterpretations = {
     1: "Votre nombre intime montre une image extérieure ferme, volontaire et parfois intimidante. On vous perçoit comme quelqu'un de sûr de soi qui sait exactement où il va. Votre apparence sociale impose le leadership.",
     2: "Votre nombre intime projette une image douce, abordable, chaleureuse et réceptive. Les autres se confient spontanément à vous car ils ressentent votre bienveillance naturelle. Vous incarnez le charme discret.",
-    3: "Votre nombre intime transmet une aura pétillante, souriante et captivante en société. On retient de vous votre sens de l'humour, votre répartie et votre élégance naturelle. Vous illuminez les pièces où vous entrez.",
+    3: "Votre nombre intime transmet une aura pétillante, souriante et captivante en société. On retient de vous votre sens de l'humour, votre répartie et votre élégance naturelle. Vous illuminez les pièces humides ou sombres par votre présence.",
     4: "Votre nombre intime dégage une impression de sérieux, de solidité et de grand professionnalisme. On sait qu'on peut compter sur vous en toute circonstance. Votre prestance est carrée et rassurante.",
     5: "Votre nombre intime exprime un dynamisme contagieux, du magnétisme et une grande modernité. Vous attirez l'attention par votre vivacité d'esprit et votre allure élégante et audacieuse.",
     6: "Votre nombre intime projette l'image d'une personne de confiance, protectrice, élégante et attentionnée. Votre sens de l'étiquette et du bon goût séduit instantanément votre entourage.",
@@ -151,7 +158,7 @@ const getNumerologyData = (dateString, fullName) => {
     9: "Votre nombre intime dégage une bienveillance magnétique, une grande noblesse d'âme et un charisme humaniste. On vous perçoit comme un sage inspirant et généreux."
   };
 
-  // 5. Année Personnelle (calcul rigoureux jour + mois + année en cours)
+  // 5. Année Personnelle (Calcul strict basé sur l'année 2026 : Jour + Mois + 2026)
   const currentYear = 2026;
   const personalYear = reduceNumber(sumDigits(day) + sumDigits(month) + sumDigits(currentYear));
 
@@ -167,14 +174,7 @@ const getNumerologyData = (dateString, fullName) => {
     9: "Cette année personnelle 9 symbolise l'achèvement d'un grand cycle de 9 ans et le grand nettoyage de printemps. Il est temps de vous délester du superflu, de solder le passé et de pardonner pour préparer la renaissance future."
   };
 
-  // 6. Grille d'Inclusion
-  const frequencies = {};
-  for (let i = 1; i <= 9; i++) frequencies[i] = 0;
-  for (let char of cleanName) {
-    const val = getLetterValue(char);
-    if (val >= 1 && val <= 9) frequencies[val]++;
-  }
-
+  // 6. Grille d'Inclusion mathématique exacte
   const missingNumbers = Object.keys(frequencies).filter(k => frequencies[k] === 0);
   const excessNumbers = Object.keys(frequencies).filter(k => frequencies[k] >= 3);
 
@@ -187,7 +187,7 @@ const getNumerologyData = (dateString, fullName) => {
     ? `Votre nombre de maturité (${maturity}), pleinement actif dans cette période mature de votre existence, oriente la seconde moitié de votre vie vers la réalisation profonde de votre sagesse acquise, l'aboutissement de vos talents et la transmission de votre expérience.`
     : `Votre nombre de maturité (${maturity}) se prépare en arrière-plan et s'activera pleinement autour de vos 35-40 ans pour guider votre accomplissement ultime.`;
 
-  // SYNTHÈSE STRICTEMENT CONTRÔLÉE DE 8 À 12 PHRASES UNIQUES
+  // Synthèse unique de 11 phrases structurées avec les variables propres à l'individu
   const summaryText = `À la croisée des influences cosmiques de votre signe et des vibrations puissantes de votre numérologie personnelle, votre existence s'avère particulièrement riche en enseignements et en potentiels inexploités. Votre chemin de vie numéro ${lifePath}, combiné à votre nombre d'expression ${expression}, dessine les contours d'une destinée où l'exigence le dispute à la rigueur constructive. Sur le plan intime, votre âme recherche un équilibre subtil entre indépendance farouche et besoin viscéral d'harmonie relationnelle. Votre élan spirituel ${soul} guide vos motivations profondes vers des réalisations qui ont du sens. Quant à votre nombre intime ${intimate}, il façonne la première impression que vous laissez aux autres avec beaucoup de prestance. L'année personnelle ${personalYear} que vous traversez actuellement agit comme un catalyseur puissant, vous incitant à aligner vos actions quotidiennes sur vos aspirations profondes. Vos forces innées, couplées aux leçons de vos nombres manquants, vous invitent à transformer chaque défi en un tremplin d'évolution magistral. Les cycles planétaires qui ont présidé à votre naissance renforcent encore votre singularité et votre capacité à marquer durablement votre entourage. En cultivant la pleine conscience de vos talents cachés et en restant à l'écoute de votre intuition première, vous disposez de toutes les clés pour accomplir votre mission de vie avec brio. C'est en unifiant la clarté de votre esprit et la générosité de votre cœur que vous transcenderez les obstacles pour bâtir une trajectoire d'exception. Votre parcours terrestre est une partition unique où chaque note numérologique et astrale résonne pour façonner votre accomplissement ultime.`;
 
   return {
@@ -205,6 +205,7 @@ const getNumerologyData = (dateString, fullName) => {
     maturityText,
     summaryText
   };
+};
 
   // Générateur de résumé hautement personnalisé et non répétitif
   const introPool = [
@@ -1184,7 +1185,7 @@ export default function App() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                   <div className="bg-emerald-50/50 border border-emerald-100 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">
                     <h4 className="text-emerald-950 font-bold text-sm sm:text-base flex items-center gap-2">
-                      <Award className="text-emerald-600" size={18} /> Top 10 QUALITÉS
+                      <Award className="text-emerald-600" size={18} /> TOP 10 QUALITÉS
                     </h4>
                     <div className="flex flex-wrap gap-1.5 sm:gap-2">
                       {searchedProfile.qualities.map((item, idx) => (
@@ -1197,7 +1198,7 @@ export default function App() {
 
                   <div className="bg-amber-50/50 border border-amber-100 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">
                     <h4 className="text-amber-950 font-bold text-sm sm:text-base flex items-center gap-2">
-                      <Info className="text-amber-600" size={18} /> Top 10 DÉFAUTS
+                      <Info className="text-amber-600" size={18} /> TOP 10 DÉFAUTS
                     </h4>
                     <div className="flex flex-wrap gap-1.5 sm:gap-2">
                       {searchedProfile.flaws.map((item, idx) => (
