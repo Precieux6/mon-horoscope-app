@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
   Sparkles, Heart, Briefcase, Wallet, Activity, Calendar, Search, 
-  Star, Award, CheckCircle2, Info, TrendingUp, Compass, Gift, ExternalLink, BookOpen, Clock
+  Star, Award, CheckCircle2, Info, TrendingUp, Compass, Gift, ExternalLink
 } from 'lucide-react';
 
 // ============================================================================
@@ -46,358 +46,171 @@ const getZodiacSignFromDate = (dateString) => {
   return ZODIAC_SIGNS[0];
 };
 
-// ============================================================================
-// MOTEUR DE NUMÉROLOGIE ET FAITS HISTORIQUES
-// ============================================================================
-
-const reduceNumber = (num) => {
-  while (num > 9 && num !== 11 && num !== 22 && num !== 33) {
-    num = num.toString().split('').reduce((acc, curr) => acc + parseInt(curr, 10), 0);
-  }
-  return num;
-};
-
-const getLetterValue = (char) => {
-  const map = {
-    a: 1, j: 1, s: 1,
-    b: 2, k: 2, t: 2,
-    c: 3, l: 3, u: 3,
-    d: 4, m: 4, v: 4,
-    e: 5, n: 5, w: 5,
-    f: 6, o: 6, x: 6,
-    g: 7, p: 7, y: 7,
-    h: 8, q: 8, z: 8,
-    i: 9, r: 9
-  };
-  return map[char.toLowerCase()] || 0;
-};
-
-const getNumerologyData = (dateString, fullName) => {
-  const date = new Date(dateString);
-  const day = date.getUTCDate();
-  const month = date.getUTCMonth() + 1;
-  const year = date.getUTCFullYear();
-
-  const sumDigits = (n) => n.toString().split('').reduce((a, b) => a + parseInt(b, 10), 0);
-  const lifePath = reduceNumber(sumDigits(day) + sumDigits(month) + sumDigits(year));
-
-  const lifePathInterpretations = {
-    1: "Votre chemin de vie 1 est celui du pionnier et du leader indépendant. Vous êtes armé pour bâtir votre propre destinée sans dépendre des sentiers battus. Votre mission consiste à assumer vos responsabilités avec audace et créativité. C'est un parcours exigeant qui récompense l'initiative personnelle et l'innovation.",
-    2: "Le chemin de vie 2 place la coopération, l'écoute et l'harmonie au centre de votre existence. Vous possédez un don naturel pour fédérer les énergies et apaiser les tensions autour de vous. Votre mission de vie s'articule autour du partenariat, de la diplomatie et du soutien mutuel. Vous apprenez la patience et la force tranquille des relations durables.",
-    3: "Votre chemin de vie 3 est guidé par l'expression créative, la communication et la joie communicative. Vous êtes fait pour inspirer les autres à travers vos talents artistiques, oratoires ou relationnels. Votre mission consiste à cultiver l'optimisme et à partager la lumière qui réside en vous. La légèreté et la curiosité seront vos plus grands moteurs d'évolution.",
-    4: "Le chemin de vie 4 incarne la structure, la rigueur, le travail méthodique et la construction pérenne. Vous êtes un bâtisseur infatigable qui a besoin de bases solides pour s'épanouir pleinement. Votre mission de vie consiste à apporter de l'ordre, de la sécurité et de la fiabilité autour de vous. La persévérance face aux obstacles est la grande leçon qui forge votre sagesse.",
-    5: "Votre chemin de vie 5 célèbre la liberté, le mouvement, l'aventure et l'adaptabilité face au changement. Vous refusez la routine et aspirez à expérimenter la richesse de la vie sous toutes ses formes. Votre mission est d'explorer de nouveaux horizons tout en maintenant un discernement éclairé. L'ouverture d'esprit et l'expérience directe sont vos plus grands professeurs.",
-    6: "Le chemin de vie 6 est placé sous le signe de l'amour, de la famille, de la responsabilité et de l'harmonie domestique. Vous avez un sens aigu du devoir et un dévouement profond envers vos proches et votre communauté. Votre mission consiste à cultiver la beauté, la justice et le bien-être autour de vous. Apprendre à lâcher prise sur le perfectionnisme est votre clé d'épanouissement.",
-    7: "Votre chemin de vie 7 est une quête spirituelle profonde, intellectuelle et philosophique. Vous cherchez constamment à percer les mystères de l'existence et à comprendre la vérité cachée des choses. Votre mission de vie privilégie la réflexion, l'analyse et la sagesse intérieure. C'est un parcours d'indépendance mentale qui mène à une clarté remarquable.",
-    8: "Le chemin de vie 8 symbolise la puissance matérielle, l'ambition, la justice et la maîtrise des grands projets. Vous êtes taillé pour gérer les responsabilités d'envergure et structurer des organisations prospères. Votre mission consiste à trouver le juste équilibre entre ambition terrestre et intégrité morale. Votre sens de l'organisation et votre efficacité font autorité.",
-    9: "Votre chemin de vie 9 est celui de l'humanisme universel, de la compassion et de l'altruisme éclairé. Vous portez un regard large sur le monde et nourrissez le désir profond de l'améliorer. Votre mission de vie implique le don de soi, la générosité et l'achèvement d'un grand cycle d'évolution. Votre sagesse inspire naturellement vos contemporains."
-  };
-
-  const sanitizedName = (fullName || "Anonyme").trim().toLowerCase().replace(/[^a-zàâäéèêëîïôöùûüç]/g, '');
-  
-  let expressionSum = 0;
-  let soulSum = 0;
-  let intimateSum = 0;
-  const vowels = ['a', 'e', 'i', 'o', 'u', 'y', 'à', 'â', 'ä', 'é', 'è', 'ê', 'ë', 'î', 'ï', 'ô', 'ö', 'ù', 'û', 'ü'];
-  const frequencies = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
-
-  for (let char of sanitizedName) {
-    const val = getLetterValue(char);
-    if (val >= 1 && val <= 9) {
-      expressionSum += val;
-      frequencies[val]++;
-      if (vowels.includes(char)) {
-        soulSum += val;
-      } else {
-        intimateSum += val;
-      }
-    }
-  }
-
-  const expression = reduceNumber(expressionSum || 1);
-  const soul = reduceNumber(soulSum || 1);
-  const intimate = reduceNumber(intimateSum || 1);
-
-  const expressionInterpretations = {
-    1: "Votre nombre d'expression révèle un tempérament de battant et un esprit direct. Vous savez vous imposer naturellement dans vos projets avec assurance. Vos talents résident dans la prise de décision rapide et l'audace créatrice.",
-    2: "Votre nombre d'expression traduit un profil profondément diplomate et collaboratif. Vous excellez dans l'art de la négociation et de l'écoute active. Votre douceur et votre tact ouvrent les portes les plus fermées.",
-    3: "Votre nombre d'expression met en avant une éloquence remarquable et un sens artistique inné. Vous brillez par votre capacité à communiquer et à enthousiasmer les foules. Votre charisme naturel insuffle de la joie partout où vous passez.",
-    4: "Votre nombre d'expression met en lumière une organisation minutieuse et un pragmatisme sans faille. Vous savez concrétiser les idées abstraites en réalisations durables. Votre fiabilité est une référence absolue pour vos pairs.",
-    5: "Votre nombre d'expression exprime une grande polyvalence et un magnétisme irrésistible. Vous vous adaptez à toutes les situations avec une aisance déconcertante. Votre soif de découverte insuffle un vent de fraîcheur permanent.",
-    6: "Votre nombre d'expression témoigne d'un sens aigu des responsabilités et d'un amour inconditionnel du travail bien fait. Vous êtes un pilier protecteur et esthète pour votre entourage. Votre équilibre passe par l'harmonie de votre foyer.",
-    7: "Votre nombre d'expression caractérise un esprit analytique perçant et une grande profondeur d'analyse. Vous préférez la qualité à la quantité et cherchez toujours l'Excellence. Votre réserve cache une érudition fascinante.",
-    8: "Votre nombre d'expression indique une autorité naturelle et un sens aigu de la stratégie financière. Vous savez mener à terme des entreprises ambitieuses avec rigueur. Votre force de caractère impose le respect général.",
-    9: "Votre nombre d'expression reflète une grande largesse d'esprit et une empathie universelle. Vous êtes animé par le désir d'apporter une contribution positive à la société. Votre sagesse humaine force l'admiration."
-  };
-
-  const soulInterpretations = {
-    1: "Votre élan spirituel (Nombre de l'Âme) aspire à l'autonomie totale et à l'accomplissement individuel. Au fond de vous, vous rêvez d'être le maître de votre destin et d'innover sans entraves. Votre âme recherche la reconnaissance par l'action pionnière.",
-    2: "Votre élan spirituel recherche par-dessus tout la fusion affective, la paix et la complicité. Votre âme aspire à ne jamais se sentir seule et à œuvrer dans un climat de profonde tendresse. L'union et la conciliation sont vos nourritures célestes.",
-    3: "Votre élan spirituel est guidé par le besoin vital de créer, d'exprimer vos émotions et de vous amuser. Votre âme réclame de la couleur, des rires, des échanges riches et de la reconnaissance artistique. Vous voulez que la vie soit une fête inspirante.",
-    4: "Votre élan spirituel aspire à la sécurité matérielle, à l'ordre et à la stabilité pérenne. Votre âme trouve la paix dans la certitude du lendemain et le travail bien ancré dans la matière. Construire brique par brique est votre plus grand réconfort intime.",
-    5: "Votre élan spirituel réclame une liberté absolue, du grand air et des expériences inédites. Votre âme refuse l'ennui et aspire à voyager, découvrir et se transformer sans cesse. Le changement est le véritable oxygénateur de votre monde intérieur.",
-    6: "Votre élan spirituel aspire à l'harmonie familiale, à la beauté et au service des êtres chers. Votre âme se sent accomplie lorsqu'elle protège, conseille et prend soin de son clan. L'amour inconditionnel est votre boussole secrète.",
-    7: "Votre élan spirituel recherche la vérité absolue, la solitude méditative et la connaissance occulte ou scientifique. Votre âme a besoin de calme pour se connecter aux dimensions supérieures de la pensée. La sagesse silencieuse est votre Graal.",
-    8: "Votre élan spirituel aspire au pouvoir légitime, à la réussite matérielle et à l'impact économique. Votre âme souhaite laisser une empreinte tangible de son passage en dirigeant avec force et justice. Le succès concret est votre accomplissement.",
-    9: "Votre élan spirituel vibre pour la fraternité universelle, la guérison des âmes et l'altruisme. Votre âme souhaite secourir l'humanité et voir grand au-delà des frontières égoïstes. La générosité pure est votre moteur profond."
-  };
-
-  const intimateInterpretations = {
-    1: "Votre nombre intime montre une image extérieure ferme, volontaire et parfois intimidante. On vous perçoit comme quelqu'un de sûr de soi qui sait exactement où il va. Votre apparence sociale impose le leadership.",
-    2: "Votre nombre intime projette une image douce, abordable, chaleureuse et réceptive. Les autres se confient spontanément à vous car ils ressentent votre bienveillance naturelle. Vous incarnez le charme discret.",
-    3: "Votre nombre intime transmet une aura pétillante, souriante et captivante en société. On retient de vous votre sens de l'humour, votre répartie et votre élégance naturelle. Vous illuminez les pièces humides ou sombres par votre présence.",
-    4: "Votre nombre intime dégage une impression de sérieux, de solidité et de grand professionnalisme. On sait qu'on peut compter sur vous en toute circonstance. Votre prestance est carrée et rassurante.",
-    5: "Votre nombre intime exprime un dynamisme contagieux, du magnétisme et une grande modernité. Vous attirez l'attention par votre vivacité d'esprit et votre allure élégante et audacieuse.",
-    6: "Votre nombre intime projette l'image d'une personne de confiance, protectrice, élégante et attentionnée. Votre sens de l'étiquette et du bon goût séduit instantanément votre entourage.",
-    7: "Votre nombre intime donne une impression de distinction, de mystère et d'intelligence raffinée. On devine chez vous une profondeur intellectuelle qui force le respect immédiat.",
-    8: "Votre nombre intime impose le respect par une prestance statutaire, élégante et rigoureuse. Vous dégagez une aura de décideur et de personne influente qui maîtrise son sujet.",
-    9: "Votre nombre intime dégage une bienveillance magnétique, une grande noblesse d'âme et un charisme humaniste. On vous perçoit comme un sage inspirant et généreux."
-  };
-
-  const currentYear = 2026;
-  const personalYear = reduceNumber(sumDigits(day) + sumDigits(month) + sumDigits(currentYear));
-
-  const personalYearInterpretations = {
-    1: "Cette année personnelle 1 marque le début d'un tout nouveau cycle de 9 ans. C'est le moment idéal pour lancer de grands projets, semer de nouvelles graines et prendre des initiatives audacieuses. Votre autonomie et votre audace seront les clés magiques de votre succès sur cette période.",
-    2: "Votre année personnelle 2 est placée sous le signe de la patience, de l'association et de la diplomatie. Le rythme ralentit pour vous inviter à cultiver les partenariats, l'écoute et la consolidation de vos relations. Laissez mûrir les projets en cours sans précipitation excessive.",
-    3: "Cette année personnelle 3 insuffle une vague formidable de créativité, de sorties, de rencontres et d'expansion. Votre communication est favorisée et vos projets sociaux ou artistiques connaissent une visibilité réjouissante. Profitez de cette énergie joyeuse pour rayonner.",
-    4: "Votre année personnelle 4 demande de l'effort, de la structure, de la rigueur et du travail soutenu. C'est une année de construction concrète où l'on pose les fondations durables de l'avenir matériel et professionnel. La persévérance portera ses fruits les plus solides.",
-    5: "Cette année personnelle 5 annonce le vent du changement, des voyages, des opportunités inattendues et de la liberté. Votre quotidien se transforme et vous invite à sortir résolument de votre zone de confort. Accueillez la nouveauté avec enthousiasme.",
-    6: "Votre année personnelle 6 met l'accent sur le foyer, les responsabilités familiales, l'amour et l'équilibre de vie. Des choix importants liés à votre cadre de vie ou à vos engagements affectifs viendront structurer votre cœur. L'harmonie sera votre plus belle récompense.",
-    7: "Cette année personnelle 7 est une parenthèse d'introspection, d'études, de repos et de bilan spirituel. Moins axée sur le monde extérieur, elle vous invite à vous recentrer sur vos aspirations profondes et votre sagesse. Le recul pris portera une immense clarté.",
-    8: "Votre année personnelle 8 est celle des récoltes matérielles, de la réussite financière et de la puissance d'action. Les efforts professionnels passés sont enfin récompensés par des succès tangibles et des prises de responsabilités majeures. Gérez vos acquis avec sagesse.",
-    9: "Cette année personnelle 9 symbolise l'achèvement d'un grand cycle de 9 ans et le grand nettoyage de printemps. Il est temps de vous délester du superflu, de solder le passé et de pardonner pour préparer la renaissance future."
-  };
-
-  const missingNumbers = Object.keys(frequencies).filter(k => frequencies[k] === 0);
-  const excessNumbers = Object.keys(frequencies).filter(k => frequencies[k] >= 3);
-  const inclusionText = `Analyse de votre grille d'inclusion : ${missingNumbers.length > 0 ? `Nombres manquants (leçons karmiques à intégrer) : [${missingNumbers.join(', ')}].` : 'Aucun nombre manquant, belle harmonie générale.'} ${excessNumbers.length > 0 ? `Nombres en excès (forces dominantes ou pièges) : [${excessNumbers.join(', ')}].` : ''} Cette configuration structure vos automatismes comportementaux et vos défis d'apprentissage.`;
-
-  const age = currentYear - year;
-  const maturity = reduceNumber(lifePath + expression);
-  const maturityText = age >= 35 
-    ? `Votre nombre de maturité (${maturity}), pleinement actif dans cette période mature de votre existence, oriente la seconde moitié de votre vie vers la réalisation profonde de votre sagesse acquise, l'aboutissement de vos talents et la transmission de votre expérience.`
-    : `Votre nombre de maturité (${maturity}) se prépare en arrière-plan et s'activera pleinement autour de vos 35-40 ans pour guider votre accomplissement ultime.`;
-
-  // Générateur de résumé non répétitif
-  const introPool = [
-    `À la croisée des influences cosmiques de votre signe et des vibrations de votre numérologie, votre parcours s'écrit sous le sceau de la singularité.`,
-    `Porteur d'une signature vibratoire très spécifique, votre thème combine l'énergie de votre zodiaque à la profondeur de vos nombres clés.`,
-    `Votre configuration astrale et numérologique révèle une personnalité complexe, façonnée pour accomplir un destin hors du commun.`
-  ];
-
-  const corePool = [
-    `Votre chemin de vie ${lifePath}, allié à un nombre d'expression ${expression}, met en lumière une aptitude naturelle à transformer les épreuves en véritables tremplins d'évolution.`,
-    `La synergie entre votre élan spirituel ${soul} et votre dynamique de vie ${lifePath} insuffle une force de conviction redoutable dans vos projets d'envergure.`,
-    `Guidé par une expression de ${expression} et un monde intérieur marqué par le nombre ${intimate}, vous naviguez entre pragmatisme et quête d'idéal.`
-  ];
-
-  const yearPool = [
-    `L'année personnelle ${personalYear} que vous traversez actuellement agit comme un puissant révélateur, ouvrant la voie à des prises de conscience décisives.`,
-    `Sous l'impulsion de l'année personnelle ${personalYear}, le moment est venu de réajuster vos priorités et de concrétiser vos aspirations profondes.`,
-    `Les énergies de votre année personnelle ${personalYear} vous incitent à faire preuve d'audace tout en consolidant vos acquis matériels et émotionnels.`
-  ];
-
-  const conclusionPool = [
-    `En restant à l'écoute de votre intuition et en assumant pleinement vos ambitions, vous disposez de toutes les clés pour rayonner durablement.`,
-    `Votre partition terrestre est unique : en unissant la force de votre esprit et la clarté de vos choix, vous édifiez une trajectoire d'exception.`,
-    `C'est par l'acceptation de vos forces et la maîtrise de vos défis que vous accomplirez la mission profonde inscrite au cœur de votre destinée.`
-  ];
-
-  const uniqueHash = Math.abs(lifePath * 37 + expression * 19 + soul * 13 + intimate * 7);
-  const intro = introPool[uniqueHash % introPool.length];
-  const core = corePool[(uniqueHash + 1) % corePool.length];
-  const yearText = yearPool[(uniqueHash + 2) % yearPool.length];
-  const conclusion = conclusionPool[(uniqueHash + 3) % conclusionPool.length];
-
-  const summaryText = `${intro} ${core} ${yearText} ${conclusion}`;
-  
-  return {
-    lifePath,
-    lifePathText: lifePathInterpretations[lifePath] || lifePathInterpretations[1],
-    expression,
-    expressionText: expressionInterpretations[expression] || expressionInterpretations[1],
-    soul,
-    soulText: soulInterpretations[soul] || soulInterpretations[1],
-    intimate,
-    intimateText: intimateInterpretations[intimate] || intimateInterpretations[1],
-    personalYear,
-    personalYearText: personalYearInterpretations[personalYear] || personalYearInterpretations[1],
-    inclusionText,
-    maturityText,
-    summaryText
-  };
-};
-
-// ============================================================================
-// FAITS HISTORIQUES ET PROFILS COMPLETS
-// ============================================================================
-
-const getHistoricalMilestones = (dateString) => {
-  if (!dateString) return [];
-  const date = new Date(dateString);
-  if (isNaN(date.getTime())) return [];
-
-  const day = date.getUTCDate();
-  const month = date.getUTCMonth() + 1;
-  const year = date.getUTCFullYear();
-
-  let dateHash = Math.abs((day * 31 + month * 123 + year) % 100);
-
-  const pools = [
-    { category: "Événement Mondial Majeur", text: `L'année de votre naissance (${year}), le paysage international a connu une mutation géopolitique et technologique profonde, redéfinissant les équilibres mondiaux.` },
-    { category: "Patrimoine Culturel", text: `Le mois de votre venue au monde coïncide historiquement avec la publication d'œuvres littéraires et cinématographiques majeures qui ont marqué durablement la conscience collective.` },
-    { category: "Avancée Scientifique", text: `À cette période précise de l'histoire, des découvertes pionnières en sciences exactes et en innovation ont ouvert de nouvelles perspectives pour l'humanité.` },
-    { category: "Synchronicité Céleste", text: `Sur le plan astrologique et calendaire, le jour du ${day}/${month}/${year} s'est distingué par des alignements rares favorisant l'émergence de talents créatifs d'exception.` },
-    { category: "Héritage Générationnel", text: `Votre cohorte de naissance porte l'empreinte d'une transition sociologique forte, combinant le respect des traditions et un esprit novateur très prononcé.` }
-  ];
-
-  return pools.map((item, idx) => ({
-    id: idx + 1,
-    category: `${item.category} (#${idx + 1})`,
-    description: `${item.text} Une résonance historique intime pour le ${day}/${month}/${year}.`
-  }));
-};
-
 const COMPLETE_PROFILES_DATABASE = {
   belier: {
     qualities: ["Audacieux", "Passionné", "Franc", "Pionnier", "Énergique", "Leader naturel", "Généreux", "Spontané", "Déterminé", "Optimiste"],
     flaws: ["Impulsif", "Impatient", "Autoritaire", "Têtu", "Téméraire", "Susceptible", "Compétitif", "Individualiste", "Direct à l'excès", "Imprévisible"],
-    anecdotes: ["Le Bélier est souvent la première personne à se porter volontaire dans les défis impossibles.", "Il préfère l'action immédiate aux longues négociations théoriques interminables.", "Sa franchise directe et naturelle est souvent perçue comme une fraîcheur revigorante.", "Possède la faculté unique de se relever en un temps record après un revers important.", "S'ennuie très rapidement si ses projets ne bougent pas à un rythme effréné."],
+    anecdotes: [
+      "Le Bélier est souvent la première personne à se porter volontaire dans les défis impossibles.",
+      "Il préfère l'action immédiate aux longues négociations théoriques interminables.",
+      "Sa franchise directe et naturelle est souvent perçue comme une fraîcheur revigorante.",
+      "Possède la faculté unique de se relever en un temps record après un revers important.",
+      "S'ennuie très rapidement si ses projets ne bougent pas à un rythme effréné."
+    ],
     talents: ["Prise de décision ultra-rapide sous haute pression", "Capacité à impulsions et démarrer de zéro", "Inspiration d'enthousiasme chez les collaborateurs", "Courage face aux incertitudes majeures", "Réactivité physique et mentale instantanée"],
     excellenceDomains: ["Entrepreneuriat", "Gestion de crise", "Sport de compétition", "Management stratégique", "Innovation disruptive", "Chirurgie & Urgences", "Vente & Négociation", "Aéronautique", "Arts martiaux", "Lancement de startups"]
   },
   taureau: {
     qualities: ["Loyal", "Patient", "Pragmatique", "Fiable", "Persévérant", "Épicurien", "Calme", "Protecteur", "Rationnel", "Méthodique"],
     flaws: ["Rancunier", "Possessif", "Têtu", "Réticent aux changements", "Matérialiste", "Rigide", "Lent au démarrage", "Gourmand excessif", "Indulgent", "Méfiant"],
-    anecdotes: ["Il peut se souvenir exactement du goût d'un repas partagé il y a plus de 10 ans.", "Sa loyauté amicale est solide comme un roc : un ami Taureau l'est pour la vie entière.", "Ne bousculez jamais son rituel du matin sous peine de rompre sa sérénité.", "A un instinct naturel infaillible pour dénicher les vraies bonnes affaires de valeur.", "Sa colère est rarissime mais quand elle éclate, elle balaye tout sur son passage."],
+    anecdotes: [
+      "Il peut se souvenir exactement du goût d'un repas partagé il y a plus de 10 ans.",
+      "Sa loyauté amicale est solide comme un roc : un ami Taureau l'est pour la vie entière.",
+      "Ne bousculez jamais son rituel du matin sous peine de rompre sa sérénité.",
+      "A un instinct naturel infaillible pour dénicher les vraies bonnes affaires de valeur.",
+      "Sa colère est rarissime mais quand elle éclate, elle balaye tout sur son passage."
+    ],
     talents: ["Gestion budgétaire et sécurisation patrimoniale", "Constance à toute épreuve dans l'effort", "Capacité à matérialiser les idées abstraites", "Sens de l'esthétique et du design tactile", "Maintien du calme au milieu de la panique"],
     excellenceDomains: ["Finance & Banque", "Gastronomie & Oenologie", "Architecture & Design", "Gestion immobilière", "Horticulture & Paysage", "Artisanat d'art", "Musique & Composition", "Ressources Humaines", "Investissement financier", "Patrimoine"]
   },
   gemeaux: {
     qualities: ["Adaptable", "Éloquent", "Curieux", "Vif d'esprit", "Sociable", "Polyvalent", "Enthousiaste", "Perspicace", "Inventif", "Pétillant"],
     flaws: ["Dispersé", "Superficiel", "Indécis", "Nerveux", "Inconstant", "Bavard", "Changeant", "Facilement distrait", "Ironique", "Tendance à procrastiner"],
-    anecdotes: ["Il peut lire trois livres en même temps tout en écoutant un podcast intéressant.", "A la capacité d'engager une conversation captivante avec absolument n'importe qui.", "Apprend de nouveaux concepts en une vitesse qui déconcerte souvent son entourage.", "Préfère cumuler les expériences plutôt que de s'enfermer dans une routine rigide.", "Conserve une jeunesse d'esprit et un regard pétillant toute sa vie durant."],
+    anecdotes: [
+      "Il peut lire trois livres en même temps tout en écoutant un podcast intéressant.",
+      "A la capacité d'engager une conversation captivante avec absolument n'importe qui.",
+      "Apprend de nouveaux concepts en une vitesse qui déconcerte souvent son entourage.",
+      "Préfère cumuler les expériences plutôt que de s'enfermer dans une routine rigide.",
+      "Conserve une jeunesse d'esprit et un regard pétillant toute sa vie durant."
+    ],
     talents: ["Synthèse rapide d'informations complexes", "Facilité d'apprentissage des langues", "Improvisation scénique et oratoire", "Création de ponts entre personnes différentes", "Multitâche fluide et efficace"],
     excellenceDomains: ["Journalisme & Médias", "Relations Publiques", "Marketing digital", "Enseignement", "Traduction & Interprétariat", "Développement logiciel", "Commerce international", "Animation & Événementiel", "Rédaction créative", "Médiation"]
   },
   cancer: {
     qualities: ["Intuitif", "Protecteur", "Empathique", "Dévoué", "Créatif", "Sensible", "Attentif", "Loyal", "Plein d'imagination", "Patient affectivement"],
     flaws: ["Susceptible", "Nostalgique", "Possessif", "Changement d'humeur", "Introverti", "Anxieux", "Réticent au risque", "Capricieux", "Protecteur à l'excès", "Dépendant"],
-    anecdotes: ["Ressent l'ambiance émotionnelle d'une pièce en une fraction de seconde.", "Gardera précieusement un simple ticket de cinéma qui lui rappelle un bon souvenir.", "Son foyer est son sanctuaire où il aime cuisiner pour les gens qu'il aime.", "Si un ami a un problème, il sera le premier sur place avec du réconfort.", "Son intuition dépasse très souvent la logique pure dans ses grands choix."],
+    anecdotes: [
+      "Ressent l'ambiance émotionnelle d'une pièce en une fraction de seconde.",
+      "Gardera précieusement un simple ticket de cinéma qui lui rappelle un bon souvenir.",
+      "Son foyer est son sanctuaire où il aime cuisiner pour les gens qu'il aime.",
+      "Si un ami a un problème, il sera le premier sur place avec du réconfort.",
+      "Son intuition dépasse très souvent la logique pure dans ses grands choix."
+    ],
     talents: ["Instinct protecteur et accompagnement", "Sensibilité artistique et poétique", "Mémoire affective et visuelle remarquable", "Création d'espaces chaleureux et sécurisants", "Écoute bienveillante sans jugement"],
     excellenceDomains: ["Psychologie & Thérapie", "Restauration & Hôtellerie", "Pédiatrie & Soins", "Architecture d'intérieur", "Histoire & Archéologie", "Écriture & Poésie", "Gestion de fondations", "Services à la personne", "Muséologie", "Immobilier résidentiel"]
   },
   lion: {
     qualities: ["Généreux", "Charmant", "Charismatique", "Loyal", "Protecteur", "Ambitieux", "Magnanime", "Créatif", "Sûr de lui", "Chaleureux"],
     flaws: ["Orgueilleux", "Théâtral", "Dominant", "Exigeant", "Centré sur soi", "Têtu", "Sensible au jugement", "Impétueux", "Extravagant", "Intolérant aux fautes"],
-    anecdotes: ["Aime faire des cadeaux grandioses et voir le sourire sur le visage de ses proches.", "Sa présence naturelle attire l'attention même lorsqu'il essaye d'être discret.", "Ne supporte pas l'injustice commise envers les personnes plus faibles que lui.", "Possède une loyauté absolue vers ceux qui ont gagné sa confiance sincère.", "Travaillera sans relâche pour transformer un projet ordinaire en chef-d'œuvre."],
+    anecdotes: [
+      "Aime faire des cadeaux grandioses et voir le sourire sur le visage de ses proches.",
+      "Sa présence naturelle attire l'attention même lorsqu'il essaye d'être discret.",
+      "Ne supporte pas l'injustice commise envers les personnes plus faibles que lui.",
+      "Possède une loyauté absolue vers ceux qui ont gagné sa confiance sincère.",
+      "Travaillera sans relâche pour transformer un projet ordinaire en chef-d'œuvre."
+    ],
     talents: ["Leadership motivant et inspirant", "Aise naturelle sur scène et en public", "Créativité visuelle et scénique", "Capacité à redonner confiance aux autres", "Gestion de projets d'envergure"],
     excellenceDomains: ["Arts du spectacle", "Direction générale", "Luxe & Haute couture", "Politique & Diplomatie", "Relations publiques", "Production cinématographique", "Mentorat de haut niveau", "Organisation de galas", "Design de marque", "Haut conseil"]
   },
   vierge: {
     qualities: ["Méthodique", "Précis", "Analytique", "Serviable", "Organisé", "Modeste", "Fiable", "Pragmatique", "Réfléchi", "Discret"],
     flaws: ["Perfectionniste", "Critique", "Anxieux", "Réservé", "Rigide", "Tendance au surmenage", "Minutieux à l'excès", "Indécis par analyse", "Inquiet", "Pessimiste"],
-    anecdotes: ["Remarquera immédiatement la moindre coquille dans un document de cinquante pages.", "Possède un système d'organisation personnel que personne d'autre ne peut déchiffrer.", "Trouve une grande satisfaction à rendre un service utile et concret à autrui.", "Son esprit analyse continuellement comment optimiser chaque processus.", "Derrière sa discrétion se cache souvent un érudit aux connaissances impressionnantes."],
+    anecdotes: [
+      "Remarquera immédiatement la moindre coquille dans un document de cinquante pages.",
+      "Possède un système d'organisation personnel que personne d'autre ne peut déchiffrer.",
+      "Trouve une grande satisfaction à rendre un service utile et concret à autrui.",
+      "Son esprit analyse continuellement comment optimiser chaque processus.",
+      "Derrière sa discrétion se cache souvent un érudit aux connaissances impressionnantes."
+    ],
     talents: ["Analyse de données et contrôle qualité", "Organisation méthodique optimale", "Détection instantanée des anomalies", "Sens du service et de l'amélioration continue", "Clarté de synthèse dans le détail"],
     excellenceDomains: ["Audit & Contrôle", "Médecine & Recherche", "Comptabilité & Analyse", "Ingénierie informatique", "Gestion de la qualité", "Sciences de données", "Édition & Correction", "Organisation logistique", "Diététique & Santé", "Archivage"]
   },
   balance: {
     qualities: ["Diplomate", "Équitable", "Sociable", "Élégant", "Charmant", "Pacifique", "Empathique", "Coopératif", "Raffiné", "Conciliant"],
     flaws: ["Indécis", "Évite les conflits", "Dépendant", "Influençable", "Superficiel", "Hésitant", "Soucieux du regard d'autrui", "Procrastinateur", "Trop indulgent", "Passif"],
-    anecdotes: ["Peut passer une heure à peser le pour et le contre pour choisir un menu.", "A un don inné pour apaiser une dispute houleuse en trouvant le juste milieu.", "L'harmonie esthétique de son environnement influe directement sur son moral.", "Préférera s'adapter au souhait du groupe plutôt qu'imposer son choix personnel.", "Sa politesse et son tact ouvrent les portes les plus difficiles d'accès."],
+    anecdotes: [
+      "Peut passer une heure à peser le pour et le contre pour choisir un menu.",
+      "A un don inné pour apaiser une dispute houleuse en trouvant le juste milieu.",
+      "L'harmonie esthétique de son environnement influe directement sur son moral.",
+      "Préférera s'adapter au souhait du groupe plutôt qu'imposer son choix personnel.",
+      "Sa politesse et son tact ouvrent les portes les plus difficiles d'accès."
+    ],
     talents: ["Négociation et médiation pacifique", "Sens raffiné de l'esthétique et des couleurs", "Capacité à percevoir tous les points de vue", "Création de partenariats durables", "Savoir-vivre et étiquette sociale"],
     excellenceDomains: ["Droit & Justice", "Médiation d'entreprise", "Diplomatie", "Design & Mode", "Conseil en image", "Relations internationales", "Ressources Humaines", "Coaching relationnel", "Muséographie", "Galerie d'art"]
   },
   scorpion: {
     qualities: ["Intense", "Passionné", "Perspicace", "Déterminé", "Loyal", "Magnétique", "Courageux", "Intuitif", "Ressource", "Profond"],
     flaws: ["Méfiant", "Rancunier", "Possessif", "Secret", "Impérieux", "Jaloux", "Intransigeant", "Partisan du tout ou rien", "Manipulateur", "Extrême"],
-    anecdotes: ["Détecte les mensonges et les omissions en un simple regard attentif.", "Conserve ses secrets les plus chers sous une carapace impénétrable.", "Quand il s'investit dans une cause, il y met son âme entière sans retenue.", "Capacité légendaire à se régénérer après les pires épreuves de l'existence.", "Préfère une vérité qui blesse mais franche à un mensonge réconfortant."],
+    anecdotes: [
+      "Détecte les mensonges et les omissions en un simple regard attentif.",
+      "Conserve ses secrets les plus chers sous une carapace impénétrable.",
+      "Quand il s'investit dans une cause, il y met son âme entière sans retenue.",
+      "Capacité légendaire à se régénérer après les pires épreuves de l'existence.",
+      "Préfère une vérité qui blesse mais franche à un mensonge réconfortant."
+    ],
     talents: ["Investigation et recherche approfondie", "Psychologie et détection des motivations", "Gestion de situations extrêmes et critiques", "Capacité de transformation personnelle", "Stratégie secrète et analyse complexe"],
     excellenceDomains: ["Psychiatrie & Psychanalyse", "Criminologie & Enquête", "Chirurgie spécialisée", "Cybersécurité", "Investissement en Capital-Risque", "Recherche scientifique", "Astrophysique", "Gestion de crises majeures", "Stratégie militaire", "Négociation complexe"]
   },
   sagittaire: {
     qualities: ["Optimiste", "Enthousiaste", "Chaleureux", "Philosophe", "Franc", "Indépendant", "Généreux", "Aventurier", "Visionnaire", "Tolérant"],
     flaws: ["Imprudent", "Direct à l'excès", "Impatient", "Promet trop", "Nerveux", "Dispersé", "Moralisateur", "Peur de l'engagement", "Inconstant", "Sans filtre"],
-    anecdotes: ["Est toujours prêt à faire sa valise en cinq minutes pour une aventure imprévue.", "Son optimisme est tellement communicatif qu'il remonte le moral de tout un groupe.", "Aime débattre de philosophie, de voyages et de grands concepts jusqu'à l'aube.", "Dit exactement ce qu'il pense sans aucune mauvaise intention sous-jacente.", "A besoin d'espace et d'indépendance pour s'épanouir pleinement dans son travail."],
+    anecdotes: [
+      "Est toujours prêt à faire sa valise en cinq minutes pour une aventure imprévue.",
+      "Son optimisme est tellement communicatif qu'il remonte le moral de tout un groupe.",
+      "Aime débattre de philosophie, de voyages et de grands concepts jusqu'à l'aube.",
+      "Dit exactement ce qu'il pense sans aucune mauvaise intention sous-jacente.",
+      "A besoin d'espace et d'indépendance pour s'épanouir pleinement dans son travail."
+    ],
     talents: ["Vision globale et réflexion stratégique", "Transmissions de connaissances et enseignement", "Adaptation instantanée aux cultures étrangères", "Enthousiasme communicatif contagieux", "Découverte d'opportunités d'avenir"],
     excellenceDomains: ["Enseignement supérieur", "Tourisme & Exploration", "Édition & Philosophie", "Commerce international", "Diplomatie culturelle", "Sports d'aventure", "Coaching de vie", "Traduction universelle", "Droit international", "Conférences"]
   },
   capricorne: {
     qualities: ["Ambitieux", "Discipliné", "Pragmatique", "Patient", "Prévoyant", "Labeur", "Responsable", "Intègre", "Méthodique", "Persévérant"],
     flaws: ["Austère", "Pessimiste", "Rigide", "Distanciation affective", "Perfectionniste", "Méfiance", "Travailleur compulsif", "Rancunier", "Sévère", "Réticent aux plaisirs"],
-    anecdotes: ["Planifie souvent sa trajectoire professionnelle avec 10 ans d'avance.", "Son humour est d'une finesse et d'un second degré irrésistibles quand il se détend.", "Préfère la qualité durable et intemporelle aux tendances passagères.", "Plus il vieillit, plus il apprend à profiter sereinement de la vie.", "Est le pilier inébranlable sur lequel toute sa famille peut s'appuyer."],
+    anecdotes: [
+      "Planifie souvent sa trajectoire professionnelle avec 10 ans d'avance.",
+      "Son humour est d'une finesse et d'un second degré irrésistibles quand il se détend.",
+      "Préfère la qualité durable et intemporelle aux tendances passagères.",
+      "Plus il vieillit, plus il apprend à profiter sereinement de la vie.",
+      "Est le pilier inébranlable sur lequel toute sa famille peut s'appuyer."
+    ],
     talents: ["Planification stratégique sur le très long terme", "Endurance exceptionnelle face à l'effort", "Gestion rigoureuse des ressources et institutions", "Sang-froid inaltérable dans les crises", "Incorruptibilité et intégrité"],
     excellenceDomains: ["Direction d'entreprise", "Administration publique", "Bâtiment & Travaux Publics", "Ingénierie civile", "Finance & Comptabilité", "Gestion de fonds", "Politique économique", "Enseignement classique", "Architecture", "Haute magistrature"]
   },
   verseau: {
     qualities: ["Innovateur", "Humaniste", "Indépendant", "Original", "Visionnaire", "Fraternel", "Altruiste", "Intelligent", "Créatif", "Tolérant"],
     flaws: ["Détaché", "Imprévisible", "Entêté dans ses idées", "Rebelle sans cause", "Utopique", "Froid en apparence", "Individualiste", "Paradoxal", "Réticent au cadre", "Iconoclaste"],
-    anecdotes: ["Pense souvent à des solutions innovantes que le monde ne comprendra que dans 5 ans.", "Accorde une valeur suprême à ses amitiés et à sa liberté d'esprit.", "Ne fera jamais quelque chose uniquement parce que 'ça s'est toujours fait ainsi'.", "Peut paraître distant tout en se passionnant pour le bien-être de l'humanité entière.", "Adore casser les codes et surprendre là où on ne l'attend absolument pas."],
+    anecdotes: [
+      "Pense souvent à des solutions innovantes que le monde ne comprendra que dans 5 ans.",
+      "Accorde une valeur suprême à ses amitiés et à sa liberté d'esprit.",
+      "Ne fera jamais quelque chose uniquement parce que 'ça s'est toujours fait ainsi'.",
+      "Peut paraître distant tout en se passionnant pour le bien-être de l'humanité entière.",
+      "Adore casser les codes et surprendre là où on ne l'attend absolument pas."
+    ],
     talents: ["Anticipation des tendances futures", "Conception de systèmes disruptifs", "Fédération de communautés diverses", "Créativité technologique et conceptuelle", "Esprit critique indépendant des dogmes"],
     excellenceDomains: ["Technologies avancées", "Aéronautique & Espace", "Sciences de l'environnement", "Sociologie & Recherche", "Intelligence Artificielle", "Action humanitaire", "Ingénierie réseau", "Invention & Brevets", "Mouvements citoyens", "E-Sport"]
   },
   poissons: {
     qualities: ["Empathique", "Intuitif", "Créatif", "Inspiré", "Généreux", "Compassionnel", "Dévoué", "Artiste", "Doux", "Rêveur"],
     flaws: ["Hypersensible", "Idéaliste", "Fuite de la réalité", "Influençable", "Indécis", "Anxieux", "Tendance au sacrifice", "Désordonné", "Confus", "Nostalgique"],
-    anecdotes: ["Son monde intérieur est une source inépuisable d'histoires et de création.", "Ressent tellement la peine d'autrui qu'il fait tout pour essayer de la soulager.", "Ses rêves nocturnes lui apportent parfois des réponses claires à ses interrogations.", "S'épanouit pleinement au contact de la musique, de la mer et de la poésie.", "Possède une sagesse émotionnelle qui surprend ceux qui ne voient que son côté rêveur."],
+    anecdotes: [
+      "Son monde intérieur est une source inépuisable d'histoires et de création.",
+      "Ressent tellement la peine d'autrui qu'il fait tout pour essayer de la soulager.",
+      "Ses rêves nocturnes lui apportent parfois des réponses claires à ses interrogations.",
+      "S'épanouit pleinement au contact de la musique, de la mer et de la poésie.",
+      "Possède une sagesse émotionnelle qui surprend ceux qui ne voient que son côté rêveur."
+    ],
     talents: ["Inspiration artistique et musicale illimitée", "Compréhension empathique instantanée", "Adaptabilité fluide aux environnements", "Facilité pour la méditation et le soin", "Imagination narrative et poétique"],
     excellenceDomains: ["Musique & Composition", "Cinéma & Réalisation", "Psychologie & Soins palliatifs", "Poésie & Littérature", "Thérapies holistiques", "Bénévolat & Humanitaire", "Océanographie", "Arts visuels", "Danse & Expression corporelle", "Coaching spirituel"]
   }
 };
 
-const getDetailedProfileForDate = (dateString, fullName) => {
-  if (!dateString) return null;
-  const date = new Date(dateString);
-  if (isNaN(date.getTime())) return null;
-
-  const sign = getZodiacSignFromDate(dateString);
-  if (!sign) return null;
-
-  const baseProfile = COMPLETE_PROFILES_DATABASE[sign.id] || COMPLETE_PROFILES_DATABASE.belier;
-  const year = date.getUTCFullYear();
-
-  let yearHash = 0;
-  const yearStr = year.toString();
-  for (let i = 0; i < yearStr.length; i++) {
-    yearHash = (yearHash << 5) - yearHash + yearStr.charCodeAt(i);
-    yearHash |= 0;
-  }
-  yearHash = Math.abs(yearHash);
-
-  const qualityShift = yearHash % baseProfile.qualities.length;
-  const rotatedQualities = [...baseProfile.qualities.slice(qualityShift), ...baseProfile.qualities.slice(0, qualityShift)];
-
-  const talentShift = (yearHash + 2) % baseProfile.talents.length;
-  const rotatedTalents = [...baseProfile.talents.slice(talentShift), ...baseProfile.talents.slice(0, talentShift)];
-
-  const planetaryInfluences = [
-    "Cycle de Jupiter : Année axée sur l'expansion, l'audace et les opportunités professionnelles majeures.",
-    "Cycle de Saturne : Année structurante apportant maturité précoce, rigueur et persévérance.",
-    "Cycle d'Uranus : Année marquée par l'indépendance, l'esprit d'innovation et les changements créatifs.",
-    "Cycle de Neptune : Année stimulant l'intuition artistique, la sensibilité empathique et la créativité.",
-    "Cycle de Pluton : Année de force intérieure profonde, de résilience et de métamorphose personnelle."
-  ];
-  const dominantPlanet = planetaryInfluences[yearHash % planetaryInfluences.length];
-  const numerology = getNumerologyData(dateString, fullName);
-  const historicalMilestones = getHistoricalMilestones(dateString);
-
-  return {
-    sign,
-    birthYear: year,
-    dominantPlanet,
-    numerology,
-    historicalMilestones,
-    qualities: rotatedQualities,
-    flaws: baseProfile.flaws,
-    anecdotes: baseProfile.anecdotes,
-    talents: rotatedTalents,
-    excellenceDomains: baseProfile.excellenceDomains
-  };
+const getProfileForSign = (sign) => {
+  return COMPLETE_PROFILES_DATABASE[sign.id] || COMPLETE_PROFILES_DATABASE.belier;
 };
 
 // ============================================================================
-// TEXTES QUOTIDIENS ET MENSUELS
+// BASES DE TEXTES QUOTIDIENS ÉLARGIES (12 TEXTES UNIQUES DE 3 À 4 PHRASES)
 // ============================================================================
 
 const DAILY_TEXTS = {
@@ -473,6 +286,10 @@ const DAILY_TEXTS = {
   ]
 };
 
+// ============================================================================
+// SELECTION GARANTIE 100% UNIQUE SANS COLLISION PAR INDEX DE SIGNE
+// ============================================================================
+
 const generateAutomatedHoroscope = (signId, dateStr) => {
   const signIndex = ZODIAC_SIGNS.findIndex(s => s.id === signId);
   const safeIndex = signIndex !== -1 ? signIndex : 0;
@@ -498,6 +315,10 @@ const generateAutomatedHoroscope = (signId, dateStr) => {
     conseil: DAILY_TEXTS.conseils[idxConseil]
   };
 };
+
+// ============================================================================
+// BASE DE TENDANCES MENSUELLES (TEXTES LONGS 6-10 PHRASES)
+// ============================================================================
 
 const MONTHLY_TRENDS_DATABASE = {
   amour: [
@@ -541,6 +362,10 @@ const generateMonthlyTrends = (signId, yearMonthStr) => {
   };
 };
 
+// ============================================================================
+// COMPOSANT DE PIED DE PAGE (SIGNATURE DÉVELOPPEUR)
+// ============================================================================
+
 const DeveloperFooter = () => (
   <footer className="mt-8 mb-4 text-center">
     <a
@@ -555,12 +380,15 @@ const DeveloperFooter = () => (
   </footer>
 );
 
+// ============================================================================
+// COMPOSANT PRINCIPAL (RESPONSIVE & MOBILE-FIRST)
+// ============================================================================
+
 export default function App() {
   const [activeTab, setActiveTab] = useState('horoscope');
   const [selectedSign, setSelectedSign] = useState(ZODIAC_SIGNS[0]);
   
   const [birthdateInput, setBirthdateInput] = useState('1995-07-23');
-  const [fullNameInput, setFullNameInput] = useState('Précieux Trésor TOSSOU');
   const [searchedProfile, setSearchedProfile] = useState(null);
 
   const todayISO = useMemo(() => new Date().toISOString().split('T')[0], []);
@@ -586,16 +414,16 @@ export default function App() {
 
   useEffect(() => {
     if (birthdateInput) {
-      const profile = getDetailedProfileForDate(birthdateInput, fullNameInput);
-      if (profile) setSearchedProfile(profile);
+      const sign = getZodiacSignFromDate(birthdateInput);
+      if (sign) setSearchedProfile({ sign, ...getProfileForSign(sign) });
     }
   }, []);
 
   const handleProfileSearch = (e) => {
     e.preventDefault();
     if (!birthdateInput) return;
-    const profile = getDetailedProfileForDate(birthdateInput, fullNameInput);
-    if (profile) setSearchedProfile(profile);
+    const sign = getZodiacSignFromDate(birthdateInput);
+    if (sign) setSearchedProfile({ sign, ...getProfileForSign(sign) });
   };
 
   return (
@@ -900,165 +728,59 @@ export default function App() {
           </div>
         )}
 
-        {/* ONGLET 3 : PROFILER ASTROLOGIQUE & NUMÉROLOGIQUE */}
+        {/* ONGLET 3 : PROFILER ASTROLOGIQUE */}
         {activeTab === 'profiler' && (
           <div className="space-y-4 sm:space-y-8 animate-fadeIn">
             
             <div className="text-center max-w-3xl mx-auto space-y-1 sm:space-y-2">
               <h2 className="text-xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                Profilage astrologique & numérologique
+                Profilage astrologique
               </h2>
               <p className="text-slate-600 text-xs sm:text-sm max-w-xl mx-auto">
-                Saisissez votre date de naissance et votre nom complet pour débloquer votre bilan de vie complet.
+                Saisissez une date de naissance pour débloquer votre bilan complet.
               </p>
             </div>
 
             <div className="max-w-xl mx-auto bg-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl shadow-sm border border-slate-200">
               <form onSubmit={handleProfileSearch} className="space-y-3">
-                <div>
-                  <label className="block text-[10px] sm:text-xs font-bold uppercase text-slate-500 tracking-wider mb-1">
-                    Nom et Prénoms (pour la numérologie) :
-                  </label>
-                  <input
-                    type="text"
-                    value={fullNameInput}
-                    onChange={(e) => setFullNameInput(e.target.value)}
-                    placeholder="Ex: Précieux Trésor TOSSOU"
-                    className="w-full px-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl border border-slate-300 focus:ring-2 focus:ring-purple-600 text-xs sm:text-sm outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[10px] sm:text-xs font-bold uppercase text-slate-500 tracking-wider mb-1">
-                    Date de naissance :
-                  </label>
-                  <div className="flex flex-col sm:flex-row gap-2.5">
-                    <div className="relative flex-1">
-                      <input
-                        type="date"
-                        required
-                        value={birthdateInput}
-                        onChange={(e) => setBirthdateInput(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl border border-slate-300 focus:ring-2 focus:ring-purple-600 text-xs sm:text-sm outline-none"
-                      />
-                      <Calendar className="absolute left-3.5 top-3 text-slate-400" size={16} />
-                    </div>
-                    <button type="submit" className="bg-purple-800 hover:bg-purple-900 text-white font-bold px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl transition flex items-center justify-center gap-2 text-xs sm:text-sm">
-                      <Search size={16} /> Calculer
-                    </button>
+                <label className="block text-[10px] sm:text-xs font-bold uppercase text-slate-500 tracking-wider">
+                  Date de naissance :
+                </label>
+                <div className="flex flex-col sm:flex-row gap-2.5">
+                  <div className="relative flex-1">
+                    <input
+                      type="date"
+                      required
+                      value={birthdateInput}
+                      onChange={(e) => setBirthdateInput(e.target.value)}
+                      className="w-full pl-10 pr-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl border border-slate-300 focus:ring-2 focus:ring-purple-600 text-xs sm:text-sm outline-none"
+                    />
+                    <Calendar className="absolute left-3.5 top-3 text-slate-400" size={16} />
                   </div>
+                  <button type="submit" className="bg-purple-800 hover:bg-purple-900 text-white font-bold px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl transition flex items-center justify-center gap-2 text-xs sm:text-sm">
+                    <Search size={16} /> Calculer
+                  </button>
                 </div>
               </form>
             </div>
 
             {searchedProfile && (
-              <div className="bg-white rounded-2xl sm:rounded-3xl shadow-md border border-slate-200 p-4 sm:p-8 space-y-6 sm:space-y-8 animate-fadeIn">
-                
-                {/* EN-TÊTE DU PROFIL */}
+              <div className="bg-white rounded-2xl sm:rounded-3xl shadow-md border border-slate-200 p-4 sm:p-8 space-y-6 sm:space-y-8">
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 sm:p-6 bg-purple-50 rounded-2xl sm:rounded-3xl border border-purple-100 text-center sm:text-left">
                   <div className="flex items-center gap-4 flex-col sm:flex-row">
                     <span className="text-5xl sm:text-6xl">{searchedProfile.sign.symbol}</span>
                     <div>
-                      <span className="text-[10px] sm:text-xs font-extrabold text-purple-700 uppercase">
-                        Signe Calculé • Année {searchedProfile.birthYear}
-                      </span>
+                      <span className="text-[10px] sm:text-xs font-extrabold text-purple-700 uppercase">Signe Calculé</span>
                       <h3 className="text-2xl sm:text-3xl font-black text-slate-900">{searchedProfile.sign.name}</h3>
                       <p className="text-xs text-slate-500">{searchedProfile.sign.dates} • Élément {searchedProfile.sign.element}</p>
                     </div>
                   </div>
-                  
-                  <div className="bg-white p-3.5 rounded-2xl border border-purple-200 text-xs text-purple-900 max-w-xs shadow-2xs text-left">
-                    <strong className="block text-purple-950 font-bold mb-1">🔑 Empreinte planétaire :</strong>
-                    <p className="text-slate-600 text-[11px] leading-relaxed">{searchedProfile.dominantPlanet}</p>
-                  </div>
                 </div>
 
-                {/* SECTION NUMÉROLOGIE AVANCÉE */}
-                <div className="space-y-4">
-                  <h4 className="text-slate-900 font-extrabold text-base sm:text-lg flex items-center gap-2 border-b pb-2">
-                    <BookOpen className="text-purple-700" size={20} /> ANALYSE NUMÉROLOGIQUE COMPLÈTE
-                  </h4>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    
-                    <div className="bg-indigo-50/40 border border-indigo-100 p-4 sm:p-5 rounded-2xl space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-indigo-900 uppercase">Chemin de Vie</span>
-                        <span className="w-7 h-7 rounded-full bg-indigo-600 text-white font-extrabold text-xs flex items-center justify-center">
-                          {searchedProfile.numerology.lifePath}
-                        </span>
-                      </div>
-                      <p className="text-xs sm:text-sm text-slate-700 leading-relaxed text-justify">
-                        {searchedProfile.numerology.lifePathText}
-                      </p>
-                    </div>
-
-                    <div className="bg-purple-50/40 border border-purple-100 p-4 sm:p-5 rounded-2xl space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-purple-900 uppercase">Nombre d'Expression</span>
-                        <span className="w-7 h-7 rounded-full bg-purple-600 text-white font-extrabold text-xs flex items-center justify-center">
-                          {searchedProfile.numerology.expression}
-                        </span>
-                      </div>
-                      <p className="text-xs sm:text-sm text-slate-700 leading-relaxed text-justify">
-                        {searchedProfile.numerology.expressionText}
-                      </p>
-                    </div>
-
-                    <div className="bg-rose-50/40 border border-rose-100 p-4 sm:p-5 rounded-2xl space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-rose-900 uppercase">Élan Spirituel (Âme)</span>
-                        <span className="w-7 h-7 rounded-full bg-rose-600 text-white font-extrabold text-xs flex items-center justify-center">
-                          {searchedProfile.numerology.soul}
-                        </span>
-                      </div>
-                      <p className="text-xs sm:text-sm text-slate-700 leading-relaxed text-justify">
-                        {searchedProfile.numerology.soulText}
-                      </p>
-                    </div>
-
-                    <div className="bg-emerald-50/40 border border-emerald-100 p-4 sm:p-5 rounded-2xl space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-emerald-900 uppercase">Nombre Intime (Moi Profond)</span>
-                        <span className="w-7 h-7 rounded-full bg-emerald-600 text-white font-extrabold text-xs flex items-center justify-center">
-                          {searchedProfile.numerology.intimate}
-                        </span>
-                      </div>
-                      <p className="text-xs sm:text-sm text-slate-700 leading-relaxed text-justify">
-                        {searchedProfile.numerology.intimateText}
-                      </p>
-                    </div>
-
-                    <div className="bg-amber-50/40 border border-amber-100 p-4 sm:p-5 rounded-2xl space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-amber-900 uppercase">Année Personnelle (2026)</span>
-                        <span className="w-7 h-7 rounded-full bg-amber-600 text-white font-extrabold text-xs flex items-center justify-center">
-                          {searchedProfile.numerology.personalYear}
-                        </span>
-                      </div>
-                      <p className="text-xs sm:text-sm text-slate-700 leading-relaxed text-justify">
-                        {searchedProfile.numerology.personalYearText}
-                      </p>
-                    </div>
-
-                    <div className="bg-sky-50/40 border border-sky-100 p-4 sm:p-5 rounded-2xl space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-sky-900 uppercase">Grille d'Inclusion & Maturité</span>
-                        <Clock size={16} className="text-sky-700" />
-                      </div>
-                      <p className="text-xs sm:text-sm text-slate-700 leading-relaxed text-justify">
-                        {searchedProfile.numerology.inclusionText} {searchedProfile.numerology.maturityText}
-                      </p>
-                    </div>
-
-                  </div>
-                </div>
-
-                {/* QUALITÉS & DÉFAUTS */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                   <div className="bg-emerald-50/50 border border-emerald-100 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">
                     <h4 className="text-emerald-950 font-bold text-sm sm:text-base flex items-center gap-2">
-                      <Award className="text-emerald-600" size={18} /> TOP 10 QUALITÉS
+                      <Award className="text-emerald-600" size={18} /> Top 10 des qualités
                     </h4>
                     <div className="flex flex-wrap gap-1.5 sm:gap-2">
                       {searchedProfile.qualities.map((item, idx) => (
@@ -1071,7 +793,7 @@ export default function App() {
 
                   <div className="bg-amber-50/50 border border-amber-100 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">
                     <h4 className="text-amber-950 font-bold text-sm sm:text-base flex items-center gap-2">
-                      <Info className="text-amber-600" size={18} /> TOP 10 DÉFAUTS
+                      <Info className="text-amber-600" size={18} /> Top 10 des défauts
                     </h4>
                     <div className="flex flex-wrap gap-1.5 sm:gap-2">
                       {searchedProfile.flaws.map((item, idx) => (
@@ -1083,11 +805,10 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* TALENTS & ANECDOTES */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                   <div className="bg-purple-50/50 border border-purple-100 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">
                     <h4 className="text-purple-950 font-bold text-sm sm:text-base flex items-center gap-2">
-                      <Gift className="text-purple-600" size={18} /> 5 TALENTS CACHÉS
+                      <Gift className="text-purple-600" size={18} /> 5 talents cachés
                     </h4>
                     <ul className="space-y-2 text-xs sm:text-sm text-slate-700">
                       {searchedProfile.talents.map((talent, idx) => (
@@ -1103,7 +824,7 @@ export default function App() {
 
                   <div className="bg-indigo-50/50 border border-indigo-100 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">
                     <h4 className="text-indigo-950 font-bold text-sm sm:text-base flex items-center gap-2">
-                      <Compass className="text-indigo-600" size={18} /> 5 ANECDOTES PARTICULIÈRES
+                      <Compass className="text-indigo-600" size={18} /> 5 anecdotes particulières
                     </h4>
                     <ul className="space-y-2 text-xs sm:text-sm text-slate-700">
                       {searchedProfile.anecdotes.map((anecdote, idx) => (
@@ -1117,18 +838,7 @@ export default function App() {
                     </ul>
                   </div>
                 </div>
-                
-                {/* RÉSUMÉ DE SYNTHÈSE GLOBAL */}
-                <div className="bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-950 text-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl shadow-xl space-y-3">
-                  <h4 className="text-amber-300 font-black text-base sm:text-lg uppercase tracking-wider flex items-center gap-2">
-                    <Star size={20} className="text-amber-400 fill-amber-400" /> Synthèse Astrologique & Numérologique de Vie
-                  </h4>
-                  <p className="text-purple-100 text-xs sm:text-sm leading-relaxed text-justify font-medium">
-                    {searchedProfile.numerology.summaryText}
-                  </p>
-                </div>
 
-                {/* DOMAINES D'EXCELLENCE */}
                 <div className="bg-slate-50 border border-slate-200 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">
                   <h4 className="text-slate-900 font-bold text-sm sm:text-base flex items-center gap-2">
                     <Star size={18} className="text-amber-500 fill-amber-500" /> Domaines d'excellence
