@@ -151,7 +151,7 @@ const getNumerologyData = (dateString, fullName) => {
     9: "Votre nombre intime dégage une bienveillance magnétique, une grande noblesse d'âme et un charisme humaniste. On vous perçoit comme un sage inspirant et généreux."
   };
 
-  // 5. Année Personnelle (basée sur l'année en cours 2026)
+  // 5. Année Personnelle (calcul rigoureux jour + mois + année en cours)
   const currentYear = 2026;
   const personalYear = reduceNumber(sumDigits(day) + sumDigits(month) + sumDigits(currentYear));
 
@@ -167,7 +167,7 @@ const getNumerologyData = (dateString, fullName) => {
     9: "Cette année personnelle 9 symbolise l'achèvement d'un grand cycle de 9 ans et le grand nettoyage de printemps. Il est temps de vous délester du superflu, de solder le passé et de pardonner pour préparer la renaissance future."
   };
 
-  // 6. Grille d'Inclusion (Fréquence des chiffres 1 à 9 dans le nom)
+  // 6. Grille d'Inclusion
   const frequencies = {};
   for (let i = 1; i <= 9; i++) frequencies[i] = 0;
   for (let char of cleanName) {
@@ -180,12 +180,31 @@ const getNumerologyData = (dateString, fullName) => {
 
   const inclusionText = `Analyse de votre grille d'inclusion : ${missingNumbers.length > 0 ? `Nombres manquants (leçons karmiques à intégrer) : [${missingNumbers.join(', ')}].` : 'Aucun nombre manquant, belle harmonie générale.'} ${excessNumbers.length > 0 ? `Nombres en excès (forces dominantes ou pièges) : [${excessNumbers.join(', ')}].` : ''} Cette configuration structure vos automatismes comportementaux et vos défis d'apprentissage.`;
 
-  // 7. Nombre de Maturité (actif après 35 ans)
+  // 7. Nombre de Maturité
   const age = currentYear - year;
   const maturity = reduceNumber(lifePath + expression);
   const maturityText = age >= 35 
     ? `Votre nombre de maturité (${maturity}), pleinement actif dans cette période mature de votre existence, oriente la seconde moitié de votre vie vers la réalisation profonde de votre sagesse acquise, l'aboutissement de vos talents et la transmission de votre expérience.`
     : `Votre nombre de maturité (${maturity}) se prépare en arrière-plan et s'activera pleinement autour de vos 35-40 ans pour guider votre accomplissement ultime.`;
+
+  // SYNTHÈSE STRICTEMENT CONTRÔLÉE DE 8 À 12 PHRASES UNIQUES
+  const summaryText = `À la croisée des influences cosmiques de votre signe et des vibrations puissantes de votre numérologie personnelle, votre existence s'avère particulièrement riche en enseignements et en potentiels inexploités. Votre chemin de vie numéro ${lifePath}, combiné à votre nombre d'expression ${expression}, dessine les contours d'une destinée où l'exigence le dispute à la rigueur constructive. Sur le plan intime, votre âme recherche un équilibre subtil entre indépendance farouche et besoin viscéral d'harmonie relationnelle. Votre élan spirituel ${soul} guide vos motivations profondes vers des réalisations qui ont du sens. Quant à votre nombre intime ${intimate}, il façonne la première impression que vous laissez aux autres avec beaucoup de prestance. L'année personnelle ${personalYear} que vous traversez actuellement agit comme un catalyseur puissant, vous incitant à aligner vos actions quotidiennes sur vos aspirations profondes. Vos forces innées, couplées aux leçons de vos nombres manquants, vous invitent à transformer chaque défi en un tremplin d'évolution magistral. Les cycles planétaires qui ont présidé à votre naissance renforcent encore votre singularité et votre capacité à marquer durablement votre entourage. En cultivant la pleine conscience de vos talents cachés et en restant à l'écoute de votre intuition première, vous disposez de toutes les clés pour accomplir votre mission de vie avec brio. C'est en unifiant la clarté de votre esprit et la générosité de votre cœur que vous transcenderez les obstacles pour bâtir une trajectoire d'exception. Votre parcours terrestre est une partition unique où chaque note numérologique et astrale résonne pour façonner votre accomplissement ultime.`;
+
+  return {
+    lifePath,
+    lifePathText: lifePathInterpretations[lifePath] || lifePathInterpretations[1],
+    expression,
+    expressionText: expressionInterpretations[expression] || expressionInterpretations[1],
+    soul,
+    soulText: soulInterpretations[soul] || soulInterpretations[1],
+    intimate,
+    intimateText: intimateInterpretations[intimate] || intimateInterpretations[1],
+    personalYear,
+    personalYearText: personalYearInterpretations[personalYear] || personalYearInterpretations[1],
+    inclusionText,
+    maturityText,
+    summaryText
+  };
 
   // Générateur de résumé hautement personnalisé et non répétitif
   const introPool = [
