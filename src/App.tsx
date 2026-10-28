@@ -187,9 +187,40 @@ const getNumerologyData = (dateString, fullName) => {
     ? `Votre nombre de maturité (${maturity}), pleinement actif dans cette période mature de votre existence, oriente la seconde moitié de votre vie vers la réalisation profonde de votre sagesse acquise, l'aboutissement de vos talents et la transmission de votre expérience.`
     : `Votre nombre de maturité (${maturity}) se prépare en arrière-plan et s'activera pleinement autour de vos 35-40 ans pour guider votre accomplissement ultime.`;
 
-  // Résumé de synthèse global (8 à 12 phrases)
-  const summaryText = `À la croisée des influences cosmiques de votre signe et des vibrations puissantes de votre numérologie personnelle, votre existence s'avère particulièrement riche en enseignements et en potentiels inexploités. Votre chemin de vie numéro ${lifePath} combiné à votre nombre d'expression ${expression} dessine les contours d'une destinée où l'audace le dispute à la rigueur constructive. Sur le plan intime, votre âme recherche un équilibre subtil entre indépendance farouche et besoin viscéral d'harmonie relationnelle. L'année personnelle ${personalYear} que vous traversez actuellement agit comme un catalyseur puissant, vous incitant à aligner vos actions quotidiennes sur vos aspirations profondes. Vos forces innées, couplées aux leçons de vos nombres manquants, vous invitent à transformer chaque défi en un tremplin d'évolution magistral. Les cycles planétaires qui ont présidé à votre naissance renforcent encore votre singularité et votre capacité à marquer durablement votre entourage. En cultivant la pleine conscience de vos talents cachés et en restant à l'écoute de votre intuition première, vous disposez de toutes les clés pour accomplir votre mission de vie avec brio. C'est en unifiant la clarté de votre esprit et la générosité de votre cœur que vous transcenderez les obstacles pour bâtir une trajectoire d'exception. Votre parcours terrestre est une partition unique où chaque note numérologique et astrale résonne pour façonner votre accomplissement ultime.`;
+  // Générateur de résumé hautement personnalisé et non répétitif
+  const introPool = [
+    `À la croisée des influences cosmiques de votre signe et des vibrations de votre numérologie, votre parcours s'écrit sous le sceau de la singularité.`,
+    `Porteur d'une signature vibratoire très spécifique, votre thème combine l'énergie de votre zodiaque à la profondeur de vos nombres clés.`,
+    `Votre configuration astrale et numérologique révèle une personnalité complexe, façonnée pour accomplir un destin hors du commun.`
+  ];
 
+  const corePool = [
+    `Votre chemin de vie ${lifePath}, allié à un nombre d'expression ${expression}, met en lumière une aptitude naturelle à transformer les épreuves en véritables tremplins d'évolution.`,
+    `La synergie entre votre élan spirituel ${soul} et votre dynamique de vie ${lifePath} insuffle une force de conviction redoutable dans vos projets d'envergure.`,
+    `Guidé par une expression de ${expression} et un monde intérieur marqué par le nombre ${intimate}, vous naviguez entre pragmatisme et quête d'idéal.`
+  ];
+
+  const yearPool = [
+    `L'année personnelle ${personalYear} que vous traversez actuellement agit comme un puissant révélateur, ouvrant la voie à des prises de conscience décisives.`,
+    `Sous l'impulsion de l'année personnelle ${personalYear}, le moment est venu de réajuster vos priorités et de concrétiser vos aspirations profondes.`,
+    `Les énergies de votre année personnelle ${personalYear} vous incitent à faire preuve d'audace tout en consolidant vos acquis matériels et émotionnels.`
+  ];
+
+  const conclusionPool = [
+    `En restant à l'écoute de votre intuition et en assumant pleinement vos ambitions, vous disposez de toutes les clés pour rayonner durablement.`,
+    `Votre partition terrestre est unique : en unissant la force de votre esprit et la clarté de vos choix, vous édifiez une trajectoire d'exception.`,
+    `C'est par l'acceptation de vos forces et la maîtrise de vos défis que vous accomplirez la mission profonde inscrite au cœur de votre destinée.`
+  ];
+
+  // Sélection unique basée sur le hash global de la personne
+  const uniqueHash = Math.abs(lifePath * 37 + expression * 19 + soul * 13 + intimate * 7);
+  const intro = introPool[uniqueHash % introPool.length];
+  const core = corePool[(uniqueHash + 1) % corePool.length];
+  const yearText = yearPool[(uniqueHash + 2) % yearPool.length];
+  const conclusion = conclusionPool[(uniqueHash + 3) % conclusionPool.length];
+
+  const summaryText = `${intro} ${core} ${yearText} ${conclusion}`;
+  
   return {
     lifePath,
     lifePathText: lifePathInterpretations[lifePath] || lifePathInterpretations[1],
