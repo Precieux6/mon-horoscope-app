@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
   Sparkles, Heart, Briefcase, Wallet, Activity, Calendar, Search, 
-  Star, Award, CheckCircle2, Info, TrendingUp, Compass, Gift
+  Star, Award, CheckCircle2, Info, TrendingUp, Compass, Gift, ExternalLink
 } from 'lucide-react';
 
 // ============================================================================
@@ -291,12 +291,9 @@ const DAILY_TEXTS = {
 // ============================================================================
 
 const generateAutomatedHoroscope = (signId, dateStr) => {
-  // Trouver l'index exact du signe dans le tableau (de 0 à 11)
   const signIndex = ZODIAC_SIGNS.findIndex(s => s.id === signId);
   const safeIndex = signIndex !== -1 ? signIndex : 0;
 
-  // Créer un décalage basé sur la date pour que les textes changent chaque jour,
-  // tout en garantissant que les 12 signes ont des textes différents le même jour.
   let dateHash = 0;
   for (let i = 0; i < dateStr.length; i++) {
     dateHash = (dateHash << 5) - dateHash + dateStr.charCodeAt(i);
@@ -304,7 +301,6 @@ const generateAutomatedHoroscope = (signId, dateStr) => {
   }
   dateHash = Math.abs(dateHash);
 
-  // Index unique par domaine pour ce signe et ce jour précis
   const idxAmour = (safeIndex + dateHash) % 12;
   const idxTravail = (safeIndex + dateHash + 3) % 12;
   const idxArgent = (safeIndex + dateHash + 6) % 12;
@@ -365,6 +361,24 @@ const generateMonthlyTrends = (signId, yearMonthStr) => {
     sante: MONTHLY_TRENDS_DATABASE.sante[(safeIndex + hash + 3) % MONTHLY_TRENDS_DATABASE.sante.length],
   };
 };
+
+// ============================================================================
+// COMPOSANT DE PIED DE PAGE (SIGNATURE DÉVELOPPEUR)
+// ============================================================================
+
+const DeveloperFooter = () => (
+  <footer className="mt-8 mb-4 text-center">
+    <a
+      href="https://precieux6.github.io/mon-portfolio/#contact"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-purple-700 transition-colors duration-200 bg-white/60 hover:bg-white px-4 py-2 rounded-full border border-slate-200/80 shadow-2xs"
+    >
+      <span>Développé par Précieux Trésor TOSSOU</span>
+      <ExternalLink size={12} className="opacity-70" />
+    </a>
+  </footer>
+);
 
 // ============================================================================
 // COMPOSANT PRINCIPAL (RESPONSIVE & MOBILE-FIRST)
@@ -606,6 +620,8 @@ export default function App() {
 
             </div>
 
+            <DeveloperFooter />
+
           </div>
         )}
 
@@ -706,6 +722,8 @@ export default function App() {
               </div>
 
             </div>
+
+            <DeveloperFooter />
 
           </div>
         )}
@@ -836,6 +854,8 @@ export default function App() {
 
               </div>
             )}
+
+            <DeveloperFooter />
 
           </div>
         )}
