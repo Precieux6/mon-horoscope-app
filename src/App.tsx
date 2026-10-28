@@ -46,6 +46,59 @@ const getZodiacSignFromDate = (dateString) => {
   return ZODIAC_SIGNS[0];
 };
 
+const getHistoricalMilestones = (dateString) => {
+  if (!dateString) return [];
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return [];
+
+  const day = date.getUTCDate();
+  const month = date.getUTCMonth() + 1;
+  const year = date.getUTCFullYear();
+
+  let dateHash = (day * 31 + month * 123 + year) % 50;
+  dateHash = Math.abs(dateHash);
+
+  const historicalPools = [
+    {
+      type: "Événement mondial",
+      text: `L'année de votre naissance (${year}), le monde technologique et culturel a connu des bascules majeures avec l'accélération du numérique et des innovations mondiales.`
+    },
+    {
+      type: "Célébrité partagée",
+      text: `Vous partagez votre période de naissance avec des figures historiques et des artistes légendaires qui ont marqué leur époque par leur charisme.`
+    },
+    {
+      type: "Fait historique",
+      text: `À cette même période historique, d'importants traités internationaux et des avancées scientifiques majeures ont redéfini les frontières de notre société.`
+    },
+    {
+      type: "Tournant culturel",
+      text: `L'ambiance de cette année-là a profondément inspiré le cinéma, la littérature et les mouvements artistiques contestataires ou novateurs.`
+    },
+    {
+      type: "Synchronicité astrale",
+      text: `Sur le plan cosmique, cette date coïncide avec des configurations planétaires rares qui renforcent l'intuition et la détermination des natifs.`
+    },
+    {
+      type: "Découverte majeure",
+      text: `Le mois de votre naissance a souvent été associé dans l'histoire à des découvertes scientifiques audacieuses ouvrant la voie au futur.`
+    }
+  ];
+
+  const milestones = [];
+  for (let i = 0; i < 5; i++) {
+    const poolIndex = (dateHash + i * 7) % historicalPools.length;
+    const item = historicalPools[poolIndex];
+    milestones.push({
+      id: i + 1,
+      category: `${item.type} #${i + 1}`,
+      description: `${item.text} (Résonance pour le ${day}/${month}/${year})`
+    });
+  }
+
+  return milestones;
+};
+
 const getDetailedProfileForDate = (dateString) => {
   if (!dateString) return null;
   const date = new Date(dateString);
@@ -85,11 +138,13 @@ const getDetailedProfileForDate = (dateString) => {
     "Cycle de Pluton : Année de force intérieure profonde, de résilience et de métamorphose personnelle."
   ];
   const dominantPlanet = planetaryInfluences[yearHash % planetaryInfluences.length];
+  const historicalMilestones = getHistoricalMilestones(dateString);
 
   return {
     sign,
     birthYear: year,
     dominantPlanet,
+    historicalMilestones,
     qualities: rotatedQualities,
     flaws: baseProfile.flaws,
     anecdotes: baseProfile.anecdotes,
@@ -817,25 +872,26 @@ export default function App() {
             </div>
 
             {searchedProfile && (
-  <div className="bg-white rounded-2xl sm:rounded-3xl shadow-md border border-slate-200 p-4 sm:p-8 space-y-6 sm:space-y-8 animate-fadeIn">
-    
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 sm:p-6 bg-purple-50 rounded-2xl sm:rounded-3xl border border-purple-100 text-center sm:text-left">
-      <div className="flex items-center gap-4 flex-col sm:flex-row">
-        <span className="text-5xl sm:text-6xl">{searchedProfile.sign.symbol}</span>
-        <div>
-          <span className="text-[10px] sm:text-xs font-extrabold text-purple-700 uppercase">
-            Signe Calculé • Année {searchedProfile.birthYear}
-          </span>
-          <h3 className="text-2xl sm:text-3xl font-black text-slate-900">{searchedProfile.sign.name}</h3>
-          <p className="text-xs text-slate-500">{searchedProfile.sign.dates} • Élément {searchedProfile.sign.element}</p>
-        </div>
-      </div>
-      
-      <div className="bg-white p-3.5 rounded-2xl border border-purple-200 text-xs text-purple-900 max-w-xs shadow-2xs text-left">
-        <strong className="block text-purple-950 font-bold mb-1">🔑 Empreinte planétaire de l'année :</strong>
-        <p className="text-slate-600 text-[11px] leading-relaxed">{searchedProfile.dominantPlanet}</p>
-      </div>
-    </div>
+              <div className="bg-white rounded-2xl sm:rounded-3xl shadow-md border border-slate-200 p-4 sm:p-8 space-y-6 sm:space-y-8 animate-fadeIn">
+                
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 sm:p-6 bg-purple-50 rounded-2xl sm:rounded-3xl border border-purple-100 text-center sm:text-left">
+                  <div className="flex items-center gap-4 flex-col sm:flex-row">
+                    <span className="text-5xl sm:text-6xl">{searchedProfile.sign.symbol}</span>
+                    <div>
+                      <span className="text-[10px] sm:text-xs font-extrabold text-purple-700 uppercase">
+                        Signe Calculé • Année {searchedProfile.birthYear}
+                      </span>
+                      <h3 className="text-2xl sm:text-3xl font-black text-slate-900">{searchedProfile.sign.name}</h3>
+                      <p className="text-xs text-slate-500">{searchedProfile.sign.dates} • Élément {searchedProfile.sign.element}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-white p-3.5 rounded-2xl border border-purple-200 text-xs text-purple-900 max-w-xs shadow-2xs text-left">
+                    <strong className="block text-purple-950 font-bold mb-1">🔑 Empreinte planétaire de l'année :</strong>
+                    <p className="text-slate-600 text-[11px] leading-relaxed">{searchedProfile.dominantPlanet}</p>
+                  </div>
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                   <div className="bg-emerald-50/50 border border-emerald-100 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">
                     <h4 className="text-emerald-950 font-bold text-sm sm:text-base flex items-center gap-2">
@@ -895,6 +951,25 @@ export default function App() {
                         </li>
                       ))}
                     </ul>
+                  </div>
+                </div>
+
+                {/* SECTION : ÉCHOS HISTORIQUES & FAITS MARQUANTS DE L'ANNÉE */}
+                <div className="bg-gradient-to-br from-amber-50/60 to-purple-50/60 border border-amber-200/80 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-4 shadow-xs">
+                  <h4 className="text-slate-900 font-extrabold text-sm sm:text-base flex items-center gap-2">
+                    <Sparkles className="text-amber-600" size={18} /> Échos historiques & faits marquants de votre année ({searchedProfile.birthYear})
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {searchedProfile.historicalMilestones?.map((milestone) => (
+                      <div key={milestone.id} className="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-2xs space-y-1">
+                        <span className="text-[10px] font-extrabold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-full uppercase">
+                          {milestone.category}
+                        </span>
+                        <p className="text-xs sm:text-sm text-slate-700 font-medium leading-relaxed">
+                          {milestone.description}
+                        </p>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
