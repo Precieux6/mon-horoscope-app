@@ -46,63 +46,6 @@ const getZodiacSignFromDate = (dateString) => {
   return ZODIAC_SIGNS[0];
 };
 
-// ============================================================================
-// GÉNÉRATEUR DE FAITS HISTORIQUES ET REPÈRES ÉMOTIONNELS
-// ============================================================================
-
-const getHistoricalMilestones = (dateString) => {
-  if (!dateString) return [];
-  const date = new Date(dateString);
-  if (isNaN(date.getTime())) return [];
-
-  const day = date.getUTCDate();
-  const month = date.getUTCMonth() + 1;
-  const year = date.getUTCFullYear();
-
-  let dateHash = (day * 37 + month * 113 + year) % 100;
-  dateHash = Math.abs(dateHash);
-
-  const historicalPools = [
-    {
-      category: "Personnalité & Destin",
-      text: `L'année ${year}, de grandes figures artistiques, littéraires et politiques sont venues au monde, marquant durablement l'histoire contemporaine de leur empreinte.`
-    },
-    {
-      category: "Traité & Diplomatie",
-      text: `À cette période historique, des accords internationaux majeurs et des pactes de paix ont été ratifiés, redéfinissant la stabilité et les alliances mondiales.`
-    },
-    {
-      category: "Journée Internationale",
-      text: `Le mois de votre naissance résonne intensément avec des célébrations mondiales dédiées à la culture, à la liberté et aux grands progrès humanitaires.`
-    },
-    {
-      category: "Fait Insolite",
-      text: `Un événement inattendu et marquant s'est produit au cours de cette année-là, captivant l'attention des chroniques et marquant la mémoire collective.`
-    },
-    {
-      category: "Avancée Technologique",
-      text: `Le monde assistait alors à l'émergence d'inventions novatrices et de découvertes scientifiques qui allaient transformer à jamais le quotidien.`
-    },
-    {
-      category: "Tournant Culturel",
-      text: `La scène artistique internationale a vu naître des chefs-d'œuvre, des films cultes et des mouvements musicaux qui inspirent encore aujourd'hui.`
-    }
-  ];
-
-  const milestones = [];
-  for (let i = 0; i < 5; i++) {
-    const index = (dateHash + i * 17) % historicalPools.length;
-    const item = historicalPools[index];
-    milestones.push({
-      id: i + 1,
-      title: `${item.category} • Repère ${day}/${month}/${year}`,
-      description: item.text
-    });
-  }
-
-  return milestones;
-};
-
 const getDetailedProfileForDate = (dateString) => {
   if (!dateString) return null;
   const date = new Date(dateString);
@@ -142,13 +85,11 @@ const getDetailedProfileForDate = (dateString) => {
     "Cycle de Pluton : Année de force intérieure profonde, de résilience et de métamorphose personnelle."
   ];
   const dominantPlanet = planetaryInfluences[yearHash % planetaryInfluences.length];
-  const historicalMilestones = getHistoricalMilestones(dateString);
 
   return {
     sign,
     birthYear: year,
     dominantPlanet,
-    historicalMilestones,
     qualities: rotatedQualities,
     flaws: baseProfile.flaws,
     anecdotes: baseProfile.anecdotes,
@@ -321,7 +262,7 @@ const getProfileForSign = (sign) => {
 };
 
 // ============================================================================
-// BASES DE TEXTES QUOTIDIENS ÉLARGIES
+// BASES DE TEXTES QUOTIDIENS ÉLARGIES (12 TEXTES UNIQUES DE 3 À 4 PHRASES)
 // ============================================================================
 
 const DAILY_TEXTS = {
@@ -397,6 +338,10 @@ const DAILY_TEXTS = {
   ]
 };
 
+// ============================================================================
+// SELECTION GARANTIE 100% UNIQUE SANS COLLISION PAR INDEX DE SIGNE
+// ============================================================================
+
 const generateAutomatedHoroscope = (signId, dateStr) => {
   const signIndex = ZODIAC_SIGNS.findIndex(s => s.id === signId);
   const safeIndex = signIndex !== -1 ? signIndex : 0;
@@ -422,6 +367,10 @@ const generateAutomatedHoroscope = (signId, dateStr) => {
     conseil: DAILY_TEXTS.conseils[idxConseil]
   };
 };
+
+// ============================================================================
+// BASE DE TENDANCES MENSUELLES (TEXTES LONGS 6-10 PHRASES)
+// ============================================================================
 
 const MONTHLY_TRENDS_DATABASE = {
   amour: [
@@ -465,6 +414,10 @@ const generateMonthlyTrends = (signId, yearMonthStr) => {
   };
 };
 
+// ============================================================================
+// COMPOSANT DE PIED DE PAGE (SIGNATURE DÉVELOPPEUR)
+// ============================================================================
+
 const DeveloperFooter = () => (
   <footer className="mt-8 mb-4 text-center">
     <a
@@ -478,6 +431,10 @@ const DeveloperFooter = () => (
     </a>
   </footer>
 );
+
+// ============================================================================
+// COMPOSANT PRINCIPAL (RESPONSIVE & MOBILE-FIRST)
+// ============================================================================
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('horoscope');
@@ -860,26 +817,25 @@ export default function App() {
             </div>
 
             {searchedProfile && (
-              <div className="bg-white rounded-2xl sm:rounded-3xl shadow-md border border-slate-200 p-4 sm:p-8 space-y-6 sm:space-y-8 animate-fadeIn">
-                
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 sm:p-6 bg-purple-50 rounded-2xl sm:rounded-3xl border border-purple-100 text-center sm:text-left">
-                  <div className="flex items-center gap-4 flex-col sm:flex-row">
-                    <span className="text-5xl sm:text-6xl">{searchedProfile.sign.symbol}</span>
-                    <div>
-                      <span className="text-[10px] sm:text-xs font-extrabold text-purple-700 uppercase">
-                        Signe Calculé • Année {searchedProfile.birthYear}
-                      </span>
-                      <h3 className="text-2xl sm:text-3xl font-black text-slate-900">{searchedProfile.sign.name}</h3>
-                      <p className="text-xs text-slate-500">{searchedProfile.sign.dates} • Élément {searchedProfile.sign.element}</p>
-                    </div>
-                  </div>
-                  
-                  <div className="bg-white p-3.5 rounded-2xl border border-purple-200 text-xs text-purple-900 max-w-xs shadow-2xs text-left">
-                    <strong className="block text-purple-950 font-bold mb-1">🔑 Empreinte planétaire de l'année :</strong>
-                    <p className="text-slate-600 text-[11px] leading-relaxed">{searchedProfile.dominantPlanet}</p>
-                  </div>
-                </div>
-
+  <div className="bg-white rounded-2xl sm:rounded-3xl shadow-md border border-slate-200 p-4 sm:p-8 space-y-6 sm:space-y-8 animate-fadeIn">
+    
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 sm:p-6 bg-purple-50 rounded-2xl sm:rounded-3xl border border-purple-100 text-center sm:text-left">
+      <div className="flex items-center gap-4 flex-col sm:flex-row">
+        <span className="text-5xl sm:text-6xl">{searchedProfile.sign.symbol}</span>
+        <div>
+          <span className="text-[10px] sm:text-xs font-extrabold text-purple-700 uppercase">
+            Signe Calculé • Année {searchedProfile.birthYear}
+          </span>
+          <h3 className="text-2xl sm:text-3xl font-black text-slate-900">{searchedProfile.sign.name}</h3>
+          <p className="text-xs text-slate-500">{searchedProfile.sign.dates} • Élément {searchedProfile.sign.element}</p>
+        </div>
+      </div>
+      
+      <div className="bg-white p-3.5 rounded-2xl border border-purple-200 text-xs text-purple-900 max-w-xs shadow-2xs text-left">
+        <strong className="block text-purple-950 font-bold mb-1">🔑 Empreinte planétaire de l'année :</strong>
+        <p className="text-slate-600 text-[11px] leading-relaxed">{searchedProfile.dominantPlanet}</p>
+      </div>
+    </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                   <div className="bg-emerald-50/50 border border-emerald-100 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">
                     <h4 className="text-emerald-950 font-bold text-sm sm:text-base flex items-center gap-2">
@@ -939,25 +895,6 @@ export default function App() {
                         </li>
                       ))}
                     </ul>
-                  </div>
-                </div>
-
-                {/* NOUVELLE SECTION : Faits historiques & émotionnels de l'année */}
-                <div className="bg-gradient-to-br from-amber-50/60 to-purple-50/60 border border-amber-200/80 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-4 shadow-xs">
-                  <h4 className="text-slate-900 font-extrabold text-sm sm:text-base flex items-center gap-2">
-                    <Sparkles className="text-amber-600" size={18} /> Faits historiques & repères de l'année ({searchedProfile.birthYear})
-                  </h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {searchedProfile.historicalMilestones?.map((milestone) => (
-                      <div key={milestone.id} className="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-2xs space-y-1">
-                        <span className="text-[10px] font-extrabold text-purple-700 bg-purple-50 px-2.5 py-0.5 rounded-full uppercase inline-block">
-                          {milestone.title}
-                        </span>
-                        <p className="text-xs sm:text-sm text-slate-700 font-medium leading-relaxed">
-                          {milestone.description}
-                        </p>
-                      </div>
-                    ))}
                   </div>
                 </div>
 
