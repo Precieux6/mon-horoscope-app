@@ -592,7 +592,7 @@ export default function App() {
               }`}
             >
               <Sparkles size={15} className={activeTab === 'horoscope' ? 'text-purple-600' : ''} />
-              <span>Horoscope Sidéral</span>
+              <span>Horoscope journalier</span>
             </button>
 
             <button
@@ -635,7 +635,7 @@ export default function App() {
             
             <div className="text-center max-w-3xl mx-auto space-y-1 sm:space-y-2">
               <h2 className="text-xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                Horoscope Sidéral Quotidien
+                Mon horoscope au quotidien avec Maître Folly Valère TOSSOU
               </h2>
               <p className="text-slate-600 text-xs sm:text-sm max-w-xl mx-auto">
                 Prévisions basées sur les constellations réelles pour le {todayFormatted}.
@@ -764,7 +764,7 @@ export default function App() {
             
             <div className="text-center max-w-3xl mx-auto space-y-1 sm:space-y-2">
               <h2 className="text-xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                Tendances Mensuelles Sidérales
+                Tendances mensuelles avec Maître Folly Valère TOSSOU
               </h2>
               <p className="text-slate-600 text-xs sm:text-sm max-w-xl mx-auto">
                 Bilan global et approfondi pour le mois de <strong className="text-purple-800 capitalize">{monthFormatted}</strong>.
@@ -887,16 +887,16 @@ export default function App() {
           </div>
         )}
 
-        {/* ONGLET 3 : PROFILER SIDÉRAL & NUMÉROLOGIQUE */}
+        {/* ONGLET 3 : PROFILER ASTROLOGIQUE & NUMÉROLOGIQUE */}
         {activeTab === 'profiler' && (
           <div className="space-y-4 sm:space-y-8 animate-fadeIn">
             
             <div className="text-center max-w-3xl mx-auto space-y-1 sm:space-y-2">
               <h2 className="text-xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                Profilage Sidéral & Numérologique
+                Profilage astrologique & numérologique
               </h2>
               <p className="text-slate-600 text-xs sm:text-sm max-w-xl mx-auto">
-                Découvrez votre signe astronomique réel (sidéral) combiné à votre numérologie complète.
+                Découvrez votre signe astronomique réel combiné à votre numérologie complète.
               </p>
             </div>
 
@@ -947,7 +947,7 @@ export default function App() {
                     <span className="text-5xl sm:text-6xl">{searchedProfile.sign.symbol}</span>
                     <div>
                       <span className="text-[10px] sm:text-xs font-extrabold text-purple-700 uppercase">
-                        Signe Sidéral Calculé • Année {searchedProfile.birthYear}
+                        Signe astrologique déterminé • Année {searchedProfile.birthYear}
                       </span>
                       <h3 className="text-2xl sm:text-3xl font-black text-slate-900">{searchedProfile.sign.name} Sidéral</h3>
                       <p className="text-xs text-slate-500">{searchedProfile.sign.dates} • Élément {searchedProfile.sign.element}</p>
@@ -955,7 +955,7 @@ export default function App() {
                   </div>
                   
                   <div className="bg-white p-3.5 rounded-2xl border border-purple-200 text-xs text-purple-900 max-w-xs shadow-2xs text-left">
-                    <strong className="block text-purple-950 font-bold mb-1">🔑 Transit Sidéral :</strong>
+                    <strong className="block text-purple-950 font-bold mb-1">🔑 Transit :</strong>
                     <p className="text-slate-600 text-[11px] leading-relaxed">{searchedProfile.dominantPlanet}</p>
                   </div>
                 </div>
@@ -1073,7 +1073,7 @@ export default function App() {
                 {/* SYNTHÈSE GLOBALE */}
                 <div className="bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-950 text-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl shadow-xl space-y-3">
                   <h4 className="text-amber-300 font-black text-base sm:text-lg uppercase tracking-wider flex items-center gap-2">
-                    <Star size={20} className="text-amber-400 fill-amber-400" /> Synthèse Sidérale & Numérologique
+                    <Star size={20} className="text-amber-400 fill-amber-400" /> Synthèse astrologique & numérologique
                   </h4>
                   <p className="text-purple-100 text-xs sm:text-sm leading-relaxed text-justify font-medium">
                     {searchedProfile.numerology.summaryText}
