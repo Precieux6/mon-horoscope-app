@@ -982,7 +982,7 @@ export default function App() {
             
             <div className="text-center max-w-3xl mx-auto space-y-1 sm:space-y-2">
               <h2 className="text-xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                Profilage Astrologique & Numérologique Avancé
+                Profilage astrologique & numérologique
               </h2>
               <p className="text-slate-600 text-xs sm:text-sm max-w-xl mx-auto">
                 Saisissez votre date de naissance et votre nom complet pour débloquer votre bilan de vie complet.
@@ -1052,7 +1052,7 @@ export default function App() {
                 {/* SECTION NUMÉROLOGIE AVANCÉE */}
                 <div className="space-y-4">
                   <h4 className="text-slate-900 font-extrabold text-base sm:text-lg flex items-center gap-2 border-b pb-2">
-                    <BookOpen className="text-purple-700" size={20} /> Analyse Numérologique Complète
+                    <BookOpen className="text-purple-700" size={20} /> ANALYSE NUMÉROLOGIQUE COMPLÈTE
                   </h4>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1134,7 +1134,7 @@ export default function App() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                   <div className="bg-emerald-50/50 border border-emerald-100 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">
                     <h4 className="text-emerald-950 font-bold text-sm sm:text-base flex items-center gap-2">
-                      <Award className="text-emerald-600" size={18} /> Top 10 des qualités
+                      <Award className="text-emerald-600" size={18} /> Top 10 QUALITÉS
                     </h4>
                     <div className="flex flex-wrap gap-1.5 sm:gap-2">
                       {searchedProfile.qualities.map((item, idx) => (
@@ -1147,7 +1147,7 @@ export default function App() {
 
                   <div className="bg-amber-50/50 border border-amber-100 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">
                     <h4 className="text-amber-950 font-bold text-sm sm:text-base flex items-center gap-2">
-                      <Info className="text-amber-600" size={18} /> Top 10 des défauts
+                      <Info className="text-amber-600" size={18} /> Top 10 DÉFAUTS
                     </h4>
                     <div className="flex flex-wrap gap-1.5 sm:gap-2">
                       {searchedProfile.flaws.map((item, idx) => (
@@ -1163,7 +1163,7 @@ export default function App() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                   <div className="bg-purple-50/50 border border-purple-100 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">
                     <h4 className="text-purple-950 font-bold text-sm sm:text-base flex items-center gap-2">
-                      <Gift className="text-purple-600" size={18} /> 5 talents cachés
+                      <Gift className="text-purple-600" size={18} /> 5 TALENTS CACHÉS
                     </h4>
                     <ul className="space-y-2 text-xs sm:text-sm text-slate-700">
                       {searchedProfile.talents.map((talent, idx) => (
@@ -1179,7 +1179,7 @@ export default function App() {
 
                   <div className="bg-indigo-50/50 border border-indigo-100 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">
                     <h4 className="text-indigo-950 font-bold text-sm sm:text-base flex items-center gap-2">
-                      <Compass className="text-indigo-600" size={18} /> 5 anecdotes particulières
+                      <Compass className="text-indigo-600" size={18} /> 5 ANECDOTES PARTICULIÈRES
                     </h4>
                     <ul className="space-y-2 text-xs sm:text-sm text-slate-700">
                       {searchedProfile.anecdotes.map((anecdote, idx) => (
