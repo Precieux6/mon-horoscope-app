@@ -46,6 +46,10 @@ const getZodiacSignFromDate = (dateString) => {
   return ZODIAC_SIGNS[0];
 };
 
+// ============================================================================
+// GÉNÉRATEUR DE FAITS HISTORIQUES ET REPÈRES ÉMOTIONNELS
+// ============================================================================
+
 const getHistoricalMilestones = (dateString) => {
   if (!dateString) return [];
   const date = new Date(dateString);
@@ -55,44 +59,44 @@ const getHistoricalMilestones = (dateString) => {
   const month = date.getUTCMonth() + 1;
   const year = date.getUTCFullYear();
 
-  let dateHash = (day * 31 + month * 123 + year) % 50;
+  let dateHash = (day * 37 + month * 113 + year) % 100;
   dateHash = Math.abs(dateHash);
 
   const historicalPools = [
     {
-      type: "Événement mondial",
-      text: `L'année de votre naissance (${year}), le monde technologique et culturel a connu des bascules majeures avec l'accélération du numérique et des innovations mondiales.`
+      category: "Personnalité & Destin",
+      text: `L'année ${year}, de grandes figures artistiques, littéraires et politiques sont venues au monde, marquant durablement l'histoire contemporaine de leur empreinte.`
     },
     {
-      type: "Célébrité partagée",
-      text: `Vous partagez votre période de naissance avec des figures historiques et des artistes légendaires qui ont marqué leur époque par leur charisme.`
+      category: "Traité & Diplomatie",
+      text: `À cette période historique, des accords internationaux majeurs et des pactes de paix ont été ratifiés, redéfinissant la stabilité et les alliances mondiales.`
     },
     {
-      type: "Fait historique",
-      text: `À cette même période historique, d'importants traités internationaux et des avancées scientifiques majeures ont redéfini les frontières de notre société.`
+      category: "Journée Internationale",
+      text: `Le mois de votre naissance résonne intensément avec des célébrations mondiales dédiées à la culture, à la liberté et aux grands progrès humanitaires.`
     },
     {
-      type: "Tournant culturel",
-      text: `L'ambiance de cette année-là a profondément inspiré le cinéma, la littérature et les mouvements artistiques contestataires ou novateurs.`
+      category: "Fait Insolite",
+      text: `Un événement inattendu et marquant s'est produit au cours de cette année-là, captivant l'attention des chroniques et marquant la mémoire collective.`
     },
     {
-      type: "Synchronicité astrale",
-      text: `Sur le plan cosmique, cette date coïncide avec des configurations planétaires rares qui renforcent l'intuition et la détermination des natifs.`
+      category: "Avancée Technologique",
+      text: `Le monde assistait alors à l'émergence d'inventions novatrices et de découvertes scientifiques qui allaient transformer à jamais le quotidien.`
     },
     {
-      type: "Découverte majeure",
-      text: `Le mois de votre naissance a souvent été associé dans l'histoire à des découvertes scientifiques audacieuses ouvrant la voie au futur.`
+      category: "Tournant Culturel",
+      text: `La scène artistique internationale a vu naître des chefs-d'œuvre, des films cultes et des mouvements musicaux qui inspirent encore aujourd'hui.`
     }
   ];
 
   const milestones = [];
   for (let i = 0; i < 5; i++) {
-    const poolIndex = (dateHash + i * 7) % historicalPools.length;
-    const item = historicalPools[poolIndex];
+    const index = (dateHash + i * 17) % historicalPools.length;
+    const item = historicalPools[index];
     milestones.push({
       id: i + 1,
-      category: `${item.type} #${i + 1}`,
-      description: `${item.text} (Résonance pour le ${day}/${month}/${year})`
+      title: `${item.category} • Repère ${day}/${month}/${year}`,
+      description: item.text
     });
   }
 
@@ -317,7 +321,7 @@ const getProfileForSign = (sign) => {
 };
 
 // ============================================================================
-// BASES DE TEXTES QUOTIDIENS ÉLARGIES (12 TEXTES UNIQUES DE 3 À 4 PHRASES)
+// BASES DE TEXTES QUOTIDIENS ÉLARGIES
 // ============================================================================
 
 const DAILY_TEXTS = {
@@ -393,10 +397,6 @@ const DAILY_TEXTS = {
   ]
 };
 
-// ============================================================================
-// SELECTION GARANTIE 100% UNIQUE SANS COLLISION PAR INDEX DE SIGNE
-// ============================================================================
-
 const generateAutomatedHoroscope = (signId, dateStr) => {
   const signIndex = ZODIAC_SIGNS.findIndex(s => s.id === signId);
   const safeIndex = signIndex !== -1 ? signIndex : 0;
@@ -422,10 +422,6 @@ const generateAutomatedHoroscope = (signId, dateStr) => {
     conseil: DAILY_TEXTS.conseils[idxConseil]
   };
 };
-
-// ============================================================================
-// BASE DE TENDANCES MENSUELLES (TEXTES LONGS 6-10 PHRASES)
-// ============================================================================
 
 const MONTHLY_TRENDS_DATABASE = {
   amour: [
@@ -469,10 +465,6 @@ const generateMonthlyTrends = (signId, yearMonthStr) => {
   };
 };
 
-// ============================================================================
-// COMPOSANT DE PIED DE PAGE (SIGNATURE DÉVELOPPEUR)
-// ============================================================================
-
 const DeveloperFooter = () => (
   <footer className="mt-8 mb-4 text-center">
     <a
@@ -486,10 +478,6 @@ const DeveloperFooter = () => (
     </a>
   </footer>
 );
-
-// ============================================================================
-// COMPOSANT PRINCIPAL (RESPONSIVE & MOBILE-FIRST)
-// ============================================================================
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('horoscope');
@@ -954,16 +942,16 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* SECTION : ÉCHOS HISTORIQUES & FAITS MARQUANTS DE L'ANNÉE */}
+                {/* NOUVELLE SECTION : Faits historiques & émotionnels de l'année */}
                 <div className="bg-gradient-to-br from-amber-50/60 to-purple-50/60 border border-amber-200/80 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-4 shadow-xs">
                   <h4 className="text-slate-900 font-extrabold text-sm sm:text-base flex items-center gap-2">
-                    <Sparkles className="text-amber-600" size={18} /> Échos historiques & faits marquants de votre année ({searchedProfile.birthYear})
+                    <Sparkles className="text-amber-600" size={18} /> Faits historiques & repères de l'année ({searchedProfile.birthYear})
                   </h4>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {searchedProfile.historicalMilestones?.map((milestone) => (
                       <div key={milestone.id} className="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-2xs space-y-1">
-                        <span className="text-[10px] font-extrabold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-full uppercase">
-                          {milestone.category}
+                        <span className="text-[10px] font-extrabold text-purple-700 bg-purple-50 px-2.5 py-0.5 rounded-full uppercase inline-block">
+                          {milestone.title}
                         </span>
                         <p className="text-xs sm:text-sm text-slate-700 font-medium leading-relaxed">
                           {milestone.description}
