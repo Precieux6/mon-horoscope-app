@@ -287,34 +287,36 @@ const DAILY_TEXTS = {
 };
 
 // ============================================================================
-// HACHAGE MATHÉMATIQUE INDÉPENDANT PAR DOMAINE (OPTION B)
+// SELECTION GARANTIE 100% UNIQUE SANS COLLISION PAR INDEX DE SIGNE
 // ============================================================================
 
-const getUniqueDailyIndex = (signId, dateStr, domainOffset) => {
-  let hash = 0;
-  const str = signId + "_" + dateStr + "_dom_" + domainOffset;
-  for (let i = 0; i < str.length; i++) {
-    hash = (hash << 5) - hash + str.charCodeAt(i);
-    hash |= 0;
-  }
-  return Math.abs(hash);
-};
-
 const generateAutomatedHoroscope = (signId, dateStr) => {
-  const hAmour = getUniqueDailyIndex(signId, dateStr, 1);
-  const hTravail = getUniqueDailyIndex(signId, dateStr, 2);
-  const hArgent = getUniqueDailyIndex(signId, dateStr, 3);
-  const hSante = getUniqueDailyIndex(signId, dateStr, 4);
-  const hConseil = getUniqueDailyIndex(signId, dateStr, 5);
+  // Trouver l'index exact du signe dans le tableau (de 0 à 11)
+  const signIndex = ZODIAC_SIGNS.findIndex(s => s.id === signId);
+  const safeIndex = signIndex !== -1 ? signIndex : 0;
 
-  const len = 12; // 12 textes uniques disponibles dans chaque tableau
+  // Créer un décalage basé sur la date pour que les textes changent chaque jour,
+  // tout en garantissant que les 12 signes ont des textes différents le même jour.
+  let dateHash = 0;
+  for (let i = 0; i < dateStr.length; i++) {
+    dateHash = (dateHash << 5) - dateHash + dateStr.charCodeAt(i);
+    dateHash |= 0;
+  }
+  dateHash = Math.abs(dateHash);
+
+  // Index unique par domaine pour ce signe et ce jour précis
+  const idxAmour = (safeIndex + dateHash) % 12;
+  const idxTravail = (safeIndex + dateHash + 3) % 12;
+  const idxArgent = (safeIndex + dateHash + 6) % 12;
+  const idxSante = (safeIndex + dateHash + 9) % 12;
+  const idxConseil = (safeIndex + dateHash + 2) % 12;
 
   return {
-    amour: { text: DAILY_TEXTS.amour[hAmour % len], score: 70 + (hAmour % 28) },
-    travail: { text: DAILY_TEXTS.travail[hTravail % len], score: 68 + (hTravail % 30) },
-    argent: { text: DAILY_TEXTS.argent[hArgent % len], score: 72 + (hArgent % 26) },
-    sante: { text: DAILY_TEXTS.sante[hSante % len], score: 75 + (hSante % 23) },
-    conseil: DAILY_TEXTS.conseils[hConseil % len]
+    amour: { text: DAILY_TEXTS.amour[idxAmour], score: 70 + (idxAmour * 2) % 28 },
+    travail: { text: DAILY_TEXTS.travail[idxTravail], score: 68 + (idxTravail * 2) % 30 },
+    argent: { text: DAILY_TEXTS.argent[idxArgent], score: 72 + (idxArgent * 2) % 26 },
+    sante: { text: DAILY_TEXTS.sante[idxSante], score: 75 + (idxSante * 2) % 23 },
+    conseil: DAILY_TEXTS.conseils[idxConseil]
   };
 };
 
@@ -341,24 +343,26 @@ const MONTHLY_TRENDS_DATABASE = {
   sante: [
     "Votre niveau de vitalité et votre énergie physique sont en phase de transition importante ce mois-ci. Par conséquent, veillez à accorder une importance capitale à la qualité de votre sommeil et à une récupération régulière. Le surmenage professionnel ou l'accumulation de petits stress du quotidien pourraient se faire ressentir sur votre système immunitaire. Intégrez des temps de pause, de silence et de déconnexion numérique absolue dans votre routine quotidienne. Une activité physique douce, comme le yoga, le Pilates ou la natation, vous aidera à relâcher les tensions musculaires accumulées. Soyez également très attentif à votre alimentation en privilégiant des produits frais, de saison et vivants. Votre corps réclame de la bienveillance et un retour aux sources salutaire. En respectant vos limites biologiques, vous traverserez ce mois en conservant un équilibre intérieur remarquable et une sérénité retrouvée.",
     "Un magnifique regain d'énergie globale vous pousse à adopter de nouvelles routines de bien-être beaucoup plus saines et durables. C'est le moment idéal pour entreprendre une détox, reprendre en main votre condition physique ou démarrer un sport stimulant. Votre métabolisme répondra merveilleusement bien aux efforts modérés et réguliers que vous lui proposerez. Sur le plan psychologique, votre optimisme naturel revient en force, chassant les ruminations mentales et l'anxiété. Profitez de ce dynamisme pour passer du temps au grand air, vous oxygéner en forêt ou près de l'eau. Votre clarté d'esprit sera redoutable pour prendre de bonnes résolutions concernant votre hygiène de vie. Veillez toutefois à ne pas dilapider votre capital énergétique dans des excès d'enthousiasme soudains. La clé réside dans la constance, la régularité et l'écoute fine des signaux de votre organisme.",
-    "L'équilibre mental, la paix intérieure et la gestion émotionnelle se trouvent au tout premier plan de vos prioritées ce mois-ci. Prenez activement du temps pour vous ressourcer loin de l'agitation urbaine, du bruit et du stress relationnel. La pratique de la méditation, de la cohérence cardiaque ou de la lecture au calme apaisera durablement votre système nerveux. Votre corps physique a besoin de douceur, de massages, de bains chauds et d'un repos bien mérité. Si des petits bobos chroniques refaisaient surface, prenez-les en charge avec sérieux sans les négliger. Cultivez la gratitude au quotidien et entourez-vous exclusivement de personnes bienveillantes qui élèvent votre taux vibratoire. Ce mois est une véritable cure de jouvence spirituelle et corporelle si vous acceptez de ralentir la cadence. Votre force intérieure en ressortira magnifiquement régénérée et consolidée pour l'avenir."
+    "L'équilibre mental, la paix intérieure et la gestion émotionnelle se trouvent au tout premier plan de vos priorités ce mois-ci. Prenez activement du temps pour vous ressourcer loin de l'agitation urbaine, du bruit et du stress relationnel. La pratique de la méditation, de la cohérence cardiaque ou de la lecture au calme apaisera durablement votre système nerveux. Votre corps physique a besoin de douceur, de massages, de bains chauds et d'un repos bien mérité. Si des petits bobos chroniques refaisaient surface, prenez-les en charge avec sérieux sans les négliger. Cultivez la gratitude au quotidien et entourez-vous exclusivement de personnes bienveillantes qui élèvent votre taux vibratoire. Ce mois est une véritable cure de jouvence spirituelle et corporelle si vous acceptez de ralentir la cadence. Votre force intérieure en ressortira magnifiquement régénérée et consolidée pour l'avenir."
   ]
 };
 
 const generateMonthlyTrends = (signId, yearMonthStr) => {
+  const signIndex = ZODIAC_SIGNS.findIndex(s => s.id === signId);
+  const safeIndex = signIndex !== -1 ? signIndex : 0;
+
   let hash = 0;
-  const str = signId + "_" + yearMonthStr;
-  for (let i = 0; i < str.length; i++) {
-    hash = (hash << 5) - hash + str.charCodeAt(i);
+  for (let i = 0; i < yearMonthStr.length; i++) {
+    hash = (hash << 5) - hash + yearMonthStr.charCodeAt(i);
     hash |= 0;
   }
   hash = Math.abs(hash);
 
   return {
-    amour: MONTHLY_TRENDS_DATABASE.amour[hash % MONTHLY_TRENDS_DATABASE.amour.length],
-    travail: MONTHLY_TRENDS_DATABASE.travail[(hash >> 1) % MONTHLY_TRENDS_DATABASE.travail.length],
-    argent: MONTHLY_TRENDS_DATABASE.argent[(hash >> 2) % MONTHLY_TRENDS_DATABASE.argent.length],
-    sante: MONTHLY_TRENDS_DATABASE.sante[(hash >> 3) % MONTHLY_TRENDS_DATABASE.sante.length],
+    amour: MONTHLY_TRENDS_DATABASE.amour[(safeIndex + hash) % MONTHLY_TRENDS_DATABASE.amour.length],
+    travail: MONTHLY_TRENDS_DATABASE.travail[(safeIndex + hash + 1) % MONTHLY_TRENDS_DATABASE.travail.length],
+    argent: MONTHLY_TRENDS_DATABASE.argent[(safeIndex + hash + 2) % MONTHLY_TRENDS_DATABASE.argent.length],
+    sante: MONTHLY_TRENDS_DATABASE.sante[(safeIndex + hash + 3) % MONTHLY_TRENDS_DATABASE.sante.length],
   };
 };
 
@@ -485,7 +489,7 @@ export default function App() {
             
             <div className="text-center max-w-3xl mx-auto space-y-1 sm:space-y-2">
               <h2 className="text-xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                Mon horoscope au quotidien
+                Horoscope Astral Quotidien
               </h2>
               <p className="text-slate-600 text-xs sm:text-sm max-w-xl mx-auto">
                 Analyse détaillée pour le {todayFormatted}.
@@ -546,7 +550,7 @@ export default function App() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2.5">
                         <div className="p-2 bg-rose-100 text-rose-700 rounded-xl"><Heart size={18} /></div>
-                        <h4 className="text-sm sm:text-base font-bold text-rose-950">Amour & relations</h4>
+                        <h4 className="text-sm sm:text-base font-bold text-rose-950">Amour & Relations</h4>
                       </div>
                       <span className="text-xs font-extrabold bg-rose-100 text-rose-900 px-2.5 py-0.5 rounded-full">{currentHoroscope.amour.score}%</span>
                     </div>
@@ -557,7 +561,7 @@ export default function App() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2.5">
                         <div className="p-2 bg-sky-100 text-sky-700 rounded-xl"><Briefcase size={18} /></div>
-                        <h4 className="text-sm sm:text-base font-bold text-sky-950">Travail & carrière</h4>
+                        <h4 className="text-sm sm:text-base font-bold text-sky-950">Travail & Carrière</h4>
                       </div>
                       <span className="text-xs font-extrabold bg-sky-100 text-sky-900 px-2.5 py-0.5 rounded-full">{currentHoroscope.travail.score}%</span>
                     </div>
@@ -568,7 +572,7 @@ export default function App() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2.5">
                         <div className="p-2 bg-emerald-100 text-emerald-700 rounded-xl"><Wallet size={18} /></div>
-                        <h4 className="text-sm sm:text-base font-bold text-emerald-950">Argent & finances</h4>
+                        <h4 className="text-sm sm:text-base font-bold text-emerald-950">Argent & Finances</h4>
                       </div>
                       <span className="text-xs font-extrabold bg-emerald-100 text-emerald-900 px-2.5 py-0.5 rounded-full">{currentHoroscope.argent.score}%</span>
                     </div>
@@ -579,7 +583,7 @@ export default function App() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2.5">
                         <div className="p-2 bg-amber-100 text-amber-800 rounded-xl"><Activity size={18} /></div>
-                        <h4 className="text-sm sm:text-base font-bold text-amber-950">Santé & vitalité</h4>
+                        <h4 className="text-sm sm:text-base font-bold text-amber-950">Santé & Vitalité</h4>
                       </div>
                       <span className="text-xs font-extrabold bg-amber-100 text-amber-900 px-2.5 py-0.5 rounded-full">{currentHoroscope.sante.score}%</span>
                     </div>
@@ -611,7 +615,7 @@ export default function App() {
             
             <div className="text-center max-w-3xl mx-auto space-y-1 sm:space-y-2">
               <h2 className="text-xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                Tendances mensuelles détaillées
+                Tendances Mensuelles Détaillées
               </h2>
               <p className="text-slate-600 text-xs sm:text-sm max-w-xl mx-auto">
                 Bilan global et approfondi pour le mois de <strong className="text-purple-800 capitalize">{monthFormatted}</strong>.
@@ -670,7 +674,7 @@ export default function App() {
                 <div className="bg-rose-50/40 border border-rose-100 p-5 sm:p-7 rounded-2xl sm:rounded-3xl space-y-3">
                   <div className="flex items-center gap-3">
                     <div className="p-2.5 bg-rose-100 text-rose-700 rounded-xl"><Heart size={20} /></div>
-                    <h4 className="text-base sm:text-lg font-bold text-rose-950">Amour & relations : tendances du mois</h4>
+                    <h4 className="text-base sm:text-lg font-bold text-rose-950">Amour & Relations - Tendances du Mois</h4>
                   </div>
                   <p className="text-slate-700 text-xs sm:text-sm leading-relaxed text-justify">{currentMonthlyTrends.amour}</p>
                 </div>
@@ -678,7 +682,7 @@ export default function App() {
                 <div className="bg-sky-50/40 border border-sky-100 p-5 sm:p-7 rounded-2xl sm:rounded-3xl space-y-3">
                   <div className="flex items-center gap-3">
                     <div className="p-2.5 bg-sky-100 text-sky-700 rounded-xl"><Briefcase size={20} /></div>
-                    <h4 className="text-base sm:text-lg font-bold text-sky-950">Travail & carrière : tendances du mois</h4>
+                    <h4 className="text-base sm:text-lg font-bold text-sky-950">Travail & Carrière - Tendances du Mois</h4>
                   </div>
                   <p className="text-slate-700 text-xs sm:text-sm leading-relaxed text-justify">{currentMonthlyTrends.travail}</p>
                 </div>
@@ -686,7 +690,7 @@ export default function App() {
                 <div className="bg-emerald-50/40 border border-emerald-100 p-5 sm:p-7 rounded-2xl sm:rounded-3xl space-y-3">
                   <div className="flex items-center gap-3">
                     <div className="p-2.5 bg-emerald-100 text-emerald-700 rounded-xl"><Wallet size={20} /></div>
-                    <h4 className="text-base sm:text-lg font-bold text-emerald-950">Argent & finances : tendances du mois</h4>
+                    <h4 className="text-base sm:text-lg font-bold text-emerald-950">Argent & Finances - Tendances du Mois</h4>
                   </div>
                   <p className="text-slate-700 text-xs sm:text-sm leading-relaxed text-justify">{currentMonthlyTrends.argent}</p>
                 </div>
@@ -694,7 +698,7 @@ export default function App() {
                 <div className="bg-amber-50/40 border border-amber-100 p-5 sm:p-7 rounded-2xl sm:rounded-3xl space-y-3">
                   <div className="flex items-center gap-3">
                     <div className="p-2.5 bg-amber-100 text-amber-800 rounded-xl"><Activity size={20} /></div>
-                    <h4 className="text-base sm:text-lg font-bold text-amber-950">Santé & vitalité : tendances du mois</h4>
+                    <h4 className="text-base sm:text-lg font-bold text-amber-950">Santé & Vitalité - Tendances du Mois</h4>
                   </div>
                   <p className="text-slate-700 text-xs sm:text-sm leading-relaxed text-justify">{currentMonthlyTrends.sante}</p>
                 </div>
@@ -758,7 +762,7 @@ export default function App() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                   <div className="bg-emerald-50/50 border border-emerald-100 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">
                     <h4 className="text-emerald-950 font-bold text-sm sm:text-base flex items-center gap-2">
-                      <Award className="text-emerald-600" size={18} /> Top 10 des qualités
+                      <Award className="text-emerald-600" size={18} /> Top 10 des Qualités
                     </h4>
                     <div className="flex flex-wrap gap-1.5 sm:gap-2">
                       {searchedProfile.qualities.map((item, idx) => (
@@ -771,7 +775,7 @@ export default function App() {
 
                   <div className="bg-amber-50/50 border border-amber-100 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">
                     <h4 className="text-amber-950 font-bold text-sm sm:text-base flex items-center gap-2">
-                      <Info className="text-amber-600" size={18} /> Top 10 des défauts
+                      <Info className="text-amber-600" size={18} /> Top 10 des Défauts
                     </h4>
                     <div className="flex flex-wrap gap-1.5 sm:gap-2">
                       {searchedProfile.flaws.map((item, idx) => (
@@ -786,7 +790,7 @@ export default function App() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                   <div className="bg-purple-50/50 border border-purple-100 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">
                     <h4 className="text-purple-950 font-bold text-sm sm:text-base flex items-center gap-2">
-                      <Gift className="text-purple-600" size={18} /> 5 talents cachés
+                      <Gift className="text-purple-600" size={18} /> 5 Talents Cachés
                     </h4>
                     <ul className="space-y-2 text-xs sm:text-sm text-slate-700">
                       {searchedProfile.talents.map((talent, idx) => (
@@ -802,7 +806,7 @@ export default function App() {
 
                   <div className="bg-indigo-50/50 border border-indigo-100 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">
                     <h4 className="text-indigo-950 font-bold text-sm sm:text-base flex items-center gap-2">
-                      <Compass className="text-indigo-600" size={18} /> 5 anecdotes particulières
+                      <Compass className="text-indigo-600" size={18} /> 5 Anecdotes Particulières
                     </h4>
                     <ul className="space-y-2 text-xs sm:text-sm text-slate-700">
                       {searchedProfile.anecdotes.map((anecdote, idx) => (
@@ -819,7 +823,7 @@ export default function App() {
 
                 <div className="bg-slate-50 border border-slate-200 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">
                   <h4 className="text-slate-900 font-bold text-sm sm:text-base flex items-center gap-2">
-                    <Star size={18} className="text-amber-500 fill-amber-500" /> Domaines d'excellence
+                    <Star size={18} className="text-amber-500 fill-amber-500" /> Domaines d'Excellence
                   </h4>
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
                     {searchedProfile.excellenceDomains.map((domain, idx) => (
