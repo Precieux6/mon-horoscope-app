@@ -1,0 +1,100 @@
+import type { Axis } from './axes';
+
+/**
+ * Table des « Calculs cabalistiques » (ouvrage numérisé pp. 185-191).
+ * - `trad`  : signification traditionnelle, transcrite du livre (null = « Nul » : on décompose).
+ * - `hide`  : true = la formulation d'époque est trop brutale pour être affichée telle quelle ; on affiche alors `display`,
+ *            des synonymes d'aujourd'hui qui gardent la même gravité (le sens doit rester compris), à côté de la lecture `modern`.
+ * - `modern`: lecture contemporaine, constructive et pratique (rédaction ASTRAEA).
+ * Confirmé par l'utilisateur : 21 (Trinité pleine et parfaite), 22 (Création, mystère, sagesse), 23 (Fléau, vengeance divine), 24 (Catéchumène), 900 (Guerre, combat).
+ * ⚠ Reste à vérifier sur l'original : 9 (« misères » supposé) et la case « 900 » du tableau des LETTRES (page 186, illisible).
+ */
+export type Tone = '+' | '=' | '!';
+export interface CabalEntry { n: number; trad: string | null; axes: [Axis] | [Axis, Axis]; tone: Tone; hide?: boolean; modern: string; /** formulation affichée : `trad` telle quelle, ou ses synonymes actuels si `hide` */ display: string | null }
+
+const E = (n: number, trad: string | null, axes: [Axis] | [Axis, Axis], tone: Tone, modern: string, hide = false, display: string | null = trad): CabalEntry => ({ n, trad, axes, tone, modern, hide, display });
+
+export const CABAL_TABLE: CabalEntry[] = [
+  E(1, 'Passion, ambition, désir', ['carriere', 'relations'], '+', "Un moteur d'ambition : vous avancez dès qu'un désir clair vous mobilise."),
+  E(2, 'Destruction, mort, catastrophe', ['sens', 'carriere'], '!', "Un nombre de fin et de bouleversement : ce qui est épuisé s'effondre, mieux vaut le clore volontairement et reconstruire sur du solide.", true, "Rupture totale, fin définitive d'un cycle, bouleversement majeur"),
+  E(3, 'Religion, destin, âme, charme', ['sens', 'relations'], '+', "Une présence qui touche : vous donnez du sens et du charme à ce que vous entreprenez."),
+  E(4, 'Solidarité, sagesse, puissance', ['carriere', 'relations'], '+', "Une force de groupe : vous êtes à votre meilleur quand vous fédérez avec sagesse."),
+  E(5, 'Astre, bonheur, grâce, mariage', ['relations', 'sens'], '+', "Une étoile relationnelle : l'harmonie des liens est votre meilleure source de réussite."),
+  E(6, 'Perfection, rédemption, travail', ['carriere', 'sante'], '=', "Le travail bien fait vous répare et vous élève, à condition de ne pas viser l'impossible."),
+  E(7, 'Cours de la vie, repos, liberté, béatitude, divinité, efficacité, vierge, Minerve', ['sens', 'sante'], '+', "Un équilibre entre efficacité et repos : respecter votre rythme multiplie vos résultats."),
+  E(8, 'Justice, plénitude, propreté, conversation', ['relations', 'carriere'], '+', "Le sens de l'équité et du dialogue : vous réglez les différends par la parole."),
+  E(9, 'Imperfection, diminution, douleurs, peines, misères, attentat', ['sante', 'sens'], '!', "Un nombre de fragilité : des douleurs et des peines sont possibles, acceptez vos limites et soignez-vous plutôt que de forcer.", true, "Imperfection, affaiblissement, douleurs, peines, grande détresse, agression"),
+  E(10, "Accomplissement, raison, union de l'âme au corps, bonheur futur", ['sante', 'sens'], '+', "Un nombre d'accomplissement : accord entre vos idées et vos actes, bonheur construit dans la durée."),
+  E(11, 'Défauts, pénitence, discorde, prévarication', ['relations'], '!', "Un point de vigilance : vos écarts et les discordes qu'ils créent sont à corriger vite, avant qu'ils ne s'enracinent.", true, "Défauts, expiation, discorde, manquement grave au devoir"),
+  E(12, 'Ville, divinité, bon présage', ['relations', 'carriere'], '+', "Un bon présage d'ancrage : vous prospérez dans un cadre collectif stable."),
+  E(13, 'Impiété', ['sens'], '!', "Un esprit qui rejette les dogmes : à assumer avec respect, car il peut heurter votre entourage.", true, "Irrespect du sacré, rejet des croyances établies"),
+  E(14, 'Sacrifice, purification', ['sante', 'sens'], '!', "Un cycle d'allègement : renoncer à l'inutile vous purifie et vous libère."),
+  E(15, 'Piété, culte contemplatif', ['sens'], '+', "Une vie intérieure riche : méditation, prière ou silence recharge votre énergie."),
+  E(16, 'Bonheur, volupté, amour', ['relations', 'sante'], '+', "Une sensibilité aux plaisirs et à l'amour : cultivez la joie sans excès."),
+  E(17, 'Oubli, malheur', ['sens', 'sante'], '!', "Un risque d'oubli et de mauvaise passe : notez, planifiez et entourez-vous pour ne rien laisser filer.", true, "Oubli, infortune, mauvaise passe"),
+  E(18, 'Endurcissement, malheur', ['relations'], '!', "Un risque de fermeture du cœur sous l'effet des épreuves : gardez-vous de devenir dur envers vous-même et envers les autres.", true, "Endurcissement, infortune"),
+  E(19, null, ['sens'], '=', ''),
+  E(20, 'Austérité, tristesse', ['sante', 'sens'], '!', "Une tendance à la rigueur ou à la mélancolie : ménagez-vous des plaisirs simples."),
+  E(21, 'Trinité pleine et parfaite', ['sens', 'carriere'], '+', "Un nombre de plénitude : corps, esprit et action s'alignent quand vous êtes cohérent."),
+  E(22, 'Création, mystère, sagesse', ['carriere', 'sens'], '+', "Un fort potentiel créateur : vous donnez forme à des idées profondes."),
+  E(23, 'Fléau, vengeance divine', ['relations'], '!', "Une alerte forte sur les conflits : la rancune et la colère se retournent contre vous si vous les laissez décider.", true, "Fléau, châtiment, rétribution inévitable"),
+  E(24, 'Catéchumène', ['sens'], '=', "Un éternel apprenti : votre progression passe par l'étude et l'humilité."),
+  E(25, 'Intelligence, naissance', ['carriere', 'sens'], '+', "Intelligence vive et goût des commencements : vous lancez de nouveaux projets avec lucidité."),
+  E(26, 'Sacré, travaux utiles', ['carriere', 'sens'], '+', "Vous donnez du sens à un travail utile : l'engagement au service des autres vous réussit."),
+  E(27, 'Fermeté, courage', ['carriere', 'sante'], '+', "Fermeté et courage : vous tenez bon dans l'adversité."),
+  E(28, 'Faveurs amoureuses', ['relations'], '+', "Un charme relationnel : les liens affectifs vous sont favorables."),
+  E(29, null, ['sens'], '=', ''),
+  E(30, 'Noces, célébrité', ['relations', 'carriere'], '+', "Union et reconnaissance : un engagement réussi vous met en lumière."),
+  E(31, 'Amour de la gloire, vertu', ['carriere', 'sens'], '=', "Désir de reconnaissance guidé par la vertu : visez la réputation durable plutôt que l'éclat."),
+  E(32, 'Hymen, chasteté', ['relations'], '=', "Engagement et retenue : vous vous liez avec sérieux et fidélité."),
+  E(33, 'Pureté, enfantement', ['sens', 'relations'], '+', "Pureté d'intention et fécondité : ce que vous démarrez avec sincérité porte du fruit."),
+  E(34, "Souffrances, peines d'esprit", ['sante', 'sens'], '!', "Une fragilité mentale possible : déposez vos soucis avant qu'ils ne s'accumulent et pèsent sur vous.", true, "Souffrances, tourments de l'esprit"),
+  E(35, 'Harmonie, santé', ['sante', 'relations'], '+', "Équilibre et bonne santé : votre hygiène de vie est votre meilleur capital."),
+  E(36, 'Univers, génie, vaste conception', ['carriere', 'sens'], '+', "Une vision d'ensemble : vous concevez grand et voyez les liens entre les choses."),
+  E(37, 'Vertus douces, amour conjugal', ['relations'], '+', "Douceur et fidélité : la stabilité du couple ou du foyer vous épanouit."),
+  E(38, 'Imperfection, avarice, envie', ['argent', 'relations'], '!', "Une vigilance envers l'avidité et la comparaison : la générosité détend votre rapport à l'argent.", true, "Imperfection, avidité, convoitise, jalousie"),
+  E(39, null, ['sens'], '=', ''),
+  E(40, 'Fêtes, noces', ['relations'], '+', "Le sens de la fête : rassembler vos proches nourrit votre énergie."),
+  E(41, 'Ignominie', ['relations', 'sens'], '!', "Une alerte sur la réputation : agissez en toute transparence pour ne pas risquer le déshonneur.", true, "Déshonneur, honte publique"),
+  E(42, 'Voyage, vie malheureuse et courte, tombeau', ['sante', 'sens'], '!', "Un nombre de passages et de fragilité vitale : soignez votre santé, préparez vos déplacements et anticipez les risques.", true, "Voyage, existence difficile et brève, fin de vie"),
+  E(43, 'Cérémonies religieuses, prêtre', ['sens'], '+', "Le goût des rites et de la transmission : les repères spirituels vous stabilisent."),
+  E(44, 'Pouvoir, pompe, monarque', ['carriere'], '=', "Le sens du commandement : l'autorité s'exerce mieux avec simplicité et écoute."),
+  E(45, 'Conception, perte de virginité', ['relations', 'sens'], '=', "Une initiation : vous êtes marqué par des commencements décisifs et des premières fois."),
+  E(46, 'Population, fertilité', ['argent', 'relations'], '+', "Fécondité : vos projets se multiplient quand vous les partagez et les entourez."),
+  E(47, 'Vie heureuse et longue', ['sante'], '+', "Un présage de longévité : constance, sobriété et joie entretiennent votre vitalité."),
+  E(48, 'Tribunal, jugement, juge', ['carriere', 'relations'], '=', "Le sens du discernement : vous arbitrez, tranchez et conseillez avec justice."),
+  E(49, null, ['sens'], '=', ''),
+  E(50, 'Pardon, rédemption, liberté', ['sens', 'relations'], '+', "Une libération par le pardon : lâcher prise sur le passé vous rend votre élan."),
+  E(60, 'Veuvage', ['relations', 'sens'], '!', "Une solitude possible après une perte : entretenez vos liens et vos amitiés pour ne pas vous isoler.", true, "Veuvage, séparation par la perte d'un être cher"),
+  E(70, 'Initié, science, grâces', ['sens', 'carriere'], '+', "Le goût du savoir et de l'initiation : l'étude approfondie est votre voie royale."),
+  E(73, 'Nature', ['sante'], '+', "Un lien à la nature : vivre au grand air et au rythme des saisons vous régénère."),
+  E(75, 'Monde sensible', ['sens', 'relations'], '=', "Une grande sensibilité : vous captez l'ambiance des lieux et des gens, protégez-vous."),
+  E(77, 'Pardon, repentir, grâce', ['sens', 'relations'], '+', "Une réconciliation : reconnaître vos torts ouvre des portes et apaise vos relations."),
+  E(80, 'Résurrection, guérison', ['sante', 'sens'], '+', "Une capacité de rebond : vous guérissez et renaissez après les épreuves."),
+  E(81, 'Adepte', ['sens', 'carriere'], '+', "Une vocation de maîtrise : la pratique régulière d'un art ou d'une discipline vous élève."),
+  E(90, 'Aveuglement, erreur, affliction', ['sante', 'sens'], '!', "Un risque d'erreur par aveuglement : demandez un avis extérieur avant les grandes décisions.", true, "Aveuglement, erreur, chagrin profond"),
+  E(100, 'Faveurs divines', ['argent', 'sens'], '+', "Un nombre de chance : les opportunités viennent à vous si vous restez disponible."),
+  E(120, 'Amour divin, patriotisme', ['relations', 'sens'], '+', "Un attachement profond aux siens et à votre communauté."),
+  E(150, 'Louanges', ['carriere', 'relations'], '+', "De la reconnaissance : votre travail est apprécié, osez le montrer."),
+  E(200, 'Irrésolution', ['carriere'], '!', "Une hésitation possible : fixez-vous des échéances pour décider."),
+  E(215, 'Calamité', ['argent', 'sante'], '!', "Une alerte sur les revers et les imprévus : constituez une marge de sécurité.", true, "Grave revers, sinistre"),
+  E(300, 'Salut, croyance, foi, philosophie', ['sens'], '+', "Foi et réflexion : vos convictions vous protègent et vous orientent."),
+  E(313, 'Messager divin, adepte', ['sens', 'carriere'], '+', "Un rôle de messager : transmettre un message juste est votre mission."),
+  E(350, 'Espoir, justice', ['relations', 'sens'], '+', "Optimisme et équité : vous gardez espoir et défendez les causes justes."),
+  E(360, 'Enceinte des villes, habitations', ['argent', 'sante'], '+', "Un sens de la protection : bâtir un foyer ou un patrimoine solide est votre priorité."),
+  E(365, 'Astronomie', ['sens'], '+', "Un esprit tourné vers le ciel et les cycles : observer les rythmes vous guide."),
+  E(400, 'Voyage dur et pénible', ['carriere', 'sante'], '!', "Un parcours exigeant : persévérance et préparation transforment l'effort en réussite."),
+  E(490, 'Prêtres, théologie', ['sens'], '+', "Une quête de sens et de transmission spirituelle."),
+  E(500, 'Élus, sainteté', ['sens'], '+', "Une exigence morale élevée : vous inspirez par l'exemple."),
+  E(600, 'Perfection', ['carriere'], '=', "Un désir d'excellence : l'achevé vaut mieux que le parfait."),
+  E(666, 'Esprit infernal, trame, machination, complot, ennemis', ['relations'], '!', "Une vigilance forte : intrigues et adversaires sont possibles, clarifiez vos alliances et protégez vos secrets.", true, "Esprit malveillant, intrigue, manœuvres, complot, adversaires"),
+  E(700, 'Force', ['carriere', 'sante'], '+', "Une force intérieure : vous endurez et vous soutenez les autres."),
+  E(800, 'Empire', ['carriere', 'argent'], '+', "Une ambition de grande ampleur : bâtir à grande échelle vous attire."),
+  E(900, 'Guerre, combat', ['carriere'], '!', "Un esprit combatif : la lutte fait partie de votre route, canalisez-la vers des causes qui valent l'effort.", true, "Guerre, combat, lutte"),
+  E(1000, 'Miséricorde', ['relations', 'sens'], '+', "Une grande bienveillance : votre clémence apaise autour de vous."),
+  E(1095, 'Taciturnité', ['sens'], '=', "Le goût du silence : vous réfléchissez avant de parler."),
+  E(1260, 'Tourments', ['sante', 'sens'], '!', "Une période d'épreuve durable : appuyez-vous sur vos proches et sur des routines stables.", true, "Tourments, épreuves prolongées"),
+  E(1390, 'Persécution', ['relations'], '!', "Une sensibilité au rejet et à l'hostilité : choisissez des environnements qui vous respectent.", true, "Harcèlement, hostilité persistante, rejet"),
+];
+
+export const CABAL_BY_N: Record<number, CabalEntry> = Object.fromEntries(CABAL_TABLE.map((e) => [e.n, e]));
